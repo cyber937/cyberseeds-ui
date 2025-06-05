@@ -1,3 +1,4 @@
+import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 import { defineConfig } from "vite";
@@ -10,6 +11,7 @@ export default defineConfig({
     },
   },
   build: {
+    cssCodeSplit: true,
     lib: {
       entry: path.resolve(__dirname, "./src/components/index.tsx"),
       name: "CyberseedsUI",
@@ -18,6 +20,7 @@ export default defineConfig({
     rollupOptions: {
       external: ["react", "react-dom"],
       output: {
+        assetFileNames: "style.css",
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
@@ -26,6 +29,7 @@ export default defineConfig({
     },
   },
   plugins: [
+    tailwindcss(),
     react(),
     dts({
       tsconfigPath: "./tsconfig.app.json",
