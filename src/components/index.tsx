@@ -1,5 +1,6 @@
 export { Button } from "./Button/Button";
 export { Checkbox } from "./Checkbox/Checkbox";
+export type { Color, Scale, Variant } from "./DesignSystemUtils";
 export { Groupbox } from "./Groupbox/Groupbox";
 export { Input } from "./Input/Input";
 export { Label } from "./Label/Label";
