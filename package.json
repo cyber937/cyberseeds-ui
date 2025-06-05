@@ -6,6 +6,14 @@
   "files": [
     "dist"
   ],
+  "main": "dist/cyberseeds-ui-umd.cjs",
+  "module": "dist/cyberseeds-ui.js",
+  "exports": {
+    ".": {
+      "import": "./dist/cyberseeds-ui.js",
+      "require": "./dist/cyberseeds-ui-umd.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -46,6 +54,7 @@
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.30.1",
     "vite": "^6.3.5",
+    "vite-plugin-dts": "^4.5.4",
     "vitest": "^3.2.2"
   }
 }

@@ -4,7 +4,7 @@ export { Groupbox } from "./Groupbox/Groupbox";
 export { Input } from "./Input/Input";
 export { Label } from "./Label/Label";
 export { PhoneInput } from "./PhoneInput/PhoneInput";
-export { Pillbox } from "./Pillbox/PillBox";
+export { Pillbox } from "./Pillbox/Pillbox";
 export { Radio } from "./Radio/Radio";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Select } from "./Select/Select";

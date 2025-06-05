@@ -1,30 +1,37 @@
-import tailwindcss from "@tailwindcss/vite";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import react from "@vitejs/plugin-react";
+import path from "path";
 import { defineConfig } from "vite";
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
+import dts from "vite-plugin-dts";
 
 export default defineConfig({
-  plugins: [tailwindcss()],
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },
   build: {
     lib: {
-      entry: resolve(__dirname, "lib/main.js"),
-      name: "MyLib",
-      // the proper extensions will be added
-      fileName: "my-lib",
+      entry: path.resolve(__dirname, "./src/components/index.tsx"),
+      name: "CyberseedsUI",
+      fileName: "cyberseeds-ui",
     },
     rollupOptions: {
-      // make sure to externalize deps that shouldn't be bundled
-      // into your library
-      external: ["vue"],
+      external: ["react", "react-dom"],
       output: {
-        // Provide global variables to use in the UMD build
-        // for externalized deps
         globals: {
-          vue: "Vue",
+          react: "React",
+          "react-dom": "ReactDOM",
         },
       },
     },
   },
+  plugins: [
+    react(),
+    dts({
+      tsconfigPath: "./tsconfig.app.json",
+      include: [path.resolve(__dirname, "src")],
+      exclude: ["vite.config.ts"],
+      rollupTypes: true,
+    }),
+  ],
 });

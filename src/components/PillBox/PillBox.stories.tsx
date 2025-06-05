@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Pillbox } from "./PillBox";
+import { Pillbox } from "./Pillbox";
 
 const meta: Meta<typeof Pillbox> = {
   component: Pillbox,

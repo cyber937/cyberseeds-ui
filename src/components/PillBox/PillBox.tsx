@@ -2,7 +2,7 @@ import clsx from "clsx";
 
 import type { Color, Scale } from "../DesignSystemUtils";
 
-interface PillBoxProps {
+interface PillboxProps {
   label: string;
   scale?: Scale;
   color?: Color;
@@ -14,7 +14,7 @@ export function Pillbox({
   color = "red",
   scale = "md",
   className,
-}: PillBoxProps) {
+}: PillboxProps) {
   const colorMap: Record<Color, string> = {
     red: "outline-red-400 bg-red-200 text-red-800",
     orange: "outline-orange-400 bg-orange-200 text-orange-800",
