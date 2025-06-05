@@ -1,16 +1,20 @@
-import clsx from "clsx"
+import clsx from "clsx";
 
-import type { Scale, Color } from "../DesignSystemUtils"
+import type { Color, Scale } from "../DesignSystemUtils";
 
 interface PillBoxProps {
-  label: string
+  label: string;
   scale?: Scale;
-  color?: Color
-  className?: string
+  color?: Color;
+  className?: string;
 }
 
-export function PillBox({ label, color = "red", scale = "md", className }: PillBoxProps) {
-
+export function Pillbox({
+  label,
+  color = "red",
+  scale = "md",
+  className,
+}: PillBoxProps) {
   const colorMap: Record<Color, string> = {
     red: "outline-red-400 bg-red-200 text-red-800",
     orange: "outline-orange-400 bg-orange-200 text-orange-800",
@@ -34,17 +38,20 @@ export function PillBox({ label, color = "red", scale = "md", className }: PillB
     zinc: "outline-zinc-400 bg-zinc-200 text-zinc-800",
     neutral: "outline-neutral-400 bg-neutral-200 text-neutral-800",
     stone: "outline-stone-400 bg-stone-200 text-stone-800",
-  }
+  };
 
   const scaleMap: Record<Scale, string> = {
-    sm: 'px-2 py-0.5 text-[0.6rem]',
-    md: 'px-2 py-1 text-xs'
-  }
+    sm: "px-2 py-0.5 text-[0.6rem]",
+    md: "px-2 py-1 text-xs",
+  };
 
-  const baseClasses = "inline-block font-medium rounded-full outline-1 font-sans"
+  const baseClasses =
+    "inline-block font-medium rounded-full outline-1 font-sans";
   return (
-    <span className={clsx(baseClasses, scaleMap[scale], colorMap[color], className)}>
+    <span
+      className={clsx(baseClasses, scaleMap[scale], colorMap[color], className)}
+    >
       {label}
     </span>
-  )
+  );
 }

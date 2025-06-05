@@ -1,14 +1,13 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { PillBox } from "./PillBox";
+import { Pillbox } from "./PillBox";
 
-
-const meta: Meta<typeof PillBox> = {
-  component: PillBox,
+const meta: Meta<typeof Pillbox> = {
+  component: Pillbox,
   title: "System/PillBox",
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     label: {
-      control: 'text',
+      control: "text",
     },
     scale: {
       control: { type: "radio" },
@@ -16,21 +15,40 @@ const meta: Meta<typeof PillBox> = {
     },
     color: {
       control: { type: "select" },
-      options: ['red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'gray', 'zinc', 'neutral', 'stone']
+      options: [
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+      ],
     },
-  }
+  },
 };
 
 export default meta;
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
     label: "PillBox",
     color: "red",
     scale: "md",
-    className: ""
+    className: "",
   },
 };
-
-

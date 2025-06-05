@@ -1,6 +1,6 @@
 import { AcademicCapIcon } from "@heroicons/react/24/solid";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from ".";
+import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {
   component: Button,
