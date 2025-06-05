@@ -9,6 +9,6 @@ export { PhoneInput } from "./PhoneInput/PhoneInput";
 export { Pillbox } from "./Pillbox/Pillbox";
 export { Radio } from "./Radio/Radio";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
-export { Select } from "./Select/Select";
+export { Select, SelectOption } from "./Select/Select";
 export { Switch } from "./Switch/Switch";
 export { TextArea } from "./TextArea/TextArea";
