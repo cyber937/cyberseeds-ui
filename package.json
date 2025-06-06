@@ -1,6 +1,6 @@
 {
   "name": "cyberseeds-ui",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "license": "MIT",
   "type": "module",
   "files": [
@@ -12,10 +12,14 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/cyberseeds-ui.js",
-      "require": "./dist/cyberseeds-ui-umd.cjs"
+      "require": "./dist/cyberseeds-ui-umd.cjs",
+      "default": "./dist/cyberseeds-ui.js"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": {
+      "default": "./dist/style.css"
+    }
   },
   "scripts": {
     "dev": "vite",

@@ -32,10 +32,11 @@ export default defineConfig({
     tailwindcss(),
     react(),
     dts({
-      tsconfigPath: "./tsconfig.app.json",
+      tsconfigPath: "./tsconfig.json",
       include: [path.resolve(__dirname, "src")],
       exclude: ["vite.config.ts"],
       rollupTypes: true,
+      outDir: "dist",
     }),
   ],
 });
