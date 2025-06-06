@@ -12,3 +12,4 @@ export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Select, SelectOption } from "./Select/Select";
 export { Switch } from "./Switch/Switch";
 export { TextArea } from "./TextArea/TextArea";
+import "../style.css";

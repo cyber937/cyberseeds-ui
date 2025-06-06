@@ -18,3 +18,13 @@ npm install cyberseeds-ui
 # or
 yarn add cyberseeds-ui
 ```
+
+---
+
+### ⚠️ Required: Import the stylesheet manually
+
+To apply Tailwind-based styles, add the following to your global CSS file (e.g., `app/globals.css` or `src/index.css`):
+
+```css
+@import "cyberseeds-ui-rhf/style.css";
+```
