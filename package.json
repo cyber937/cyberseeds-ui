@@ -1,7 +1,11 @@
 {
   "name": "cyberseeds-ui",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "license": "MIT",
+  "keywords": [
+    "ui-components"
+  ],
+  "homepage": "https://github.com/cyber937/cyberseeds-ui",
   "type": "module",
   "files": [
     "dist",

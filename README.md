@@ -26,5 +26,5 @@ yarn add cyberseeds-ui
 To apply Tailwind-based styles, add the following to your global CSS file (e.g., `app/globals.css` or `src/index.css`):
 
 ```css
-@import "cyberseeds-ui-rhf/style.css";
+@import "cyberseeds-ui/style.css";
 ```
