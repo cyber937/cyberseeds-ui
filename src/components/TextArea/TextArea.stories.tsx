@@ -1,34 +1,55 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { TextArea } from "./TextArea";
 
 const meta: Meta<typeof TextArea> = {
   component: TextArea,
   title: "System/TextArea",
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     label: {
-      control: { type: 'text' }
+      control: { type: "text" },
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"]
+      options: ["sm", "md"],
     },
     color: {
       control: { type: "select" },
-      options: ['red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'gray', 'zinc', 'neutral', 'stone']
+      options: [
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+      ],
     },
     isInvalid: {
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
     disabled: {
-      control: { type: 'boolean' },
-    }
-  }
+      control: { type: "boolean" },
+    },
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
@@ -37,8 +58,8 @@ export const Default: Story = {
     color: "blue",
     require: false,
     isInvalid: false,
-    disabled: false
-  }
+    disabled: false,
+  },
 };
 
 export const Require: Story = {
@@ -48,8 +69,8 @@ export const Require: Story = {
     color: "blue",
     require: true,
     isInvalid: false,
-    disabled: false
-  }
+    disabled: false,
+  },
 };
 
 export const Invalid: Story = {
@@ -59,8 +80,8 @@ export const Invalid: Story = {
     color: "blue",
     require: false,
     isInvalid: true,
-    disabled: false
-  }
+    disabled: false,
+  },
 };
 
 export const Disabled: Story = {
@@ -70,6 +91,6 @@ export const Disabled: Story = {
     color: "blue",
     require: false,
     isInvalid: false,
-    disabled: true
-  }
+    disabled: true,
+  },
 };

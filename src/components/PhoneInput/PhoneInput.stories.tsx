@@ -1,32 +1,31 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PhoneInput } from "./PhoneInput";
 
 const meta: Meta<typeof PhoneInput> = {
   component: PhoneInput,
   title: "System/PhoneInput",
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
-    label: { control: { type: 'text' } },
+    label: { control: { type: "text" } },
     isInvalid: {
-      control: { type: 'boolean' },
+      control: { type: "boolean" },
     },
     disabled: {
-      control: { type: 'boolean' },
-    }
-  }
+      control: { type: "boolean" },
+    },
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof meta>
-
+type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
-    label: '電話番号',
-    scale: 'md',
+    label: "電話番号",
+    scale: "md",
     color: "blue",
     isInvalid: false,
-    disabled: false
-  }
-}
+    disabled: false,
+  },
+};

@@ -24,7 +24,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
     <ModalContext.Provider value={{ close: onClose }}>
       <div className="fixed inset-0 bg-gray-500/80 flex justify-center items-center z-50 text-base sm:text-sm/5">
         <div
-          className={`absolute bg-white shadow-xl rounded-md p-2 flex flex-col max-h-[90vh] ${widthMap[width]}`}
+          className={`absolute bg-white dark:bg-gray-800 shadow-xl rounded-md p-2 flex flex-col max-h-[90vh] ${widthMap[width]}`}
         >
           {children}
         </div>
@@ -34,11 +34,17 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
 }
 
 Modal.Header = function ModalHeader({ children }: { children: ReactNode }) {
-  return <div className="px-4 py-2 font-semibold">{children}</div>;
+  return (
+    <div className="px-4 py-2 font-semibold dark:text-gray-200">{children}</div>
+  );
 };
 
 Modal.Body = function ModalBody({ children }: { children: ReactNode }) {
-  return <div className="px-4 pt-1 pb-4 flex-1 overflow-auto">{children}</div>;
+  return (
+    <div className="px-4 pt-1 pb-4 flex-1 overflow-auto dark:text-gray-400">
+      {children}
+    </div>
+  );
 };
 
 Modal.Footer = function ModalFooter({ children }: { children: ReactNode }) {

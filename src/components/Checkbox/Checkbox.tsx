@@ -75,7 +75,7 @@ export function Checkbox({
         <div className={`group grid grid-cols-1 ${checkBoxScaleMap[scale]}`}>
           <input
             type="checkbox"
-            className={`col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white focus-visible:outline-2 focus-visible:outline-offset-2  disabled:border-gray-300 disabled:bg-amber-100 disabled:checked:bg-amber-100 forced-colors:appearance-auto ${colorMaps[color]}`}
+            className={`col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white dark:bg-gray-200 focus-visible:outline-2 focus-visible:outline-offset-2  disabled:border-gray-300 disabled:bg-amber-100 disabled:checked:bg-amber-100 forced-colors:appearance-auto ${colorMaps[color]}`}
             {...props}
           />
           <svg
@@ -101,7 +101,9 @@ export function Checkbox({
         </div>
       </div>
       <div className="text-sm/6">
-        <label className={`font-sans dark:text-white ${textScaleMap[scale]}`}>
+        <label
+          className={`font-sans dark:text-gray-200 ${textScaleMap[scale]}`}
+        >
           {label}
         </label>
       </div>

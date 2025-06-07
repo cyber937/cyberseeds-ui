@@ -1,26 +1,32 @@
-import React, { createContext, useContext } from "react"
-import type { ReactElement, ReactNode } from "react"
-import type { Color, Scale, Variant } from "../DesignSystemUtils"
+import type { ReactElement, ReactNode } from "react";
+import React, { createContext, useContext } from "react";
+import type { Color, Scale, Variant } from "../DesignSystemUtils";
 
 type ButtonContextType = {
-  scale: Scale
-}
+  scale: Scale;
+};
 
-const ButtonContext = createContext<ButtonContextType | null>(null)
+const ButtonContext = createContext<ButtonContextType | null>(null);
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  scale?: Scale
-  variant?: Variant
-  color?: Color
-  children: ReactNode
+  scale?: Scale;
+  variant?: Variant;
+  color?: Color;
+  children: ReactNode;
 }
 
-export function Button({ scale = 'md', variant = 'primary', color = 'red', children, className = '', ...props }: ButtonProps) {
-
+export function Button({
+  scale = "md",
+  variant = "primary",
+  color = "red",
+  children,
+  className = "",
+  ...props
+}: ButtonProps) {
   const scaleMap: Record<Scale, string> = {
-    sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1.5 text-sm/6',
-  }
+    sm: "px-2 py-1 text-xs",
+    md: "px-3 py-1.5 text-sm/6",
+  };
 
   const colorMap: Record<Color, string> = {
     red: "bg-red-600 hover:bg-red-500 active:bg-red-400",
@@ -45,12 +51,12 @@ export function Button({ scale = 'md', variant = 'primary', color = 'red', child
     zinc: "bg-zinc-600 hover:bg-zinc-500 active:bg-zinc-400",
     neutral: "bg-neutral-600 hover:bg-neutral-500 active:bg-neutral-400",
     stone: "bg-stone-600 hover:bg-stone-500 active:bg-stone-400",
-  }
+  };
 
   const variantMap: Record<Variant, string> = {
     primary: `text-white ${colorMap[color]}`,
-    secondary: `ring-gray-500/80 ring-1 ring-inset text-black hover:bg-gray-200 active: active:bg-gray-300`
-  }
+    secondary: `dark:text-white ring-gray-500/80 ring-1 ring-inset text-black hover:bg-gray-400 active: active:bg-gray-300`,
+  };
 
   return (
     <ButtonContext.Provider value={{ scale }}>
@@ -61,22 +67,27 @@ export function Button({ scale = 'md', variant = 'primary', color = 'red', child
         {children}
       </button>
     </ButtonContext.Provider>
-  )
+  );
 }
 
-Button.Icon = function ButtonIcon({ children }: { children: ReactElement<{ className?: string }> }) {
-
+Button.Icon = function ButtonIcon({
+  children,
+}: {
+  children: ReactElement<{ className?: string }>;
+}) {
   const iconScaleMap = {
-    sm: 'size-4',
-    md: 'size-5',
-  }
+    sm: "size-4",
+    md: "size-5",
+  };
 
   const context = useContext(ButtonContext);
   if (!context) {
-    throw new Error('Button.Icon must be used within a <Button>');
+    throw new Error("Button.Icon must be used within a <Button>");
   }
 
   return React.cloneElement(children, {
-    className: `${children.props.className ?? ''} ${iconScaleMap[context.scale]}`.trim(),
+    className: `${children.props.className ?? ""} ${
+      iconScaleMap[context.scale]
+    }`.trim(),
   });
 };

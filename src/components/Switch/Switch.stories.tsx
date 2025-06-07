@@ -1,30 +1,50 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Switch } from "./Switch";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { Switch } from "./Switch";
 
 const meta: Meta<typeof Switch> = {
   component: Switch,
   title: "System/Switch",
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"]
+      options: ["sm", "md"],
     },
     color: {
       control: { type: "select" },
-      options: ['red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'gray', 'zinc', 'neutral', 'stone']
+      options: [
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+      ],
     },
     disabled: {
-      control: { type: "boolean" }
-    }
-  }
+      control: { type: "boolean" },
+    },
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof meta>
-
+type Story = StoryObj<typeof meta>;
 
 const BasicSwitch = (args: React.ComponentProps<typeof Switch>) => {
   const [value, setValue] = useState<boolean>(false);

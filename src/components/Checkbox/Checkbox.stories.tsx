@@ -1,10 +1,10 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Checkbox } from "./Checkbox";
 
 const meta: Meta<typeof Checkbox> = {
   component: Checkbox,
   title: "System/Checkbox",
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     scale: {
       control: { type: "radio" },
@@ -12,19 +12,40 @@ const meta: Meta<typeof Checkbox> = {
     },
     color: {
       control: { type: "select" },
-      options: ['red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'gray', 'zinc', 'neutral', 'stone']
-    }
-  }
+      options: [
+        "red",
+        "orange",
+        "amber",
+        "yellow",
+        "lime",
+        "green",
+        "emerald",
+        "teal",
+        "cyan",
+        "sky",
+        "blue",
+        "indigo",
+        "violet",
+        "purple",
+        "fuchsia",
+        "pink",
+        "gray",
+        "zinc",
+        "neutral",
+        "stone",
+      ],
+    },
+  },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof meta>
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    label: '運営',
+    label: "運営",
     scale: "md",
     color: "blue",
-  }
+  },
 };
