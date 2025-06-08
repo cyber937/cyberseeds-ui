@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 
 interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -39,31 +40,6 @@ export function Switch({
     md: "text-sm/6",
   };
 
-  const colorMap: Record<Color, string> = {
-    red: "bg-red-600",
-    orange: "bg-orange-600",
-    amber: "bg-amber-600",
-    yellow: "bg-yellow-600",
-    lime: "bg-lime-600",
-    green: "bg-green-600",
-    emerald: "bg-emerald-600",
-    teal: "bg-teal-600",
-    cyan: "bg-cyan-600",
-    sky: "bg-sky-600",
-    blue: "bg-blue-600",
-    indigo: "bg-indigo-600",
-    violet: "bg-violet-600",
-    purple: "bg-purple-600",
-    fuchsia: "bg-fuchsia-600",
-    pink: "bg-pink-600",
-    rose: "bg-rose-600",
-    slate: "bg-slate-600",
-    gray: "bg-gray-600",
-    zinc: "bg-zinc-600",
-    neutral: "bg-neutral-600",
-    stone: "bg-stone-600",
-  };
-
   return (
     <div className="flex gap-1 items-center">
       <button
@@ -72,7 +48,7 @@ export function Switch({
         className={clsx(
           `flex items-center rounded-full transition-colors duration-300 ${scaleMap[scale]}`,
           checked
-            ? `${colorMap[color]} disabled:bg-amber-100`
+            ? `${backgroundColorMap[color]} disabled:bg-amber-100`
             : "bg-gray-300 disabled:bg-gray-200"
         )}
         {...props}

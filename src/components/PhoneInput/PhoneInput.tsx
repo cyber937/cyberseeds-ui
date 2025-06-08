@@ -1,31 +1,39 @@
-import React from "react"
-import { useRef } from "react";
-import type { Scale, Color } from "../DesignSystemUtils"
-import { Label } from "../Label/Label"
+import React, { useRef } from "react";
+import { focusOutlineColorMap } from "../Constants/colorMap";
+import type { Color, Scale } from "../DesignSystemUtils";
+import { Label } from "../Label/Label";
 
 const formatPhoneNumber = (value: string) => {
-  if (value === undefined) return ""
+  if (value === undefined) return "";
   const numbers = value.replace(/\D/g, "");
   if (numbers.length === 0) return "";
   if (numbers.length <= 2) return `(${numbers}`;
-  if (numbers.length <= 5) return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
-  return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(6, 10)}`;
+  if (numbers.length <= 5)
+    return `(${numbers.slice(0, 3)}) ${numbers.slice(3)}`;
+  return `(${numbers.slice(0, 3)}) ${numbers.slice(3, 6)}-${numbers.slice(
+    6,
+    10
+  )}`;
 };
 
-interface PhoneInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
-  label?: string
-  scale?: Scale
-  color?: Color
-  require?: boolean
-  isInvalid?: boolean
+interface PhoneInputProps
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    "onChange" | "value"
+  > {
+  label?: string;
+  scale?: Scale;
+  color?: Color;
+  require?: boolean;
+  isInvalid?: boolean;
   value?: string;
-  onChange?: (value: string) => void
+  onChange?: (value: string) => void;
 }
 
 export function PhoneInput({
   label,
-  scale = 'md',
-  color = 'red',
+  scale = "md",
+  color = "red",
   require = false,
   isInvalid = false,
   value,
@@ -35,34 +43,9 @@ export function PhoneInput({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scaleMap: Record<Scale, string> = {
-    sm: 'px-2 py-1 text-xs',
-    md: 'px-3 py-1.5 text-sm/6'
-  }
-
-  const colorMap: Record<Color, string> = {
-    red: "focus:outline-red-600",
-    orange: "focus:outline-orange-600",
-    amber: "focus:outline-amber-600",
-    yellow: "focus:outline-yellow-600",
-    lime: "focus:outline-lime-600",
-    green: "focus:outline-green-600",
-    emerald: "focus:outline-emerald-600",
-    teal: "focus:outline-teal-600",
-    cyan: "focus:outline-cyan-600",
-    sky: "focus:outline-sky-600",
-    blue: "focus:outline-blue-600",
-    indigo: "focus:outline-indigo-600",
-    violet: "focus:outline-violet-600",
-    purple: "focus:outline-purple-600",
-    fuchsia: "focus:outline-fuchsia-600",
-    pink: "focus:outline-pink-600",
-    rose: "focus:outline-rose-600",
-    slate: "focus:outline-slate-600",
-    gray: "focus:outline-gray-600",
-    zinc: "focus:outline-zinc-600",
-    neutral: "focus:outline-neutral-600",
-    stone: "focus:outline-stone-600",
-  }
+    sm: "px-2 py-1 text-xs",
+    md: "px-3 py-1.5 text-sm/6",
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
@@ -111,10 +94,7 @@ export function PhoneInput({
       const raw = input.value;
 
       // 記号の直後（例えば ")" や "-" の直前）でBackspaceされたとき、数字も消すように調整
-      if (
-        cursorPos > 0 &&
-        [")", "-"].includes(raw[cursorPos - 1])
-      ) {
+      if (cursorPos > 0 && [")", "-"].includes(raw[cursorPos - 1])) {
         e.preventDefault();
 
         // カーソルを1つ前に戻して数字を削除
@@ -129,7 +109,11 @@ export function PhoneInput({
         }, 0);
       }
 
-      if (cursorPos > 0 && " " === raw[cursorPos - 1] && ")" === raw[cursorPos - 2]) {
+      if (
+        cursorPos > 0 &&
+        " " === raw[cursorPos - 1] &&
+        ")" === raw[cursorPos - 2]
+      ) {
         e.preventDefault();
 
         // カーソルを2つ前に戻して数字を削除
@@ -148,9 +132,9 @@ export function PhoneInput({
 
   return (
     <div>
-      {label &&
+      {label && (
         <Label text={label} scale={scale} className="mb-2" require={require} />
-      }
+      )}
       <input
         ref={inputRef}
         type="tel"
@@ -159,7 +143,11 @@ export function PhoneInput({
         onKeyDown={handleKeyDown}
         placeholder="(123) 456-7890"
         maxLength={16}
-        className={`block w-full rounded-md disabled:bg-amber-100 disabled:text-gray-400 font-sans outline-1 placeholder:text-gray-400 dark:bg-gray-800 text-gray-900 dark:text-gray-200 -outline-offset-1 outline-gray-300  focus:outline-2 focus:-outline-offset-2  dark:disabled:text-gray-800 ${isInvalid ? 'text-red-400 bg-red-100/50 outline-red-300' : 'text-gray-900 bg-white outline-gray-300'} ${scaleMap[scale]} ${colorMap[color]}`}
+        className={`block w-full rounded-md disabled:bg-amber-100 disabled:text-gray-400 font-sans outline-1 placeholder:text-gray-400 dark:bg-gray-800 text-gray-900 dark:text-gray-200 -outline-offset-1 outline-gray-300  focus:outline-2 focus:-outline-offset-2  dark:disabled:text-gray-800 ${
+          isInvalid
+            ? "text-red-400 bg-red-100/50 outline-red-300"
+            : "text-gray-900 bg-white outline-gray-300"
+        } ${scaleMap[scale]} ${focusOutlineColorMap[color]}`}
         {...props}
       />
     </div>

@@ -1,4 +1,3 @@
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import type { ReactNode } from "react";
 import React from "react";
 import type { Scale } from "../DesignSystemUtils";
@@ -15,8 +14,8 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
   };
 
   const iconScaleMap: Record<Scale, string> = {
-    sm: "size-4 -ml-5.5 mt-1",
-    md: "size-5 -ml-7 mt-2",
+    sm: "size-3 -ml-5.5 mt-1.5",
+    md: "size-4 -ml-7 mt-3",
   };
 
   return (
@@ -27,9 +26,20 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
       >
         {children}
       </select>
-      <ChevronDownIcon
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
         className={`pointer-events-none items-center ${iconScaleMap[scale]}`}
-      />
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="m19.5 8.25-7.5 7.5-7.5-7.5"
+        />
+      </svg>
     </div>
   );
 }
