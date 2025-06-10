@@ -2,6 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import React, { createContext, useContext } from "react";
 import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale, Variant } from "../DesignSystemUtils";
+import { useUIColor } from "../useUIColor";
 
 type ButtonContextType = {
   scale: Scale;
@@ -24,6 +25,10 @@ export function Button({
   className = "",
   ...props
 }: ButtonProps) {
+  const { color: contextUIColor } = useUIColor() ?? { color: undefined };
+
+  const finalUIColor = contextUIColor ?? color;
+
   const scaleMap: Record<Scale, string> = {
     sm: "cs:px-2 cs:py-1 cs:text-xs",
     md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
@@ -55,7 +60,7 @@ export function Button({
   };
 
   const variantMap: Record<Variant, string> = {
-    primary: `cs:text-white ${backgroundColorMap[color]} ${activeColorMap[color]}`,
+    primary: `cs:text-white ${backgroundColorMap[finalUIColor]} ${activeColorMap[finalUIColor]}`,
     secondary: `cs:dark:text-white cs:ring-gray-500/80 cs:ring-1 cs:ring-inset cs:text-black cs:hover:bg-gray-400 cs:active:bg-gray-300`,
   };
 

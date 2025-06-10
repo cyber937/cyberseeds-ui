@@ -21,7 +21,7 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
   return (
     <div className="cs:flex">
       <select
-        className={`cs:appearance-none cs:rounded-md cs:border-gray-300 cs:bg-white cs:dark:bg-gray-800 cs:font-sans cs:focus:outline-hidden cs:border-1 cs:disabled:bg-gray-300 ${scaleMap[scale]}`}
+        className={`cs:appearance-none cs:rounded-md cs:border-gray-300 cs:dark:text-gray-200 cs:dark:bg-gray-800 cs:font-sans cs:focus:outline-hidden cs:border-1 cs:disabled:bg-gray-300 ${scaleMap[scale]}`}
         {...props}
       >
         {children}
@@ -32,7 +32,7 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className={`cs:pointer-events-none ${iconScaleMap[scale]}`}
+        className={`cs:pointer-events-none cs:dark:text-gray-200 ${iconScaleMap[scale]}`}
       >
         <path
           strokeLinecap="round"

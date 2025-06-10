@@ -1,5 +1,6 @@
 import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
+import { useUIColor } from "../useUIColor";
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -13,6 +14,10 @@ export function Checkbox({
   label = "checkbox",
   ...props
 }: CheckboxProps) {
+  const { color: contextUIColor } = useUIColor() ?? { color: undefined };
+
+  const finalUIColor = contextUIColor ?? color;
+
   const gapScaleMap: Record<Scale, string> = {
     sm: "cs:gap-x-2",
     md: "cs:gap-x-3",
@@ -41,7 +46,7 @@ export function Checkbox({
         >
           <input
             type="checkbox"
-            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:bg-white cs:dark:bg-gray-200 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2  cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:checked:bg-amber-100 cs:forced-colors:appearance-auto ${checkedFocusOutlineColorMap[color]}`}
+            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:bg-white cs:dark:bg-gray-200 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2  cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:checked:bg-amber-100 cs:forced-colors:appearance-auto ${checkedFocusOutlineColorMap[finalUIColor]}`}
             {...props}
           />
           <svg

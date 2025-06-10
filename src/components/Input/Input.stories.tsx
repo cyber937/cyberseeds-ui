@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { UIColorProvider } from "../UIColorContext";
 import { Input } from "./Input";
 
 const meta: Meta<typeof Input> = {
@@ -61,6 +62,12 @@ export const Default: Story = {
     isInvalid: false,
     disabled: false,
   },
+
+  render: (args) => (
+    <UIColorProvider initialColor="gray">
+      <Input {...args} />
+    </UIColorProvider>
+  ),
 };
 
 export const Require: Story = {

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { UIColorProvider } from "../UIColorContext";
 import { Checkbox } from "./Checkbox";
 
 const meta: Meta<typeof Checkbox> = {
@@ -48,4 +49,9 @@ export const Default: Story = {
     scale: "md",
     color: "blue",
   },
+  render: (args) => (
+    <UIColorProvider initialColor="blue">
+      <Checkbox {...args} />
+    </UIColorProvider>
+  ),
 };

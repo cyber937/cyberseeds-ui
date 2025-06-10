@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
+import { useUIColor } from "../useUIColor";
 
 interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   scale?: Scale;
@@ -20,6 +21,10 @@ export function Switch({
   disabled = false,
   ...props
 }: SwitchProps) {
+  const { color: contextUIColor } = useUIColor() ?? { color: undefined };
+
+  const finalUIColor = contextUIColor ?? color;
+
   const scaleMap: Record<Scale, string> = {
     sm: "cs:w-6 cs:h-4 cs:p-0.5",
     md: "cs:w-10 cs:h-5 cs:p-1",
@@ -48,7 +53,7 @@ export function Switch({
         className={clsx(
           `cs:flex cs:items-center cs:rounded-full cs:transition-colors cs:duration-300 ${scaleMap[scale]}`,
           checked
-            ? `${backgroundColorMap[color]} cs:disabled:bg-amber-100`
+            ? `${backgroundColorMap[finalUIColor]} cs:disabled:bg-amber-100`
             : "cs:bg-gray-300 cs:disabled:bg-gray-200"
         )}
         {...props}

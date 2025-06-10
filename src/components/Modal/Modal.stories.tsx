@@ -30,7 +30,7 @@ export const Primary: Story = {
         サンプルモダルの中身です。 色々とカスタマイズできます。
       </Modal.Body>
       <Modal.Footer>
-        <div className="flex gap-2">
+        <div className="cs:flex cs:gap-2">
           <Button variant="secondary">キャンセル</Button>
           <Button>確定</Button>
         </div>
