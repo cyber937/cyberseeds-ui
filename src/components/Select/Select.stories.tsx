@@ -1,6 +1,5 @@
 // stories/Select.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Button } from "../Button/Button";
 import { Select, SelectOption } from "./Select";
 
 const meta: Meta<typeof Select> = {
@@ -49,7 +48,6 @@ export const Default: Story = {
   },
   render: (args) => (
     <div className="flex">
-      <Button>Test</Button>
       <Select {...args}>
         <SelectOption key="0" label="選んでください" value="0" />
         <SelectOption key="1" label="テスト" value="1" />

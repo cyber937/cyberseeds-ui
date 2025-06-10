@@ -1,3 +1,2 @@
-@import "tailwindcss";
-
-@custom-variant dark (&:where(.dark, .dark *));
+@import "tailwindcss" prefix(cs);
+@custom-variant dark (&: where(.dark, .dark *));

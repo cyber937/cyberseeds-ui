@@ -8,14 +8,14 @@ type GroupboxProps = {
 
 export function Groupbox({ label, children, className = "" }: GroupboxProps) {
   return (
-    <div className="w-full">
+    <div className="cs:w-full">
       {label && (
-        <div className="left-4 px-2 text-xs font-semibold text-gray-700 dark:text-gray-100">
+        <div className="cs:left-4 cs:px-2 cs:text-xs cs:font-semibold cs:text-gray-700 cs:dark:text-gray-100">
           {label}
         </div>
       )}
       <div
-        className={`border border-gray-300 dark:text-gray-400 dark:bg-gray-800 dark:border-gray-600 rounded-md p-4 w-full ${className}`}
+        className={`cs:border cs:border-gray-300 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:dark:border-gray-600 cs:rounded-md cs:p-4 cs:w-full ${className}`}
       >
         {children}
       </div>

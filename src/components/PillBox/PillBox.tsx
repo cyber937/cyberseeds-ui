@@ -16,37 +16,37 @@ export function Pillbox({
   className,
 }: PillboxProps) {
   const colorMap: Record<Color, string> = {
-    red: "outline-red-400 bg-red-200 text-red-800",
-    orange: "outline-orange-400 bg-orange-200 text-orange-800",
-    amber: "outline-amber-400 bg-amber-200 text-amber-800",
-    yellow: "outline-yellow-400 bg-yellow-200 text-yellow-800",
-    lime: "outline-lime-400 bg-lime-200 text-lime-800",
-    green: "outline-green-400 bg-green-200 text-green-800",
-    emerald: "outline-emerald-400 bg-emerald-200 text-emerald-800",
-    teal: "outline-teal-400 bg-teal-200 text-teal-800",
-    cyan: "outline-cyan-400 bg-cyan-200 text-cyan-800",
-    sky: "outline-sky-400 bg-sky-200 text-sky-800",
-    blue: "outline-blue-400 bg-blue-200 text-blue-800",
-    indigo: "outline-indigo-400 bg-indigo-200 text-indigo-800",
-    violet: "outline-violet-400 bg-violet-200 text-violet-800",
-    purple: "outline-purple-400 bg-purple-200 text-purple-800",
-    fuchsia: "outline-fuchsia-400 bg-fuchsia-200 text-fuchsia-800",
-    pink: "outline-pink-400 bg-pink-200 text-pink-800",
-    rose: "outline-rose-400 bg-rose-200 text-rose-800",
-    slate: "outline-slate-400 bg-slate-200 text-slate-800",
-    gray: "outline-gray-400 bg-gray-200 text-gray-800",
-    zinc: "outline-zinc-400 bg-zinc-200 text-zinc-800",
-    neutral: "outline-neutral-400 bg-neutral-200 text-neutral-800",
-    stone: "outline-stone-400 bg-stone-200 text-stone-800",
+    red: "cs:outline-red-400 cs:bg-red-200 cs:text-red-800",
+    orange: "cs:outline-orange-400 cs:bg-orange-200 cs:text-orange-800",
+    amber: "cs:outline-amber-400 cs:bg-amber-200 cs:text-amber-800",
+    yellow: "cs:outline-yellow-400 cs:bg-yellow-200 cs:text-yellow-800",
+    lime: "cs:outline-lime-400 cs:bg-lime-200 cs:text-lime-800",
+    green: "cs:outline-green-400 cs:bg-green-200 cs:text-green-800",
+    emerald: "cs:outline-emerald-400 cs:bg-emerald-200 cs:text-emerald-800",
+    teal: "cs:outline-teal-400 cs:bg-teal-200 cs:text-teal-800",
+    cyan: "cs:outline-cyan-400 cs:bg-cyan-200 cs:text-cyan-800",
+    sky: "cs:outline-sky-400 cs:bg-sky-200 cs:text-sky-800",
+    blue: "cs:outline-blue-400 cs:bg-blue-200 cs:text-blue-800",
+    indigo: "cs:outline-indigo-400 cs:bg-indigo-200 cs:text-indigo-800",
+    violet: "cs:outline-violet-400 cs:bg-violet-200 cs:text-violet-800",
+    purple: "cs:outline-purple-400 cs:bg-purple-200 cs:text-purple-800",
+    fuchsia: "cs:outline-fuchsia-400 cs:bg-fuchsia-200 cs:text-fuchsia-800",
+    pink: "cs:outline-pink-400 cs:bg-pink-200 cs:text-pink-800",
+    rose: "cs:outline-rose-400 cs:bg-rose-200 cs:text-rose-800",
+    slate: "cs:outline-slate-400 cs:bg-slate-200 cs:text-slate-800",
+    gray: "cs:outline-gray-400 cs:bg-gray-200 cs:text-gray-800",
+    zinc: "cs:outline-zinc-400 cs:bg-zinc-200 cs:text-zinc-800",
+    neutral: "cs:outline-neutral-400 cs:bg-neutral-200 cs:text-neutral-800",
+    stone: "cs:outline-stone-400 cs:bg-stone-200 cs:text-stone-800",
   };
 
   const scaleMap: Record<Scale, string> = {
-    sm: "px-2 py-0.5 text-[0.6rem]",
-    md: "px-2 py-1 text-xs",
+    sm: "cs:px-2 cs:py-0.5 cs:text-[0.6rem]",
+    md: "cs:px-2 cs:py-1 cs:text-xs",
   };
 
   const baseClasses =
-    "inline-block font-medium rounded-full outline-1 font-sans";
+    "cs:inline-block cs:font-medium cs:rounded-full cs:outline-1 cs:font-sans";
   return (
     <span
       className={clsx(baseClasses, scaleMap[scale], colorMap[color], className)}

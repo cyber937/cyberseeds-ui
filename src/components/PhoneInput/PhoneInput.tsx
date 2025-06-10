@@ -43,8 +43,8 @@ export function PhoneInput({
   const inputRef = useRef<HTMLInputElement>(null);
 
   const scaleMap: Record<Scale, string> = {
-    sm: "px-2 py-1 text-xs",
-    md: "px-3 py-1.5 text-sm/6",
+    sm: "cs:px-2 cs:py-1 cs:text-xs",
+    md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,7 +133,12 @@ export function PhoneInput({
   return (
     <div>
       {label && (
-        <Label text={label} scale={scale} className="mb-2" require={require} />
+        <Label
+          text={label}
+          scale={scale}
+          className="cs:mb-2"
+          require={require}
+        />
       )}
       <input
         ref={inputRef}
@@ -143,10 +148,10 @@ export function PhoneInput({
         onKeyDown={handleKeyDown}
         placeholder="(123) 456-7890"
         maxLength={16}
-        className={`block w-full rounded-md disabled:bg-amber-100 disabled:text-gray-400 font-sans outline-1 placeholder:text-gray-400 dark:bg-gray-800 text-gray-900 dark:text-gray-200 -outline-offset-1 outline-gray-300  focus:outline-2 focus:-outline-offset-2  dark:disabled:text-gray-800 ${
+        className={`cs:block cs:w-full cs:rounded-md cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 placeholder:cs:text-gray-400 cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200 cs:-outline-offset-1 cs:outline-gray-300  cs:focus:outline-2 cs:focus:-outline-offset-2  cs:dark:disabled:text-gray-800 ${
           isInvalid
-            ? "text-red-400 bg-red-100/50 outline-red-300"
-            : "text-gray-900 bg-white outline-gray-300"
+            ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300"
+            : "cs:text-gray-900 cs:bg-white cs:outline-gray-300"
         } ${scaleMap[scale]} ${focusOutlineColorMap[color]}`}
         {...props}
       />

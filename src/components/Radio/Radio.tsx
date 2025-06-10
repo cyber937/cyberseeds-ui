@@ -14,29 +14,29 @@ export function Radio({
   ...props
 }: RadioProps) {
   const gapScaleMap: Record<Scale, string> = {
-    sm: "gap-x-2",
-    md: "gap-x-3",
+    sm: "cs:gap-x-2",
+    md: "cs:gap-x-3",
   };
 
   const radioScaleMap: Record<Scale, string> = {
-    sm: "size-3.5",
-    md: "size-4",
+    sm: "cs:size-3.5",
+    md: "cs:size-4",
   };
 
   const textScaleMap: Record<Scale, string> = {
-    sm: "text-xs",
-    md: "text-sm/6",
+    sm: "cs:text-xs",
+    md: "cs:text-sm/6",
   };
 
   return (
-    <div className={`flex items-center ${gapScaleMap[scale]}`}>
+    <div className={`cs:flex cs:items-center ${gapScaleMap[scale]}`}>
       <input
         type="radio"
-        className={`relative appearance-none rounded-full border border-gray-300 bg-white before:absolute before:inset-1 before:rounded-full before:bg-white not-checked:before:hidden focus-visible:outline-2 focus-visible:outline-offset-2 disabled:border-gray-300 disabled:bg-amber-100 disabled:before:bg-gray-400 forced-colors:appearance-auto forced-colors:before:hidden ${radioScaleMap[scale]} ${checkedFocusOutlineColorMap[color]}`}
+        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-300 cs:bg-white cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:before:bg-white cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${radioScaleMap[scale]} ${checkedFocusOutlineColorMap[color]}`}
         {...props}
       />
       <label
-        className={`block text-gray-900 dark:text-white font-sans ${textScaleMap[scale]}`}
+        className={`cs:block cs:text-gray-900 cs:dark:text-white cs:font-sans ${textScaleMap[scale]}`}
       >
         {label}
       </label>

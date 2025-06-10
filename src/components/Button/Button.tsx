@@ -25,44 +25,44 @@ export function Button({
   ...props
 }: ButtonProps) {
   const scaleMap: Record<Scale, string> = {
-    sm: "px-2 py-1 text-xs",
-    md: "px-3 py-1.5 text-sm/6",
+    sm: "cs:px-2 cs:py-1 cs:text-xs",
+    md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
   };
 
   const activeColorMap: Record<Color, string> = {
-    red: "hover:bg-red-500 active:bg-red-400",
-    orange: "hover:bg-orange-500 active:bg-orange-400",
-    amber: "hover:bg-amber-500 active:bg-amber-400",
-    yellow: "hover:bg-yellow-500 active:bg-yellow-400",
-    lime: "hover:bg-lime-500 active:bg-lime-400",
-    green: "hover:bg-green-500 active:bg-green-400",
-    emerald: "hover:bg-emerald-500 active:bg-emerald-400",
-    teal: "hover:bg-teal-500 active:bg-teal-400",
-    cyan: "hover:bg-cyan-500 active:bg-cyan-400",
-    sky: "hover:bg-sky-500 active:bg-sky-400",
-    blue: "hover:bg-blue-500 active:bg-blue-400",
-    indigo: "hover:bg-indigo-500 active:bg-indigo-400",
-    violet: "hover:bg-violet-500 active:bg-violet-400",
-    purple: "hover:bg-purple-500 active:bg-purple-400",
-    fuchsia: "hover:bg-fuchsia-500 active:bg-fuchsia-400",
-    pink: "hover:bg-pink-500 active:bg-pink-400",
-    rose: "hover:bg-rose-500 active:bg-rose-400",
-    slate: "hover:bg-slate-500 active:bg-slate-400",
-    gray: "hover:bg-gray-500 active:bg-gray-400",
-    zinc: "hover:bg-zinc-500 active:bg-zinc-400",
-    neutral: "hover:bg-neutral-500 active:bg-neutral-400",
-    stone: "hover:bg-stone-500 active:bg-stone-400",
+    red: "cs:hover:bg-red-500 cs:active:bg-red-400",
+    orange: "cs:hover:bg-orange-500 cs:active:bg-orange-400",
+    amber: "cs:hover:bg-amber-500 cs:active:bg-amber-400",
+    yellow: "cs:hover:bg-yellow-500 cs:active:bg-yellow-400",
+    lime: "cs:hover:bg-lime-500 cs:active:bg-lime-400",
+    green: "cs:hover:bg-green-500 cs:active:bg-green-400",
+    emerald: "cs:hover:bg-emerald-500 cs:active:bg-emerald-400",
+    teal: "cs:hover:bg-teal-500 cs:active:bg-teal-400",
+    cyan: "cs:hover:bg-cyan-500 cs:active:bg-cyan-400",
+    sky: "cs:hover:bg-sky-500 cs:active:bg-sky-400",
+    blue: "cs:hover:bg-blue-500 cs:active:bg-blue-400",
+    indigo: "cs:hover:bg-indigo-500 cs:active:bg-indigo-400",
+    violet: "cs:hover:bg-violet-500 cs:active:bg-violet-400",
+    purple: "cs:hover:bg-purple-500 cs:active:bg-purple-400",
+    fuchsia: "cs:hover:bg-fuchsia-500 cs:active:bg-fuchsia-400",
+    pink: "cs:hover:bg-pink-500 cs:active:bg-pink-400",
+    rose: "cs:hover:bg-rose-500 cs:active:bg-rose-400",
+    slate: "cs:hover:bg-slate-500 cs:active:bg-slate-400",
+    gray: "cs:hover:bg-gray-500 cs:active:bg-gray-400",
+    zinc: "cs:hover:bg-zinc-500 cs:active:bg-zinc-400",
+    neutral: "cs:hover:bg-neutral-500 cs:active:bg-neutral-400",
+    stone: "cs:hover:bg-stone-500 cs:active:bg-stone-400",
   };
 
   const variantMap: Record<Variant, string> = {
-    primary: `text-white ${backgroundColorMap[color]} ${activeColorMap[color]}`,
-    secondary: `dark:text-white ring-gray-500/80 ring-1 ring-inset text-black hover:bg-gray-400 active:bg-gray-300`,
+    primary: `cs:text-white ${backgroundColorMap[color]} ${activeColorMap[color]}`,
+    secondary: `cs:dark:text-white cs:ring-gray-500/80 cs:ring-1 cs:ring-inset cs:text-black cs:hover:bg-gray-400 cs:active:bg-gray-300`,
   };
 
   return (
     <ButtonContext.Provider value={{ scale }}>
       <button
-        className={`inline-flex items-center rounded-md font-sans justify-center font-semibold cursor-pointer text-nowrap self-start align-middle gap-1.5 ${scaleMap[scale]} ${variantMap[variant]} ${className}`}
+        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:text-nowrap cs:self-start cs:align-middle cs:gap-1.5 ${scaleMap[scale]} ${variantMap[variant]} ${className}`}
         {...props}
       >
         {children}
@@ -77,8 +77,8 @@ Button.Icon = function ButtonIcon({
   children: ReactElement<{ className?: string }>;
 }) {
   const iconScaleMap = {
-    sm: "size-4",
-    md: "size-5",
+    sm: "cs:size-4",
+    md: "cs:size-5",
   };
 
   const context = useContext(ButtonContext);

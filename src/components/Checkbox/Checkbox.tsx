@@ -14,59 +14,61 @@ export function Checkbox({
   ...props
 }: CheckboxProps) {
   const gapScaleMap: Record<Scale, string> = {
-    sm: "gap-x-2",
-    md: "gap-x-3",
+    sm: "cs:gap-x-2",
+    md: "cs:gap-x-3",
   };
 
   const checkBoxScaleMap: Record<Scale, string> = {
-    sm: "size-3.5",
-    md: "size-4",
+    sm: "cs:size-3.5",
+    md: "cs:size-4",
   };
 
   const iconScaleMap: Record<Scale, string> = {
-    sm: "size-3",
-    md: "size-3.5",
+    sm: "cs:size-3",
+    md: "cs:size-3.5",
   };
 
   const textScaleMap: Record<Scale, string> = {
-    sm: "text-xs",
-    md: "text-sm/6",
+    sm: "cs:text-xs",
+    md: "cs:text-sm/6",
   };
 
   return (
-    <div className={`flex ${gapScaleMap[scale]}`}>
-      <div className="flex h-6 shrink-0 items-center">
-        <div className={`group grid grid-cols-1 ${checkBoxScaleMap[scale]}`}>
+    <div className={`cs:flex ${gapScaleMap[scale]}`}>
+      <div className="cs:flex cs:h-6 cs:shrink-0 cs:items-center">
+        <div
+          className={`cs:group cs:grid cs:grid-cols-1 ${checkBoxScaleMap[scale]}`}
+        >
           <input
             type="checkbox"
-            className={`col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white dark:bg-gray-200 focus-visible:outline-2 focus-visible:outline-offset-2  disabled:border-gray-300 disabled:bg-amber-100 disabled:checked:bg-amber-100 forced-colors:appearance-auto ${checkedFocusOutlineColorMap[color]}`}
+            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:bg-white cs:dark:bg-gray-200 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2  cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:checked:bg-amber-100 cs:forced-colors:appearance-auto ${checkedFocusOutlineColorMap[color]}`}
             {...props}
           />
           <svg
             fill="none"
             viewBox="0 0 14 14"
-            className={`pointer-events-none col-start-1 row-start-1 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25 ${iconScaleMap[scale]}`}
+            className={`cs:pointer-events-none cs:col-start-1 cs:row-start-1 cs:self-center cs:justify-self-center cs:stroke-white cs:group-has-disabled:stroke-gray-950/25 ${iconScaleMap[scale]}`}
           >
             <path
               d="M3 8L6 11L11 3.5"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="opacity-0 group-has-checked:opacity-100"
+              className="cs:opacity-0 cs:group-has-checked:opacity-100"
             />
             <path
               d="M3 7H11"
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="opacity-0 group-has-indeterminate:opacity-100"
+              className="cs:opacity-0 cs:group-has-indeterminate:opacity-100"
             />
           </svg>
         </div>
       </div>
-      <div className="text-sm/6">
+      <div className="cs:text-sm/6">
         <label
-          className={`font-sans dark:text-gray-200 ${textScaleMap[scale]}`}
+          className={`cs:font-sans cs:dark:text-gray-200 ${textScaleMap[scale]}`}
         >
           {label}
         </label>

@@ -9,19 +9,19 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 
 export function Select({ scale = "md", children, ...props }: SelectProps) {
   const scaleMap: Record<Scale, string> = {
-    sm: "pl-2 pr-6 py-1 text-xs h-6",
-    md: "pl-3 pr-10 py-1.5 text-sm/6 h-9",
+    sm: "cs:pl-2 cs:pr-6 cs:py-1 cs:text-xs cs:h-6",
+    md: "cs:pl-3 cs:pr-10 cs:py-1.5 cs:text-sm/6 cs:h-9",
   };
 
   const iconScaleMap: Record<Scale, string> = {
-    sm: "size-3 -ml-5.5 -mt-2",
-    md: "size-4 -ml-7",
+    sm: "cs:h-3 cs:w-3 cs:-ml-4.5 cs:mt-1.5",
+    md: "cs:h-4 cs:w-4 cs:-ml-7 cs:mt-3",
   };
 
   return (
-    <div className="flex dark:text-gray-200">
+    <div className="cs:flex">
       <select
-        className={`col-start-1 row-start-1 w-full appearance-none rounded-md border-gray-300 bg-white dark:bg-gray-800 font-sans focus:outline-hidden border-1 disabled:bg-gray-300 ${scaleMap[scale]}`}
+        className={`cs:appearance-none cs:rounded-md cs:border-gray-300 cs:bg-white cs:dark:bg-gray-800 cs:font-sans cs:focus:outline-hidden cs:border-1 cs:disabled:bg-gray-300 ${scaleMap[scale]}`}
         {...props}
       >
         {children}
@@ -32,7 +32,7 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
         viewBox="0 0 24 24"
         strokeWidth="1.5"
         stroke="currentColor"
-        className={`pointer-events-none col-start-1 row-start-1 items-center self-center justify-self-end ${iconScaleMap[scale]}`}
+        className={`cs:pointer-events-none ${iconScaleMap[scale]}`}
       >
         <path
           strokeLinecap="round"

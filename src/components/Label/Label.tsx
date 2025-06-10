@@ -1,25 +1,27 @@
-'use client'
+"use client";
 
-import type { Scale } from "../DesignSystemUtils"
-import clsx from "clsx"
+import clsx from "clsx";
+import type { Scale } from "../DesignSystemUtils";
 
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
-  scale?: Scale
-  text: string,
-  require?: boolean
+  scale?: Scale;
+  text: string;
+  require?: boolean;
 }
 
-export function Label({ scale = 'md', text, require = false }: LabelProps) {
-
+export function Label({ scale = "md", text, require = false }: LabelProps) {
   const scaleMaps: Record<Scale, string> = {
-    sm: 'text-xs',
-    md: 'text-sm/6'
-  }
+    sm: "cs:text-xs",
+    md: "cs:text-sm/6",
+  };
 
   return (
     <label
-      className={`block font-medium font-sans text-gray-900 dark:text-gray-200 text-nowrap ${clsx(require && "after:content-['*'] after:text-red-500")} ${scaleMaps[scale]}`} >
+      className={`cs:block cs:font-medium cs:font-sans cs:text-gray-900 cs:dark:text-gray-200 cs:text-nowrap ${clsx(
+        require && "cs:after:content-['*'] cs:after:text-red-500"
+      )} ${scaleMaps[scale]}`}
+    >
       {text}
-    </label >
-  )
+    </label>
+  );
 }
