@@ -11,7 +11,7 @@ interface PillboxProps {
 
 export function Pillbox({
   label,
-  color = "red",
+  color = "blue",
   scale = "md",
   className,
 }: PillboxProps) {

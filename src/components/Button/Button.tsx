@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import React, { createContext, useContext } from "react";
 import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale, Variant } from "../DesignSystemUtils";
-import { useUIColor } from "../useUIColor";
+import { useUIColor } from "../UIColorContext";
 
 type ButtonContextType = {
   scale: Scale;
@@ -20,7 +20,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export function Button({
   scale = "md",
   variant = "primary",
-  color = "red",
+  color = "blue",
   children,
   className = "",
   ...props

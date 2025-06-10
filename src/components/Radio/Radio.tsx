@@ -1,6 +1,6 @@
 import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
-import { useUIColor } from "../useUIColor";
+import { useUIColor } from "../UIColorContext";
 
 interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -11,7 +11,7 @@ interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Radio({
   label,
   scale = "md",
-  color = "red",
+  color = "blue",
   ...props
 }: RadioProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };

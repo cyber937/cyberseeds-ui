@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useContext, useState } from "react";
 import type { Color } from "./DesignSystemUtils";
 
 export interface UIColorContextType {
@@ -24,4 +24,9 @@ export const UIColorProvider = ({
       {children}
     </UIColorContext.Provider>
   );
+};
+
+export const useUIColor = () => {
+  const context = useContext(UIColorContext);
+  return context;
 };

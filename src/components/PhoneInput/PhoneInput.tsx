@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
-import { useUIColor } from "../useUIColor";
+import { useUIColor } from "../UIColorContext";
 
 const formatPhoneNumber = (value: string) => {
   if (value === undefined) return "";
@@ -34,7 +34,7 @@ interface PhoneInputProps
 export function PhoneInput({
   label,
   scale = "md",
-  color = "red",
+  color = "blue",
   require = false,
   isInvalid = false,
   value,

@@ -15,10 +15,11 @@ export default defineConfig({
     lib: {
       entry: path.resolve(__dirname, "./src/components/index.tsx"),
       name: "CyberseedsUI",
+      formats: ["es"],
       fileName: "cyberseeds-ui",
     },
     rollupOptions: {
-      external: ["react", "react-dom"],
+      external: ["react", "react-dom", "clsx"],
       output: {
         assetFileNames: "style.css",
         globals: {
@@ -37,6 +38,7 @@ export default defineConfig({
       exclude: ["vite.config.ts"],
       rollupTypes: true,
       outDir: "dist",
+      insertTypesEntry: true,
     }),
   ],
 });

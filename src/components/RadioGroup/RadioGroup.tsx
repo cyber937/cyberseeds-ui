@@ -21,7 +21,7 @@ interface RadioGroupProps {
 
 export function RadioGroup({
   scale,
-  color = "red",
+  color = "blue",
   value,
   onChange,
   children,

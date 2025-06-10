@@ -1,6 +1,6 @@
 import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
-import { useUIColor } from "../useUIColor";
+import { useUIColor } from "../UIColorContext";
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -10,7 +10,7 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 export function Checkbox({
   scale = "md",
-  color = "red",
+  color = "blue",
   label = "checkbox",
   ...props
 }: CheckboxProps) {
