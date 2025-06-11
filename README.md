@@ -3,7 +3,7 @@
 Reusable React UI component library built with **Tailwind CSS v4**, **TypeScript**, and **React 19**.  
 Designed for clean, accessible, and maintainable interfaces in modern web applications.
 
-[![Storybook](https://img.shields.io/badge/Storybook-online-orange?logo=storybook)](https://cyber937.github.io/cyberseeds-ui/) Please check the interactive UI catalog 👉
+[![Storybook](https://img.shields.io/badge/Storybook-online-orange?logo=storybook)](https://cyber937.github.io/cyberseeds-ui/?path=/docs/overview--docs) Please check the interactive UI catalog 👉
 
 ## ✨ Features
 
