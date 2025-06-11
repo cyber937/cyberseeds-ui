@@ -1,0 +1,6 @@
+.storybook/
+**/*.stories.tsx
+**/*.stories.ts
+**/*.stories.mdx
+storybook-static/
+**/Overview.tsx
