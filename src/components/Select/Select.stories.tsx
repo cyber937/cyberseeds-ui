@@ -56,3 +56,20 @@ export const Default: Story = {
     </div>
   ),
 };
+
+export const Scale: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-2">
+      <Select scale="md">
+        <SelectOption key="0" label="選んでください" value="0" />
+        <SelectOption key="1" label="テスト" value="1" />
+        <SelectOption key="2" label="テスト2" value="2" />
+      </Select>
+      <Select scale="sm">
+        <SelectOption key="0" label="選んでください" value="0" />
+        <SelectOption key="1" label="テスト" value="1" />
+        <SelectOption key="2" label="テスト2" value="2" />
+      </Select>
+    </div>
+  ),
+};

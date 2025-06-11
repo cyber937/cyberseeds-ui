@@ -31,7 +31,7 @@ export function Button({
 
   const scaleMap: Record<Scale, string> = {
     sm: "cs:px-2 cs:py-1 cs:text-xs",
-    md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
+    md: "cs:px-3 cs:py-1.5 cs:text-sm",
   };
 
   const activeColorMap: Record<Color, string> = {
@@ -67,7 +67,7 @@ export function Button({
   return (
     <ButtonContext.Provider value={{ scale }}>
       <button
-        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:text-nowrap cs:self-start cs:align-middle cs:gap-1.5 ${scaleMap[scale]} ${variantMap[variant]} ${className}`}
+        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 ${scaleMap[scale]} ${variantMap[variant]} ${className}`}
         {...props}
       >
         {children}

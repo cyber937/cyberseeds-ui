@@ -31,7 +31,7 @@ export function TextArea({
 
   return (
     <div>
-      {label && <Label text={label} className="cs:mb-2" require={require} />}
+      {label && <Label text={label} require={require} className="cs:ml-2" />}
       <textarea
         className={`cs:w-full cs:dark:bg-gray-800 cs:dark:text-gray-200 cs:rounded-md cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:outline-1 cs:placeholder:text-gray-400 cs:focus:outline-2 cs:focus:-outline-offset-2 ${
           isInvalid

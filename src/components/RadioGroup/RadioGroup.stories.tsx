@@ -1,5 +1,6 @@
-import type { Meta } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
+import { Groupbox } from "../Groupbox/Groupbox";
 import { RadioGroup } from "./RadioGroup";
 
 const meta: Meta<typeof RadioGroup> = {
@@ -40,15 +41,56 @@ const meta: Meta<typeof RadioGroup> = {
 };
 
 export default meta;
+type Story = StoryObj<typeof meta>;
 
-export function Default() {
-  const [gender, setGender] = useState<string>("male");
+export const Default: Story = {
+  args: {
+    scale: "md",
+    color: "blue",
+  },
+  render: (args) => {
+    const [gender, setGender] = useState<string>("male");
+    return (
+      <RadioGroup {...args} value={gender} onChange={setGender}>
+        <RadioGroup.Option label="男性" value="male" />
+        <RadioGroup.Option label="女性" value="female" />
+        <RadioGroup.Option label="その他" value="other" />
+      </RadioGroup>
+    );
+  },
+};
 
-  return (
-    <RadioGroup scale="sm" color="blue" value={gender} onChange={setGender}>
-      <RadioGroup.Option label="男性" value="male" />
-      <RadioGroup.Option label="女性" value="female" />
-      <RadioGroup.Option label="その他" value="other" />
-    </RadioGroup>
-  );
-}
+export const Scale: Story = {
+  render: () => {
+    const [standardSender, setStandarGender] = useState<string>("male");
+    const [smallSender, setSmallGender] = useState<string>("male");
+    return (
+      <div className="cs:grid cs:grid-cols-2 cs:gap-4">
+        <Groupbox label="Standard Size">
+          <RadioGroup
+            scale="md"
+            color="blue"
+            value={standardSender}
+            onChange={setStandarGender}
+          >
+            <RadioGroup.Option label="男性" value="male" />
+            <RadioGroup.Option label="女性" value="female" />
+            <RadioGroup.Option label="その他" value="other" />
+          </RadioGroup>
+        </Groupbox>
+        <Groupbox label="Small Size">
+          <RadioGroup
+            scale="sm"
+            color="blue"
+            value={smallSender}
+            onChange={setSmallGender}
+          >
+            <RadioGroup.Option label="男性" value="male" />
+            <RadioGroup.Option label="女性" value="female" />
+            <RadioGroup.Option label="その他" value="other" />
+          </RadioGroup>
+        </Groupbox>
+      </div>
+    );
+  },
+};

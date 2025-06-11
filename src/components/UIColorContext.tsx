@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import type { Color } from "./DesignSystemUtils";
 
 export interface UIColorContextType {
@@ -18,6 +24,10 @@ export const UIColorProvider = ({
   initialColor?: Color;
 }) => {
   const [color, setColor] = useState<Color>(initialColor); // 初期値
+
+  useEffect(() => {
+    setColor(initialColor);
+  }, [initialColor]);
 
   return (
     <UIColorContext.Provider value={{ color, setColor }}>

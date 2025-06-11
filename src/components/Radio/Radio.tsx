@@ -37,11 +37,11 @@ export function Radio({
     <div className={`cs:flex cs:items-center ${gapScaleMap[scale]}`}>
       <input
         type="radio"
-        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-300 cs:bg-white cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:before:bg-white cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${radioScaleMap[scale]} ${checkedFocusOutlineColorMap[finalUIColor]}`}
+        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-200 cs:bg-white cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:before:bg-white cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${radioScaleMap[scale]} ${checkedFocusOutlineColorMap[finalUIColor]}`}
         {...props}
       />
       <label
-        className={`cs:block cs:text-gray-900 cs:dark:text-white cs:font-sans ${textScaleMap[scale]}`}
+        className={`cs:block cs:text-gray-900 cs:dark:text-gray-300 cs:font-sans ${textScaleMap[scale]}`}
       >
         {label}
       </label>

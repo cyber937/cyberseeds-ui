@@ -20,7 +20,7 @@ const groupBoxContent = <div>This is inside of the group box.</div>;
 
 export const Default: Story = {
   args: {
-    label: "保護者",
+    label: "Label",
     children: groupBoxContent,
   },
 };

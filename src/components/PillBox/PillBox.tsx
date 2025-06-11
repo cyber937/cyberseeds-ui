@@ -46,7 +46,7 @@ export function Pillbox({
   };
 
   const baseClasses =
-    "cs:inline-block cs:font-medium cs:rounded-full cs:outline-1 cs:font-sans";
+    "cs:inline-block cs:font-medium cs:rounded-full cs:outline-1 cs:font-sans cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start";
   return (
     <span
       className={clsx(baseClasses, scaleMap[scale], colorMap[color], className)}

@@ -141,7 +141,7 @@ export function PhoneInput({
         <Label
           text={label}
           scale={scale}
-          className="cs:mb-2"
+          className="cs:ml-2"
           require={require}
         />
       )}

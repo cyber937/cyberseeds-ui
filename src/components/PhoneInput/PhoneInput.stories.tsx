@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { PhoneInput } from "./PhoneInput";
 
 const meta: Meta<typeof PhoneInput> = {
@@ -27,5 +28,11 @@ export const Basic: Story = {
     color: "blue",
     isInvalid: false,
     disabled: false,
+  },
+  render: (args) => {
+    const [phoneNyumber, setPhoneNumber] = useState<string>("");
+    return (
+      <PhoneInput value={phoneNyumber} onChange={setPhoneNumber} {...args} />
+    );
   },
 };

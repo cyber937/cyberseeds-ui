@@ -36,8 +36,8 @@ export function Input({
         <Label
           text={label}
           scale={scale}
-          className="cs:mb-2"
           require={require}
+          className="cs:ml-2"
         />
       )}
       <input

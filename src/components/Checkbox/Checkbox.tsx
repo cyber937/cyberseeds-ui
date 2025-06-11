@@ -73,7 +73,7 @@ export function Checkbox({
       </div>
       <div className="cs:text-sm/6">
         <label
-          className={`cs:font-sans cs:dark:text-gray-200 ${textScaleMap[scale]}`}
+          className={`cs:font-sans cs:dark:text-gray-300 ${textScaleMap[scale]}`}
         >
           {label}
         </label>

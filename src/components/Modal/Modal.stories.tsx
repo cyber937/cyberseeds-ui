@@ -5,7 +5,6 @@ import { Modal } from "./Modal";
 const meta: Meta<typeof Modal> = {
   component: Modal,
   title: "System/Modal",
-  tags: ["autodocs"],
   argTypes: {
     width: {
       control: { type: "radio" },
@@ -24,17 +23,17 @@ export const Primary: Story = {
   },
 
   render: (args) => (
-    <Modal {...args}>
-      <Modal.Header>サンプルモダル</Modal.Header>
-      <Modal.Body>
-        サンプルモダルの中身です。 色々とカスタマイズできます。
-      </Modal.Body>
-      <Modal.Footer>
-        <div className="cs:flex cs:gap-2">
-          <Button variant="secondary">キャンセル</Button>
-          <Button>確定</Button>
-        </div>
-      </Modal.Footer>
-    </Modal>
+    <div className="cs:h-full">
+      <Modal {...args}>
+        <Modal.Header>Modal</Modal.Header>
+        <Modal.Body>Sample modal body sentencse.</Modal.Body>
+        <Modal.Footer>
+          <div className="cs:flex cs:gap-2">
+            <Button variant="secondary">キャンセル</Button>
+            <Button>確定</Button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    </div>
   ),
 };

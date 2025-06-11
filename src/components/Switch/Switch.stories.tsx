@@ -68,3 +68,27 @@ export const Primary: Story = {
   },
   render: (args) => <BasicSwitch {...args} />,
 };
+
+export const Scale: Story = {
+  render: () => {
+    const [standardSwitch, setStandardSwitch] = useState<boolean>(true);
+    const [smallSwitch, setSmallSwitch] = useState<boolean>(true);
+    return (
+      <div className="cs:grid cs:grid-cols-2">
+        <Switch
+          checked={standardSwitch}
+          onClick={() => setStandardSwitch(!standardSwitch)}
+          onLabel="オン"
+          offLabel="オフ"
+        />
+        <Switch
+          scale="sm"
+          checked={smallSwitch}
+          onClick={() => setSmallSwitch(!smallSwitch)}
+          onLabel="オン"
+          offLabel="オフ"
+        />
+      </div>
+    );
+  },
+};
