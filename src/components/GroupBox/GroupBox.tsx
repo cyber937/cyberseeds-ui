@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
 import { Label } from "../Label/Label";
 
-type GroupboxProps = {
+type GroupBoxProps = {
   label?: string;
   children: ReactNode;
   className?: string;
 };
 
-export function Groupbox({ label, children, className = "" }: GroupboxProps) {
+export function GroupBox({ label, children, className = "" }: GroupBoxProps) {
   return (
     <div className="cs:w-full">
       {label && <Label text={label} className="cs:ml-2" />}

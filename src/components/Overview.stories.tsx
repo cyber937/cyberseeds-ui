@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "./Button/Button";
 import { Checkbox } from "./Checkbox/Checkbox";
 import type { Color } from "./DesignSystemUtils";
-import { Groupbox } from "./Groupbox/Groupbox";
+import { GroupBox } from "./GroupBox/GroupBox";
 import { Input } from "./Input/Input";
 import { Modal } from "./Modal/Modal";
 import { PhoneInput } from "./PhoneInput/PhoneInput";
@@ -34,7 +34,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
   return (
     <div>
       <UIColorProvider initialColor={color}>
-        <Groupbox label="Groupbox" className="cs:space-y-4">
+        <GroupBox label="Groupbox" className="cs:space-y-4">
           <div className="cs:flex cs:gap-4">
             <Button onClick={() => setIsMobalOpen(!isModalOpen)}>
               Open Modal
@@ -55,13 +55,13 @@ const Overview = ({ initialColor }: OverviewProps) => {
             <Pillbox label="Pillbox" color="yellow" />
             <Pillbox label="Pillbox" color="gray" />
           </div>
-          <Groupbox label="Radio Group">
+          <GroupBox label="Radio Group">
             <RadioGroup value={language} onChange={setLanguage}>
               <RadioGroup.Option label="English" value="english" />
               <RadioGroup.Option label="Spanish" value="spanish" />
               <RadioGroup.Option label="French" value="french" />
             </RadioGroup>
-          </Groupbox>
+          </GroupBox>
           <Select>
             <SelectOption key="0" label="Select Fruit" value="0" />
             <SelectOption key="1" label="Apple" value="1" />
@@ -75,7 +75,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
             offLabel="Off"
           />
           <TextArea placeholder="Please type some texts." />
-        </Groupbox>
+        </GroupBox>
         {isModalOpen && (
           <Modal>
             <Modal.Header>Modal Header</Modal.Header>

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { Groupbox } from "../Groupbox/Groupbox";
+import { GroupBox } from "../GroupBox/GroupBox";
 import { RadioGroup } from "./RadioGroup";
 
 const meta: Meta<typeof RadioGroup> = {
@@ -66,7 +66,7 @@ export const Scale: Story = {
     const [smallSender, setSmallGender] = useState<string>("male");
     return (
       <div className="cs:grid cs:grid-cols-2 cs:gap-4">
-        <Groupbox label="Standard Size">
+        <GroupBox label="Standard Size">
           <RadioGroup
             scale="md"
             color="blue"
@@ -77,8 +77,8 @@ export const Scale: Story = {
             <RadioGroup.Option label="女性" value="female" />
             <RadioGroup.Option label="その他" value="other" />
           </RadioGroup>
-        </Groupbox>
-        <Groupbox label="Small Size">
+        </GroupBox>
+        <GroupBox label="Small Size">
           <RadioGroup
             scale="sm"
             color="blue"
@@ -89,7 +89,7 @@ export const Scale: Story = {
             <RadioGroup.Option label="女性" value="female" />
             <RadioGroup.Option label="その他" value="other" />
           </RadioGroup>
-        </Groupbox>
+        </GroupBox>
       </div>
     );
   },

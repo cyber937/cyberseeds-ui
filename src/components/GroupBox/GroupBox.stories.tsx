@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Groupbox } from "./Groupbox";
+import { GroupBox } from "./GroupBox";
 
-const meta: Meta<typeof Groupbox> = {
-  component: Groupbox,
-  title: "System/Groupbox",
+const meta: Meta<typeof GroupBox> = {
+  component: GroupBox,
+  title: "System/GroupBox",
   tags: ["autodocs"],
   argTypes: {
     label: {
