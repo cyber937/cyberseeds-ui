@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createContext } from "react";
+import { createContext, useEffect, useState } from "react";
 
 type ModalContext = {
   close?: () => void;
@@ -20,11 +20,27 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
     lg: "cs:sm:w-2xl",
   };
 
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // 次のフレームで visible を true にしてアニメーション開始
+    const timeout = requestAnimationFrame(() => setIsVisible(true));
+    return () => cancelAnimationFrame(timeout);
+  }, []);
+
   return (
     <ModalContext.Provider value={{ close: onClose }}>
-      <div className="cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:flex cs:justify-center cs:items-center cs:z-50 cs:text-base cs:sm:text-sm/5">
+      <div
+        className={`cs:transition-opacity cs:duration-200 cs:ease-in-out cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:flex cs:justify-center cs:items-center cs:z-50 cs:text-base cs:sm:text-sm/5 ${
+          isVisible ? "cs:opacity-100" : "cs:opacity-0"
+        }`}
+      >
         <div
-          className={`cs:absolute cs:bg-white cs:dark:bg-gray-800 cs:shadow-xl cs:rounded-md cs:p-2 cs:flex cs:flex-col cs:max-h-[90vh] ${widthMap[width]}`}
+          className={`cs:transition cs:duration-300 cs:ease-in-out cs:absolute cs:bg-white cs:dark:bg-gray-800 cs:shadow-xl cs:rounded-md cs:p-2 cs:flex cs:flex-col cs:max-h-[90vh] cs:transform ${
+            isVisible
+              ? "cs:opacity-100 cs:scale-100"
+              : "cs:opacity-0 cs:scale-95"
+          } ${widthMap[width]}`}
         >
           {children}
         </div>

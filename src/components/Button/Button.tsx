@@ -67,7 +67,7 @@ export function Button({
   return (
     <ButtonContext.Provider value={{ scale }}>
       <button
-        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 ${scaleMap[scale]} ${variantMap[variant]} ${className}`}
+        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:transition-colors cs:duration-150 cs:ease-in-out ${scaleMap[scale]} ${variantMap[variant]} ${className}`}
         {...props}
       >
         {children}
