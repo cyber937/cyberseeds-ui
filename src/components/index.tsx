@@ -6,7 +6,7 @@ export { Input } from "./Input/Input";
 export { Label } from "./Label/Label";
 export { Modal } from "./Modal/Modal";
 export { PhoneInput } from "./PhoneInput/PhoneInput";
-export { Pillbox } from "./Pillbox/Pillbox";
+export { PillBox as Pillbox } from "./PillBox/PillBox";
 export { Radio } from "./Radio/Radio";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Select, SelectOption } from "./Select/Select";

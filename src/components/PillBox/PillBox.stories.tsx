@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { Pillbox } from "./Pillbox";
+import { PillBox } from "./PillBox";
 
-const meta: Meta<typeof Pillbox> = {
-  component: Pillbox,
+const meta: Meta<typeof PillBox> = {
+  component: PillBox,
   title: "System/PillBox",
   tags: ["autodocs"],
   argTypes: {
@@ -57,28 +57,28 @@ export const Color: Story = {
   render: () => (
     <div className="cs:space-y-4">
       <div className="cs:grid cs:grid-cols-5 cs:gap-6">
-        <Pillbox label="Red" color="red" />
-        <Pillbox label="Orange" color="orange" />
-        <Pillbox label="Amber" color="amber" />
-        <Pillbox label="Yellow" color="yellow" />
-        <Pillbox label="Lime" color="lime" />
-        <Pillbox label="Green" color="green" />
-        <Pillbox label="Emerald" color="emerald" />
-        <Pillbox label="Teal" color="teal" />
-        <Pillbox label="Cyan" color="cyan" />
-        <Pillbox label="Sky" color="sky" />
-        <Pillbox label="Blue" color="blue" />
-        <Pillbox label="Indigo" color="indigo" />
-        <Pillbox label="Violet" color="violet" />
-        <Pillbox label="Purple" color="purple" />
-        <Pillbox label="Fuchsia" color="fuchsia" />
-        <Pillbox label="Pink" color="pink" />
-        <Pillbox label="Rose" color="rose" />
-        <Pillbox label="Slate" color="slate" />
-        <Pillbox label="Gray" color="gray" />
-        <Pillbox label="Zinc" color="zinc" />
-        <Pillbox label="Neutral" color="neutral" />
-        <Pillbox label="Stone" color="stone" />
+        <PillBox label="Red" color="red" />
+        <PillBox label="Orange" color="orange" />
+        <PillBox label="Amber" color="amber" />
+        <PillBox label="Yellow" color="yellow" />
+        <PillBox label="Lime" color="lime" />
+        <PillBox label="Green" color="green" />
+        <PillBox label="Emerald" color="emerald" />
+        <PillBox label="Teal" color="teal" />
+        <PillBox label="Cyan" color="cyan" />
+        <PillBox label="Sky" color="sky" />
+        <PillBox label="Blue" color="blue" />
+        <PillBox label="Indigo" color="indigo" />
+        <PillBox label="Violet" color="violet" />
+        <PillBox label="Purple" color="purple" />
+        <PillBox label="Fuchsia" color="fuchsia" />
+        <PillBox label="Pink" color="pink" />
+        <PillBox label="Rose" color="rose" />
+        <PillBox label="Slate" color="slate" />
+        <PillBox label="Gray" color="gray" />
+        <PillBox label="Zinc" color="zinc" />
+        <PillBox label="Neutral" color="neutral" />
+        <PillBox label="Stone" color="stone" />
       </div>
     </div>
   ),
@@ -88,8 +88,8 @@ export const Scale: Story = {
   render: () => (
     <div className="cs:space-y-4">
       <div className="cs:grid cs:grid-cols-5 cs:gap-6">
-        <Pillbox label="Red" color="red" scale="md" />
-        <Pillbox label="Red" color="red" scale="sm" />
+        <PillBox label="Red" color="red" scale="md" />
+        <PillBox label="Red" color="red" scale="sm" />
       </div>
     </div>
   ),

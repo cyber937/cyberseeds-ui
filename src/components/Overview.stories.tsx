@@ -8,7 +8,7 @@ import { GroupBox } from "./GroupBox/GroupBox";
 import { Input } from "./Input/Input";
 import { Modal } from "./Modal/Modal";
 import { PhoneInput } from "./PhoneInput/PhoneInput";
-import { Pillbox } from "./Pillbox/Pillbox";
+import { PillBox } from "./PillBox/PillBox";
 import { RadioGroup } from "./RadioGroup/RadioGroup";
 import { Select, SelectOption } from "./Select/Select";
 import { Switch } from "./Switch/Switch";
@@ -49,11 +49,11 @@ const Overview = ({ initialColor }: OverviewProps) => {
             onChange={setPhoneNumber}
           />
           <div className="cs:flex cs:gap-2">
-            <Pillbox label="Pillbox" />
-            <Pillbox label="Pillbox" color="red" />
-            <Pillbox label="Pillbox" color="green" />
-            <Pillbox label="Pillbox" color="yellow" />
-            <Pillbox label="Pillbox" color="gray" />
+            <PillBox label="Pillbox" />
+            <PillBox label="Pillbox" color="red" />
+            <PillBox label="Pillbox" color="green" />
+            <PillBox label="Pillbox" color="yellow" />
+            <PillBox label="Pillbox" color="gray" />
           </div>
           <GroupBox label="Radio Group">
             <RadioGroup value={language} onChange={setLanguage}>
