@@ -1,3 +1,4 @@
+export { Accordion, AccordionItem } from "./Accordion/Accordion";
 export { Button } from "./Button/Button";
 export { Checkbox } from "./Checkbox/Checkbox";
 export type { Color, Scale, Variant } from "./DesignSystemUtils";
