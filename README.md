@@ -54,7 +54,7 @@ You can pass a `color` prop (or use classNames internally) with values like:
 
 | Component     | Description |
 |---------------|-------------|
-| `Accordion`   | Symple an accordion components |
+| `Accordion`   | A simple accordion component supporting smooth open/close transitions and icon rotation. |
 | `Button`      | Versatile button component with support for multiple variants and sizes (**color with Tailwind color classes**)|
 | `Checkbox`    | Accessible checkbox with custom styling and states (**color with Tailwind color classes**) |
 | `Groupbox`    | Labeled container to group related form inputs, styled consistently |
