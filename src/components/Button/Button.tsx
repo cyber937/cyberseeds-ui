@@ -2,7 +2,7 @@ import type { ReactElement, ReactNode } from "react";
 import React, { createContext, useContext } from "react";
 import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale, Variant } from "../DesignSystemUtils";
-import { useUIColor } from "../UIColorContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 type ButtonContextType = {
   scale: Scale;
@@ -92,8 +92,7 @@ Button.Icon = function ButtonIcon({
   }
 
   return React.cloneElement(children, {
-    className: `${children.props.className ?? ""} ${
-      iconScaleMap[context.scale]
-    }`.trim(),
+    className: `${children.props.className ?? ""} ${iconScaleMap[context.scale]
+      }`.trim(),
   });
 };

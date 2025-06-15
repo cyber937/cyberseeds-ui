@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { UIColorProvider } from "../UIColorContext";
+import { UIColorProvider } from "../UIColorProvider/UIColorContext";
 import { Input } from "./Input";
 
 const meta: Meta<typeof Input> = {

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { UIColorProvider } from "../UIColorContext";
+import { UIColorProvider } from "../UIColorProvider/UIColorContext";
 import { Button } from "./Button";
 
 const meta: Meta<typeof Button> = {

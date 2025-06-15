@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
-import { useUIColor } from "../UIColorContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   scale?: Scale;
