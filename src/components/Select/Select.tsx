@@ -4,10 +4,11 @@ import type { Scale } from "../DesignSystemUtils";
 
 interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   scale?: Scale;
+  isInvalid?: boolean;
   children: ReactNode;
 }
 
-export function Select({ scale = "md", children, ...props }: SelectProps) {
+export function Select({ scale = "md", isInvalid = false, children, ...props }: SelectProps) {
   const scaleMap: Record<Scale, string> = {
     sm: "cs:pl-2 cs:pr-6 cs:py-1 cs:text-xs cs:h-6",
     md: "cs:pl-3 cs:pr-10 cs:py-1.5 cs:text-sm/6 cs:h-9",
@@ -21,7 +22,11 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
   return (
     <div className="cs:flex">
       <select
-        className={`cs:appearance-none cs:rounded-md cs:bg-white cs:border-gray-300 cs:dark:text-gray-200 cs:dark:bg-gray-800 cs:font-sans cs:focus:outline-hidden cs:border-1 cs:disabled:bg-gray-300 ${scaleMap[scale]}`}
+        className={`cs:appearance-none cs:rounded-md cs:border-gray-300 cs:dark:text-gray-200 cs:dark:bg-gray-800 cs:font-sans cs:focus:outline-hidden cs:border-1 cs:disabled:bg-gray-300
+          ${isInvalid
+            ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
+            : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"
+          } ${scaleMap[scale]}`}
         {...props}
       >
         {children}
