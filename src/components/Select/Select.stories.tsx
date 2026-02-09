@@ -45,6 +45,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     scale: "md",
+    "aria-label": "選択",
   },
   render: (args) => (
     <div className="flex">
@@ -60,12 +61,12 @@ export const Default: Story = {
 export const Scale: Story = {
   render: () => (
     <div className="cs:grid cs:grid-cols-2">
-      <Select scale="md">
+      <Select scale="md" aria-label="標準サイズ">
         <SelectOption key="0" label="選んでください" value="0" />
         <SelectOption key="1" label="テスト" value="1" />
         <SelectOption key="2" label="テスト2" value="2" />
       </Select>
-      <Select scale="sm">
+      <Select scale="sm" aria-label="小サイズ">
         <SelectOption key="0" label="選んでください" value="0" />
         <SelectOption key="1" label="テスト" value="1" />
         <SelectOption key="2" label="テスト2" value="2" />

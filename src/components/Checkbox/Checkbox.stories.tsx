@@ -54,7 +54,6 @@ export const Default: Story = {
 export const Color: Story = {
   args: {
     scale: "md",
-    checked: true,
   },
   render: (args) => (
     <div className="cs:space-y-4">

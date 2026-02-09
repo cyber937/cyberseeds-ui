@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useId } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  id?: string;
   label?: string;
   scale?: Scale;
   color?: Color;
@@ -13,6 +14,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function Input({
+  id: externalId,
   label,
   scale = "md",
   color = "blue",
@@ -21,6 +23,8 @@ export function Input({
   className = "",
   ...props
 }: InputProps) {
+  const generatedId = useId();
+  const id = externalId ?? generatedId;
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
   const finalUIColor = contextUIColor ?? color;
@@ -34,6 +38,7 @@ export function Input({
     <div>
       {label && (
         <Label
+          htmlFor={id}
           text={label}
           scale={scale}
           require={require}
@@ -41,7 +46,9 @@ export function Input({
         />
       )}
       <input
-        className={`cs:w-full cs:items-center cs:rounded-md cs:dark:text-gray-200 cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 cs:placeholder:text-gray-400 cs:focus:outline-2 cs:focus:-outline-offset-2 cs:self-start ors cs:duration-200 cs:ease-in-out ${isInvalid
+        id={id}
+        aria-invalid={isInvalid || undefined}
+        className={`cs:w-full cs:items-center cs:rounded-md cs:dark:text-gray-200 cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 cs:placeholder:text-gray-400 cs:focus:outline-2 cs:focus:-outline-offset-2 cs:self-start cs:transition-colors cs:duration-200 cs:ease-in-out ${isInvalid
           ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
           : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"
           } ${scaleMap[scale]} ${focusOutlineColorMap[finalUIColor]

@@ -28,7 +28,7 @@ export function RadioGroup({
 }: RadioGroupProps) {
   return (
     <RadioGroupContext.Provider value={{ scale, color, value, onChange }}>
-      <div className="cs:flex cs:flex-col cs:gap-2">{children}</div>
+      <div role="radiogroup" className="cs:flex cs:flex-col cs:gap-2">{children}</div>
     </RadioGroupContext.Provider>
   );
 }
