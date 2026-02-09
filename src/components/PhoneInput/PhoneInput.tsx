@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useId, useRef } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
@@ -39,8 +39,11 @@ export function PhoneInput({
   isInvalid = false,
   value,
   onChange,
+  id: externalId,
   ...props
 }: PhoneInputProps) {
+  const generatedId = useId();
+  const id = externalId ?? generatedId;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
@@ -139,6 +142,7 @@ export function PhoneInput({
     <div>
       {label && (
         <Label
+          htmlFor={id}
           text={label}
           scale={scale}
           className="cs:ml-2"
@@ -147,13 +151,15 @@ export function PhoneInput({
       )}
       <input
         ref={inputRef}
+        id={id}
         type="tel"
+        aria-invalid={isInvalid || undefined}
         value={value ? formatPhoneNumber(String(value)) : ""}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder="(123) 456-7890"
         maxLength={16}
-        className={`cs:block cs:w-full cs:rounded-md cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 placeholder:cs:text-gray-400 cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200 cs:-outline-offset-1 cs:outline-gray-300 cs:placeholder:text-gray-400 cs:focus:outline-2 cs:focus:-outline-offset-2 cs:dark:disabled:text-gray-800 ors cs:duration-200 cs:ease-in-out ${
+        className={`cs:block cs:w-full cs:rounded-md cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 placeholder:cs:text-gray-400 cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200 cs:-outline-offset-1 cs:outline-gray-300 cs:placeholder:text-gray-400 cs:focus:outline-2 cs:focus:-outline-offset-2 cs:dark:disabled:text-gray-800 cs:transition-colors cs:duration-200 cs:ease-in-out ${
           isInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
             : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"

@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorContext";
@@ -11,9 +12,13 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
 export function Checkbox({
   scale = "md",
   color = "blue",
-  label = "checkbox",
+  label,
+  id: externalId,
   ...props
 }: CheckboxProps) {
+  const generatedId = useId();
+  const id = externalId ?? generatedId;
+
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
   const finalUIColor = contextUIColor ?? color;
@@ -45,6 +50,7 @@ export function Checkbox({
           className={`cs:group cs:grid cs:grid-cols-1 ${checkBoxScaleMap[scale]}`}
         >
           <input
+            id={id}
             type="checkbox"
             className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:bg-white cs:dark:bg-gray-200 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2  cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:checked:bg-amber-100 cs:forced-colors:appearance-auto ${checkedFocusOutlineColorMap[finalUIColor]}`}
             {...props}
@@ -71,13 +77,16 @@ export function Checkbox({
           </svg>
         </div>
       </div>
-      <div className="cs:text-sm/6">
-        <label
-          className={`cs:font-sans cs:dark:text-gray-300 ${textScaleMap[scale]}`}
-        >
-          {label}
-        </label>
-      </div>
+      {label && (
+        <div className="cs:text-sm/6">
+          <label
+            htmlFor={id}
+            className={`cs:font-sans cs:dark:text-gray-300 ${textScaleMap[scale]}`}
+          >
+            {label}
+          </label>
+        </div>
+      )}
     </div>
   );
 }

@@ -54,6 +54,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
+    id: "emailaddress",
     label: "メールアドレス",
     scale: "md",
     color: "blue",
@@ -72,7 +73,6 @@ export const Default: Story = {
 
 export const Require: Story = {
   args: {
-    label: "メールアドレス",
     scale: "md",
     color: "blue",
     placeholder: "メールアドレス",

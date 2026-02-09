@@ -44,12 +44,12 @@ export function Select({ scale = "md", children, ...props }: SelectProps) {
   );
 }
 
-type SelectOptionPros = {
+type SelectOptionProps = {
   label: string;
   value: string;
-} & React.OptgroupHTMLAttributes<HTMLOptionElement>;
+} & React.OptionHTMLAttributes<HTMLOptionElement>;
 
-export function SelectOption({ label, value, ...props }: SelectOptionPros) {
+export function SelectOption({ label, value, ...props }: SelectOptionProps) {
   return (
     <option value={value} {...props}>
       {label}
