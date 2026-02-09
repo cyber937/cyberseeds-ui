@@ -18,7 +18,7 @@ import { PhoneInput } from '../PhoneInput/PhoneInput';
 import { RadioGroup } from '../RadioGroup/RadioGroup';
 import { Radio } from '../Radio/Radio';
 import { Label } from '../Label/Label';
-import { UIColorProvider } from '../UIColorContext';
+import { UIColorProvider } from '../UIColorProvider/UIColorContext';
 
 describe('Integration Tests', () => {
   describe('Form Integration', () => {

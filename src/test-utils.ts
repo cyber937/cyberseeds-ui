@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
-import { UIColorProvider } from './components/UIColorContext';
+import { UIColorProvider } from './components/UIColorProvider/UIColorContext';
 import type { Color } from './components/DesignSystemUtils';
 
 // Custom render function with UIColorProvider wrapper
