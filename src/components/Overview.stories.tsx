@@ -14,7 +14,7 @@ import { RadioGroup } from "./RadioGroup/RadioGroup";
 import { Select, SelectOption } from "./Select/Select";
 import { Switch } from "./Switch/Switch";
 import { TextArea } from "./TextArea/TextArea";
-import { UIColorProvider } from "./UIColorContext";
+import { UIColorProvider } from "./UIColorProvider/UIColorContext";
 
 interface OverviewProps {
   initialColor: Color;

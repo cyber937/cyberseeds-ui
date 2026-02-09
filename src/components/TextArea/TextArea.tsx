@@ -2,7 +2,7 @@ import { useId } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
-import { useUIColor } from "../UIColorContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface TextAreaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {

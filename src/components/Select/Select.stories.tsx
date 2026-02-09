@@ -74,3 +74,17 @@ export const Scale: Story = {
     </div>
   ),
 };
+
+export const Invalid: Story = {
+  args: {
+    scale: "md",
+    isInvalid: true
+  },
+  render: (args) => (
+    <Select {...args}>
+      <SelectOption key="0" label="選んでください" value="0" />
+      <SelectOption key="1" label="テスト" value="1" />
+      <SelectOption key="2" label="テスト2" value="2" />
+    </Select>
+  ),
+};

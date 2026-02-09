@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
-import { useUIColor } from "../UIColorContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;

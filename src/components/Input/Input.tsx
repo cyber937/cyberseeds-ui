@@ -2,7 +2,7 @@ import React, { useId } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
-import { useUIColor } from "../UIColorContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   id?: string;

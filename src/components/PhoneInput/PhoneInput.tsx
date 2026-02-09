@@ -2,7 +2,7 @@ import React, { useId, useRef } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
-import { useUIColor } from "../UIColorContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 const formatPhoneNumber = (value: string) => {
   if (value === undefined) return "";

@@ -13,5 +13,6 @@ export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Select, SelectOption } from "./Select/Select";
 export { Switch } from "./Switch/Switch";
 export { TextArea } from "./TextArea/TextArea";
-export { UIColorProvider, useUIColor } from "./UIColorContext";
+export { UIColorProvider } from "./UIColorProvider/UIColorContext";
+export { useUIColor } from "./UIColorProvider/useUIColor";
 import "../style.css";
