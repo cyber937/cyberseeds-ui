@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { useId } from "react";
 import { backgroundColorMap } from "../Constants/colorMap";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorContext";
@@ -15,12 +16,16 @@ interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 export function Switch({
   scale = "md",
   color = "blue",
-  checked = true,
+  checked = false,
   onLabel = "オン",
   offLabel = "オフ",
   disabled = false,
+  id: externalId,
   ...props
 }: SwitchProps) {
+  const generatedId = useId();
+  const id = externalId ?? generatedId;
+  const labelId = `${id}-label`;
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
   const finalUIColor = contextUIColor ?? color;
@@ -48,7 +53,11 @@ export function Switch({
   return (
     <div className="cs:flex cs:gap-1 cs:items-center">
       <button
+        id={id}
         type="button"
+        role="switch"
+        aria-checked={checked}
+        aria-labelledby={labelId}
         disabled={disabled}
         className={clsx(
           `cs:flex cs:items-center cs:rounded-full cs:transition-colors cs:duration-300 ${scaleMap[scale]}`,
@@ -66,6 +75,8 @@ export function Switch({
         />
       </button>
       <label
+        id={labelId}
+        htmlFor={id}
         className={clsx(
           `cs:font-sans ${labelScaleMap[scale]}`,
           disabled ? "cs:text-gray-400" : "cs:text-black cs:dark:text-gray-200"
