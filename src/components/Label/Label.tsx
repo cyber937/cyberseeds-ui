@@ -1,6 +1,7 @@
 "use client";
 
 import clsx from "clsx";
+import { memo } from "react";
 import type { Scale } from "../DesignSystemUtils";
 
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
@@ -11,7 +12,12 @@ interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   htmlFor?: string;
 }
 
-export function Label({
+const scaleMaps: Record<Scale, string> = {
+  sm: "cs:text-xs",
+  md: "cs:text-sm/6",
+};
+
+export const Label = memo(function Label({
   scale = "md",
   text,
   require = false,
@@ -19,11 +25,6 @@ export function Label({
   htmlFor,
   ...props
 }: LabelProps) {
-  const scaleMaps: Record<Scale, string> = {
-    sm: "cs:text-xs",
-    md: "cs:text-sm/6",
-  };
-
   return (
     <label
       htmlFor={htmlFor}
@@ -35,4 +36,4 @@ export function Label({
       {text}
     </label>
   );
-}
+});

@@ -1,2 +1,60 @@
 @import "tailwindcss" prefix(cs);
 @custom-variant dark (&:where(.dark, .dark *));
+
+/* Custom Color Support — CSS variable-based styles for CustomColor objects */
+.cs-custom-btn-primary {
+  background-color: var(--cs-ui-base);
+}
+.cs-custom-btn-primary:hover {
+  background-color: var(--cs-ui-hover);
+}
+.cs-custom-btn-primary:active {
+  background-color: var(--cs-ui-active);
+}
+.cs-custom-btn-primary:disabled {
+  background-color: var(--cs-color-gray-200);
+  border: 1px solid var(--cs-ui-active);
+}
+.cs-custom-bg {
+  background-color: var(--cs-ui-base);
+}
+.cs-custom-focus:focus {
+  outline-color: var(--cs-ui-focus);
+}
+.cs-custom-checked:checked {
+  border-color: var(--cs-ui-base);
+  background-color: var(--cs-ui-base);
+}
+.cs-custom-checked:focus-visible {
+  outline-color: var(--cs-ui-focus);
+}
+.cs-custom-pill {
+  outline-color: var(--cs-ui-border);
+  background-color: var(--cs-ui-light);
+  color: var(--cs-ui-lightText);
+}
+
+/* Progress bar stripe animation */
+@keyframes cs-progress-stripe {
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.cs-progress-animated {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: cs-progress-stripe 1s linear infinite;
+}

@@ -4,8 +4,10 @@ import {
   createContext,
   ReactNode,
   useEffect,
+  useMemo,
   useState
 } from "react";
+import { customColorToCSSVars, isCustomColor } from "../Constants/colorUtils";
 import type { Color } from "../DesignSystemUtils";
 
 export interface UIColorContextType {
@@ -28,9 +30,17 @@ export function UIColorProvider({
     setColor(initialColor);
   }, [initialColor]);
 
+  const contextValue = useMemo(() => ({ color, setColor }), [color, setColor]);
+
+  const cssVars = isCustomColor(color) ? customColorToCSSVars(color) : undefined;
+
   return (
-    <UIColorContext.Provider value={{ color, setColor }}>
-      {children}
+    <UIColorContext.Provider value={contextValue}>
+      {cssVars ? (
+        <div style={{ display: "contents", ...cssVars }}>{children}</div>
+      ) : (
+        children
+      )}
     </UIColorContext.Provider>
   );
 };

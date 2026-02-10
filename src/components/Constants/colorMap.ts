@@ -1,6 +1,6 @@
-import type { Color } from "../DesignSystemUtils";
+import type { PresetColor } from "../DesignSystemUtils";
 
-export const focusOutlineColorMap: Record<Color, string> = {
+export const focusOutlineColorMap: Record<PresetColor, string> = {
   red: "cs:focus:outline-red-600",
   orange: "cs:focus:outline-orange-600",
   amber: "cs:focus:outline-amber-600",
@@ -25,7 +25,7 @@ export const focusOutlineColorMap: Record<Color, string> = {
   stone: "cs:focus:outline-stone-600",
 } as const;
 
-export const checkedFocusOutlineColorMap: Record<Color, string> = {
+export const checkedFocusOutlineColorMap: Record<PresetColor, string> = {
   red: "cs:checked:border-red-600 cs:checked:bg-red-600 cs:focus-visible:outline-red-600",
   orange:
     "cs:checked:border-orange-600 cs:checked:bg-orange-600 cs:focus-visible:outline-orange-600",
@@ -62,7 +62,7 @@ export const checkedFocusOutlineColorMap: Record<Color, string> = {
     "cs:checked:border-stone-600 cs:checked:bg-stone-600 cs:focus-visible:outline-stone-600",
 } as const;
 
-export const backgroundColorMap: Record<Color, string> = {
+export const backgroundColorMap: Record<PresetColor, string> = {
   red: "cs:bg-red-600",
   orange: "cs:bg-orange-600",
   amber: "cs:bg-amber-600",

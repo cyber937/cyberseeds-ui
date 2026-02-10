@@ -14,7 +14,7 @@ Designed for clean, accessible, and maintainable interfaces in modern web applic
 - Developed using **Vite 6** for instant HMR
 - Tree-shakable, TypeScript-friendly components with full type exports
 - **WAI-ARIA** compliant accessibility across all components
-- Global color theming via `UIColorProvider` context
+- Global color theming via `UIColorProvider` context with custom color support
 - Interactive component catalog with **Storybook 9**
 - Tested with **Vitest**, **React Testing Library**, and **jest-axe**
 
@@ -47,12 +47,14 @@ This is required for Tailwind CSS utility classes to take effect.
 ## Usage
 
 ```tsx
-import { Button, Input, Checkbox } from 'cyberseeds-ui';
+import { Button, Input, FormField, Checkbox } from 'cyberseeds-ui';
 
 export default function Page() {
   return (
     <form>
-      <Input label="Email" type="email" require />
+      <FormField label="Email" required>
+        <Input type="email" />
+      </FormField>
       <Checkbox label="Remember me" color="blue" />
       <Button variant="primary">Submit</Button>
     </form>
@@ -62,24 +64,53 @@ export default function Page() {
 
 ## Components
 
+### Form
+
+| Component | Description |
+| --- | --- |
+| `FormField` | Label + Input + Error + Help integration wrapper with context-based `aria-describedby` |
+| `Input` | Text input with label integration, validation styling, and auto-generated id |
+| `TextArea` | Multiline text input with label integration and validation styling |
+| `Select` / `SelectOption` | Styled select dropdown with custom chevron icon |
+| `PhoneInput` | Formatted 10-digit US phone number input with cursor-aware formatting |
+| `Checkbox` | Accessible checkbox with custom SVG checkmark and indeterminate state support |
+| `Radio` | Single radio input with label association |
+| `RadioGroup` | Radio group wrapper with `RadioGroup.Option` for controlled selection via context |
+| `Switch` | Toggle switch with on/off labels and animated transitions |
+| `Label` | Semantic `<label>` element with required indicator (`*`) support |
+
+### Layout
+
 | Component | Description |
 | --- | --- |
 | `Accordion` / `AccordionItem` | Collapsible content panels with smooth animations and ARIA support |
-| `Button` | Versatile button with `primary` / `secondary` variants and `Button.Icon` compound component |
-| `Checkbox` | Accessible checkbox with custom SVG checkmark and indeterminate state support |
 | `GroupBox` | Labeled container to group related form inputs |
-| `Input` | Text input with label integration, validation styling, and auto-generated id |
-| `Label` | Semantic `<label>` element with required indicator (`*`) support |
-| `Modal` | Dialog with `Modal.Header`, `Modal.Body`, `Modal.Footer` compound components, ESC key and backdrop click handling |
-| `PhoneInput` | Formatted 10-digit US phone number input with cursor-aware formatting |
-| `Pillbox` | Capsule-style tag/badge component |
-| `Radio` | Single radio input with label association |
-| `RadioGroup` | Radio group wrapper with `RadioGroup.Option` for controlled selection via context |
-| `Select` / `SelectOption` | Styled select dropdown with custom chevron icon |
-| `Switch` | Toggle switch with on/off labels and animated transitions |
-| `TextArea` | Multiline text input with label integration and validation styling |
+| `Modal` | Dialog with `Modal.Header`, `Modal.Body`, `Modal.Footer` compound components |
+| `Tabs` | Tab navigation with `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, WAI-ARIA keyboard navigation |
 
-All form components support `scale` (`"sm"` | `"md"`) and `color` props using the Tailwind v4 color palette.
+### Feedback
+
+| Component | Description |
+| --- | --- |
+| `Toast` | Notification toasts with 4 variants (`success` / `error` / `warning` / `info`), auto-dismiss |
+| `Spinner` | SVG-based loading indicator with `role="status"` |
+| `Progress` | Progress bar with percentage display and stripe animation |
+
+### Data Display
+
+| Component | Description |
+| --- | --- |
+| `Badge` | Notification count / status with `solid` / `outline` / `dot` variants and `Badge.Wrapper` |
+| `Pillbox` | Capsule-style tag/badge component |
+| `Button` | Versatile button with `primary` / `secondary` variants and `Button.Icon` compound component |
+
+### Overlay
+
+| Component | Description |
+| --- | --- |
+| `Tooltip` | Hover/focus tooltip with auto-flip positioning, delay, and `role="tooltip"` |
+
+All components support `scale` (`"sm"` | `"md"`) and `color` props using the Tailwind v4 color palette or custom color objects.
 
 ## Color Theming
 
@@ -89,6 +120,21 @@ All form components support `scale` (`"sm"` | `"md"`) and `color` props using th
 <Button color="emerald">Confirm</Button>
 <Checkbox color="red" />
 <Pillbox color="blue" label="Tag" />
+```
+
+### Custom color objects
+
+```tsx
+import { Button } from 'cyberseeds-ui';
+
+const brand = {
+  base: '#6D28D9',
+  hover: '#5B21B6',
+  active: '#4C1D95',
+  focus: '#7C3AED',
+};
+
+<Button color={brand}>Custom Brand</Button>
 ```
 
 ### Global color via context
@@ -111,19 +157,45 @@ function App() {
 
 Individual components can override the context color with an explicit `color` prop.
 
-### Available colors
+### Available preset colors
 
 `red` `orange` `amber` `yellow` `lime` `green` `emerald` `teal` `cyan` `sky` `blue` `indigo` `violet` `purple` `fuchsia` `pink` `rose` `slate` `gray` `zinc` `neutral` `stone`
+
+## Toast Notifications
+
+```tsx
+import { ToastProvider, useToast, Button } from 'cyberseeds-ui';
+
+function App() {
+  return (
+    <ToastProvider position="top-right">
+      <MyComponent />
+    </ToastProvider>
+  );
+}
+
+function MyComponent() {
+  const toast = useToast();
+
+  return (
+    <Button onClick={() => toast.success('Saved!')}>
+      Save
+    </Button>
+  );
+}
+```
 
 ## Type Exports
 
 ```tsx
-import type { Color, Scale, Variant } from 'cyberseeds-ui';
+import type { Color, PresetColor, CustomColor, Scale, Variant } from 'cyberseeds-ui';
 ```
 
 | Type | Values |
 | --- | --- |
-| `Color` | `"red"` \| `"orange"` \| `"amber"` \| ... (22 colors) |
+| `PresetColor` | `"red"` \| `"orange"` \| `"amber"` \| ... (22 colors) |
+| `CustomColor` | `{ base, hover, active, focus, ... }` |
+| `Color` | `PresetColor \| CustomColor` |
 | `Scale` | `"sm"` \| `"md"` |
 | `Variant` | `"primary"` \| `"secondary"` |
 
@@ -161,22 +233,28 @@ npm run lint
 src/
   components/
     Accordion/        # Accordion, AccordionItem
+    Badge/            # Badge, Badge.Wrapper
     Button/           # Button, Button.Icon
     Checkbox/         # Checkbox
-    Constants/        # Color maps
-    DesignSystemUtils.tsx  # Type definitions (Color, Scale, Variant)
+    Constants/        # Color maps, color utilities
+    FormField/        # FormField, FormField.Label/Error/Help, useFormField
     GroupBox/         # GroupBox
     Input/            # Input
     Label/            # Label
-    Modal/            # Modal, Modal.Header, Modal.Body, Modal.Footer
+    Modal/            # Modal, Modal.Header/Body/Footer
     PhoneInput/       # PhoneInput
     PillBox/          # PillBox (exported as Pillbox)
+    Progress/         # Progress
     Radio/            # Radio
     RadioGroup/       # RadioGroup, RadioGroup.Option
     Select/           # Select, SelectOption
+    Spinner/          # Spinner
     Switch/           # Switch
+    Tabs/             # Tabs, Tabs.List/Trigger/Content
     TextArea/         # TextArea
-    UIColorContext.tsx # UIColorProvider, useUIColor
+    Toast/            # Toast, ToastProvider, useToast
+    Tooltip/          # Tooltip
+    UIColorProvider/  # UIColorProvider, useUIColor
     __tests__/        # Integration and accessibility tests
     index.tsx         # Library entry point
   style.css           # Tailwind CSS v4 utilities

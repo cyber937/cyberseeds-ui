@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useCallback, useContext, useMemo } from "react";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Radio } from "../Radio/Radio";
 
@@ -26,8 +26,13 @@ export function RadioGroup({
   onChange,
   children,
 }: RadioGroupProps) {
+  const contextValue = useMemo(
+    () => ({ scale, color, value, onChange }),
+    [scale, color, value, onChange]
+  );
+
   return (
-    <RadioGroupContext.Provider value={{ scale, color, value, onChange }}>
+    <RadioGroupContext.Provider value={contextValue}>
       <div role="radiogroup" className="cs:flex cs:flex-col cs:gap-2">{children}</div>
     </RadioGroupContext.Provider>
   );
@@ -42,16 +47,20 @@ function Option({ label, value }: OptionProps) {
   const ctx = useContext(RadioGroupContext);
   if (!ctx) throw new Error("RadioGroup.Option must be used within RadioGroup");
 
-  const isSelected = ctx.value === value;
+  const { onChange: ctxOnChange, scale, color, value: ctxValue } = ctx;
+  const isSelected = ctxValue === value;
+  const handleChange = useCallback(() => {
+    ctxOnChange?.(value);
+  }, [ctxOnChange, value]);
 
   return (
     <Radio
       label={label}
-      scale={ctx.scale}
-      color={ctx.color}
+      scale={scale}
+      color={color}
       value={value}
       checked={isSelected}
-      onChange={() => ctx.onChange?.(value)}
+      onChange={handleChange}
     />
   );
 }

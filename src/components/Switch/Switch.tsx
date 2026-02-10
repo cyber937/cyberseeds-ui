@@ -1,10 +1,11 @@
 import clsx from "clsx";
 import { useId } from "react";
 import { backgroundColorMap } from "../Constants/colorMap";
+import { customColorToCSSVars, isPresetColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
-interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface SwitchProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
   scale?: Scale;
   color?: Color;
   checked?: boolean;
@@ -12,6 +13,26 @@ interface SwitchProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   offLabel?: string;
   disabled?: boolean;
 }
+
+const scaleMap: Record<Scale, string> = {
+  sm: "cs:w-6 cs:h-4 cs:p-0.5",
+  md: "cs:w-10 cs:h-5 cs:p-1",
+};
+
+const nobScaleMap: Record<Scale, string> = {
+  sm: "cs:w-3 cs:h-3",
+  md: "cs:w-4 cs:h-4",
+};
+
+const checkedPositionMap: Record<Scale, string> = {
+  sm: "cs:translate-x-2",
+  md: "cs:translate-x-4",
+};
+
+const labelScaleMap: Record<Scale, string> = {
+  sm: "cs:text-xs",
+  md: "cs:text-sm/6",
+};
 
 export function Switch({
   scale = "md",
@@ -30,25 +51,9 @@ export function Switch({
 
   const finalUIColor = contextUIColor ?? color;
 
-  const scaleMap: Record<Scale, string> = {
-    sm: "cs:w-6 cs:h-4 cs:p-0.5",
-    md: "cs:w-10 cs:h-5 cs:p-1",
-  };
-
-  const nobScaleMap: Record<Scale, string> = {
-    sm: "cs:w-3 cs:h-3",
-    md: "cs:w-4 cs:h-4",
-  };
-
-  const checkedPositionMap: Record<Scale, string> = {
-    sm: "cs:translate-x-2",
-    md: "cs:translate-x-4",
-  };
-
-  const labelScaleMap: Record<Scale, string> = {
-    sm: "cs:text-xs",
-    md: "cs:text-sm/6",
-  };
+  const customStyle = !isPresetColor(finalUIColor) && checked
+    ? customColorToCSSVars(finalUIColor)
+    : undefined;
 
   return (
     <div className="cs:flex cs:gap-1 cs:items-center">
@@ -59,10 +64,13 @@ export function Switch({
         aria-checked={checked}
         aria-labelledby={labelId}
         disabled={disabled}
+        style={customStyle}
         className={clsx(
           `cs:flex cs:items-center cs:rounded-full cs:transition-colors cs:duration-300 ${scaleMap[scale]}`,
           checked
-            ? `${backgroundColorMap[finalUIColor]} cs:disabled:bg-amber-100`
+            ? isPresetColor(finalUIColor)
+              ? `${backgroundColorMap[finalUIColor]} cs:disabled:bg-amber-100`
+              : "cs-custom-bg cs:disabled:bg-amber-100"
             : "cs:bg-gray-300 cs:disabled:bg-gray-200"
         )}
         {...props}

@@ -1,13 +1,34 @@
 import { useId } from "react";
 import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
+import { customColorToCSSVars, isPresetColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
-interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "color"> {
   label?: string;
   scale?: Scale;
   color?: Color;
 }
+
+const gapScaleMap: Record<Scale, string> = {
+  sm: "cs:gap-x-2",
+  md: "cs:gap-x-3",
+};
+
+const checkBoxScaleMap: Record<Scale, string> = {
+  sm: "cs:size-3.5",
+  md: "cs:size-4",
+};
+
+const iconScaleMap: Record<Scale, string> = {
+  sm: "cs:size-3",
+  md: "cs:size-3.5",
+};
+
+const textScaleMap: Record<Scale, string> = {
+  sm: "cs:text-xs",
+  md: "cs:text-sm/6",
+};
 
 export function Checkbox({
   scale = "md",
@@ -23,25 +44,9 @@ export function Checkbox({
 
   const finalUIColor = contextUIColor ?? color;
 
-  const gapScaleMap: Record<Scale, string> = {
-    sm: "cs:gap-x-2",
-    md: "cs:gap-x-3",
-  };
-
-  const checkBoxScaleMap: Record<Scale, string> = {
-    sm: "cs:size-3.5",
-    md: "cs:size-4",
-  };
-
-  const iconScaleMap: Record<Scale, string> = {
-    sm: "cs:size-3",
-    md: "cs:size-3.5",
-  };
-
-  const textScaleMap: Record<Scale, string> = {
-    sm: "cs:text-xs",
-    md: "cs:text-sm/6",
-  };
+  const customStyle = !isPresetColor(finalUIColor)
+    ? customColorToCSSVars(finalUIColor)
+    : undefined;
 
   return (
     <div className={`cs:flex ${gapScaleMap[scale]}`}>
@@ -52,7 +57,8 @@ export function Checkbox({
           <input
             id={id}
             type="checkbox"
-            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:bg-white cs:dark:bg-gray-200 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2  cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:checked:bg-amber-100 cs:forced-colors:appearance-auto ${checkedFocusOutlineColorMap[finalUIColor]}`}
+            style={customStyle}
+            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:bg-white cs:dark:bg-gray-200 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2  cs:disabled:border-gray-300 cs:disabled:bg-amber-100 cs:disabled:checked:bg-amber-100 cs:forced-colors:appearance-auto ${isPresetColor(finalUIColor) ? checkedFocusOutlineColorMap[finalUIColor] : "cs-custom-checked"}`}
             {...props}
           />
           <svg

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { createContext, useCallback, useContext, useEffect, useId, useState } from "react";
+import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useState } from "react";
 
 type ModalContextType = {
   close?: () => void;
@@ -14,13 +14,14 @@ type ModalProps = {
   onClose?: () => void;
 };
 
+const widthMap = {
+  sm: "cs:sm:w-2xs",
+  md: "cs:sm:w-md",
+  lg: "cs:sm:w-2xl",
+} as const;
+
 export function Modal({ width = "md", children, onClose }: ModalProps) {
   const headerId = useId();
-  const widthMap = {
-    sm: "cs:sm:w-2xs",
-    md: "cs:sm:w-md",
-    lg: "cs:sm:w-2xl",
-  };
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -43,14 +44,19 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
     };
   }, [handleKeyDown]);
 
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (e.target === e.currentTarget) {
-      onClose?.();
-    }
-  };
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget) {
+        onClose?.();
+      }
+    },
+    [onClose]
+  );
+
+  const contextValue = useMemo(() => ({ close: onClose, headerId }), [onClose, headerId]);
 
   return (
-    <ModalContext.Provider value={{ close: onClose, headerId }}>
+    <ModalContext.Provider value={contextValue}>
       <div
         role="dialog"
         aria-modal="true"
@@ -74,14 +80,14 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
   );
 }
 
-Modal.Header = function ModalHeader({ children }: { children: ReactNode }) {
+Modal.Header = memo(function ModalHeader({ children }: { children: ReactNode }) {
   const context = useContext(ModalContext);
   return (
     <div id={context?.headerId} className="cs:px-4 cs:py-2 cs:font-semibold cs:dark:text-gray-200">
       {children}
     </div>
   );
-};
+});
 
 Modal.Body = function ModalBody({ children }: { children: ReactNode }) {
   return (
