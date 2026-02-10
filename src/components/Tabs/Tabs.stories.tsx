@@ -17,7 +17,7 @@ const meta: Meta<typeof Tabs> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
   },
 };
@@ -34,17 +34,17 @@ export const Default: Story = {
         <Tabs.Trigger value="notifications">通知</Tabs.Trigger>
       </Tabs.List>
       <Tabs.Content value="account">
-        <p className="cs:text-gray-700 cs:dark:text-gray-300">
+        <p className="cs:text-gray-700 cs:dark:text-gray-400">
           アカウント設定を管理します。名前、メールアドレスなどを変更できます。
         </p>
       </Tabs.Content>
       <Tabs.Content value="password">
-        <p className="cs:text-gray-700 cs:dark:text-gray-300">
+        <p className="cs:text-gray-700 cs:dark:text-gray-400">
           パスワードを変更します。セキュリティのため、定期的な変更をお勧めします。
         </p>
       </Tabs.Content>
       <Tabs.Content value="notifications">
-        <p className="cs:text-gray-700 cs:dark:text-gray-300">
+        <p className="cs:text-gray-700 cs:dark:text-gray-400">
           通知設定をカスタマイズします。メール通知やプッシュ通知を制御できます。
         </p>
       </Tabs.Content>
@@ -103,13 +103,13 @@ export const Colors: Story = {
 export const Scales: Story = {
   render: () => (
     <div className="cs:grid cs:grid-cols-2 cs:gap-6">
-      <GroupBox label="Standard (md)">
-        <Tabs defaultValue="tab1" scale="md">
+      <GroupBox label="Extra Small (xs)">
+        <Tabs defaultValue="tab1" scale="xs">
           <Tabs.List>
             <Tabs.Trigger value="tab1">タブ 1</Tabs.Trigger>
             <Tabs.Trigger value="tab2">タブ 2</Tabs.Trigger>
           </Tabs.List>
-          <Tabs.Content value="tab1">Standard サイズ</Tabs.Content>
+          <Tabs.Content value="tab1">Extra Small サイズ</Tabs.Content>
           <Tabs.Content value="tab2">タブ 2</Tabs.Content>
         </Tabs>
       </GroupBox>
@@ -120,6 +120,26 @@ export const Scales: Story = {
             <Tabs.Trigger value="tab2">タブ 2</Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="tab1">Small サイズ</Tabs.Content>
+          <Tabs.Content value="tab2">タブ 2</Tabs.Content>
+        </Tabs>
+      </GroupBox>
+      <GroupBox label="Standard (md)">
+        <Tabs defaultValue="tab1" scale="md">
+          <Tabs.List>
+            <Tabs.Trigger value="tab1">タブ 1</Tabs.Trigger>
+            <Tabs.Trigger value="tab2">タブ 2</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="tab1">Standard サイズ</Tabs.Content>
+          <Tabs.Content value="tab2">タブ 2</Tabs.Content>
+        </Tabs>
+      </GroupBox>
+      <GroupBox label="Large (lg)">
+        <Tabs defaultValue="tab1" scale="lg">
+          <Tabs.List>
+            <Tabs.Trigger value="tab1">タブ 1</Tabs.Trigger>
+            <Tabs.Trigger value="tab2">タブ 2</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="tab1">Large サイズ</Tabs.Content>
           <Tabs.Content value="tab2">タブ 2</Tabs.Content>
         </Tabs>
       </GroupBox>

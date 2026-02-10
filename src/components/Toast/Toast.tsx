@@ -6,7 +6,12 @@ import {
   useRef,
   useState,
 } from "react";
-import type { Scale } from "../DesignSystemUtils";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { isPresetColor } from "../Constants/colorUtils";
+import { FOCUS_RING } from "../Constants/designTokens";
+import { resolveSemanticColor } from "../Constants/semanticColor";
+import type { PresetColor, Scale } from "../DesignSystemUtils";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 export type ToastVariant = "success" | "error" | "warning" | "info";
 
@@ -19,44 +24,45 @@ interface ToastProps {
   className?: string;
 }
 
-const variantStyles: Record<
-  ToastVariant,
-  { bg: string; border: string; text: string; iconColor: string }
-> = {
-  success: {
-    bg: "cs:bg-green-50 cs:dark:bg-green-900/30",
-    border: "cs:border-green-200 cs:dark:border-green-700",
-    text: "cs:text-green-800 cs:dark:text-green-200",
-    iconColor: "cs:text-green-500 cs:dark:text-green-400",
-  },
-  error: {
-    bg: "cs:bg-red-50 cs:dark:bg-red-900/30",
-    border: "cs:border-red-200 cs:dark:border-red-700",
-    text: "cs:text-red-800 cs:dark:text-red-200",
-    iconColor: "cs:text-red-500 cs:dark:text-red-400",
-  },
-  warning: {
-    bg: "cs:bg-amber-50 cs:dark:bg-amber-900/30",
-    border: "cs:border-amber-200 cs:dark:border-amber-700",
-    text: "cs:text-amber-800 cs:dark:text-amber-200",
-    iconColor: "cs:text-amber-500 cs:dark:text-amber-400",
-  },
-  info: {
-    bg: "cs:bg-blue-50 cs:dark:bg-blue-900/30",
-    border: "cs:border-blue-200 cs:dark:border-blue-700",
-    text: "cs:text-blue-800 cs:dark:text-blue-200",
-    iconColor: "cs:text-blue-500 cs:dark:text-blue-400",
-  },
+type ToastStyleSet = { bg: string; border: string; text: string; iconColor: string };
+
+const presetToastStyles: Record<PresetColor, ToastStyleSet> = {
+  red: { bg: "cs:bg-red-50 cs:dark:bg-red-900/30", border: "cs:border-red-200 cs:dark:border-red-700", text: "cs:text-red-800 cs:dark:text-red-300", iconColor: "cs:text-red-500 cs:dark:text-red-400" },
+  orange: { bg: "cs:bg-orange-50 cs:dark:bg-orange-900/30", border: "cs:border-orange-200 cs:dark:border-orange-700", text: "cs:text-orange-800 cs:dark:text-orange-300", iconColor: "cs:text-orange-500 cs:dark:text-orange-400" },
+  amber: { bg: "cs:bg-amber-50 cs:dark:bg-amber-900/30", border: "cs:border-amber-200 cs:dark:border-amber-700", text: "cs:text-amber-800 cs:dark:text-amber-300", iconColor: "cs:text-amber-500 cs:dark:text-amber-400" },
+  yellow: { bg: "cs:bg-yellow-50 cs:dark:bg-yellow-900/30", border: "cs:border-yellow-200 cs:dark:border-yellow-700", text: "cs:text-yellow-800 cs:dark:text-yellow-300", iconColor: "cs:text-yellow-500 cs:dark:text-yellow-400" },
+  lime: { bg: "cs:bg-lime-50 cs:dark:bg-lime-900/30", border: "cs:border-lime-200 cs:dark:border-lime-700", text: "cs:text-lime-800 cs:dark:text-lime-300", iconColor: "cs:text-lime-500 cs:dark:text-lime-400" },
+  green: { bg: "cs:bg-green-50 cs:dark:bg-green-900/30", border: "cs:border-green-200 cs:dark:border-green-700", text: "cs:text-green-800 cs:dark:text-green-300", iconColor: "cs:text-green-500 cs:dark:text-green-400" },
+  emerald: { bg: "cs:bg-emerald-50 cs:dark:bg-emerald-900/30", border: "cs:border-emerald-200 cs:dark:border-emerald-700", text: "cs:text-emerald-800 cs:dark:text-emerald-300", iconColor: "cs:text-emerald-500 cs:dark:text-emerald-400" },
+  teal: { bg: "cs:bg-teal-50 cs:dark:bg-teal-900/30", border: "cs:border-teal-200 cs:dark:border-teal-700", text: "cs:text-teal-800 cs:dark:text-teal-300", iconColor: "cs:text-teal-500 cs:dark:text-teal-400" },
+  cyan: { bg: "cs:bg-cyan-50 cs:dark:bg-cyan-900/30", border: "cs:border-cyan-200 cs:dark:border-cyan-700", text: "cs:text-cyan-800 cs:dark:text-cyan-300", iconColor: "cs:text-cyan-500 cs:dark:text-cyan-400" },
+  sky: { bg: "cs:bg-sky-50 cs:dark:bg-sky-900/30", border: "cs:border-sky-200 cs:dark:border-sky-700", text: "cs:text-sky-800 cs:dark:text-sky-300", iconColor: "cs:text-sky-500 cs:dark:text-sky-400" },
+  blue: { bg: "cs:bg-blue-50 cs:dark:bg-blue-900/30", border: "cs:border-blue-200 cs:dark:border-blue-700", text: "cs:text-blue-800 cs:dark:text-blue-300", iconColor: "cs:text-blue-500 cs:dark:text-blue-400" },
+  indigo: { bg: "cs:bg-indigo-50 cs:dark:bg-indigo-900/30", border: "cs:border-indigo-200 cs:dark:border-indigo-700", text: "cs:text-indigo-800 cs:dark:text-indigo-300", iconColor: "cs:text-indigo-500 cs:dark:text-indigo-400" },
+  violet: { bg: "cs:bg-violet-50 cs:dark:bg-violet-900/30", border: "cs:border-violet-200 cs:dark:border-violet-700", text: "cs:text-violet-800 cs:dark:text-violet-300", iconColor: "cs:text-violet-500 cs:dark:text-violet-400" },
+  purple: { bg: "cs:bg-purple-50 cs:dark:bg-purple-900/30", border: "cs:border-purple-200 cs:dark:border-purple-700", text: "cs:text-purple-800 cs:dark:text-purple-300", iconColor: "cs:text-purple-500 cs:dark:text-purple-400" },
+  fuchsia: { bg: "cs:bg-fuchsia-50 cs:dark:bg-fuchsia-900/30", border: "cs:border-fuchsia-200 cs:dark:border-fuchsia-700", text: "cs:text-fuchsia-800 cs:dark:text-fuchsia-300", iconColor: "cs:text-fuchsia-500 cs:dark:text-fuchsia-400" },
+  pink: { bg: "cs:bg-pink-50 cs:dark:bg-pink-900/30", border: "cs:border-pink-200 cs:dark:border-pink-700", text: "cs:text-pink-800 cs:dark:text-pink-300", iconColor: "cs:text-pink-500 cs:dark:text-pink-400" },
+  rose: { bg: "cs:bg-rose-50 cs:dark:bg-rose-900/30", border: "cs:border-rose-200 cs:dark:border-rose-700", text: "cs:text-rose-800 cs:dark:text-rose-300", iconColor: "cs:text-rose-500 cs:dark:text-rose-400" },
+  slate: { bg: "cs:bg-slate-50 cs:dark:bg-slate-900/30", border: "cs:border-slate-200 cs:dark:border-slate-700", text: "cs:text-slate-800 cs:dark:text-slate-300", iconColor: "cs:text-slate-500 cs:dark:text-slate-400" },
+  gray: { bg: "cs:bg-gray-50 cs:dark:bg-gray-900/30", border: "cs:border-gray-200 cs:dark:border-gray-700", text: "cs:text-gray-800 cs:dark:text-gray-300", iconColor: "cs:text-gray-500 cs:dark:text-gray-400" },
+  zinc: { bg: "cs:bg-zinc-50 cs:dark:bg-zinc-900/30", border: "cs:border-zinc-200 cs:dark:border-zinc-700", text: "cs:text-zinc-800 cs:dark:text-zinc-300", iconColor: "cs:text-zinc-500 cs:dark:text-zinc-400" },
+  neutral: { bg: "cs:bg-neutral-50 cs:dark:bg-neutral-900/30", border: "cs:border-neutral-200 cs:dark:border-neutral-700", text: "cs:text-neutral-800 cs:dark:text-neutral-300", iconColor: "cs:text-neutral-500 cs:dark:text-neutral-400" },
+  stone: { bg: "cs:bg-stone-50 cs:dark:bg-stone-900/30", border: "cs:border-stone-200 cs:dark:border-stone-700", text: "cs:text-stone-800 cs:dark:text-stone-300", iconColor: "cs:text-stone-500 cs:dark:text-stone-400" },
 };
 
 const scaleMap: Record<Scale, string> = {
+  xs: "cs:text-[0.625rem] cs:px-2 cs:py-1.5 cs:min-w-48",
   sm: "cs:text-xs cs:px-3 cs:py-2 cs:min-w-56",
   md: "cs:text-sm cs:px-4 cs:py-3 cs:min-w-72",
+  lg: "cs:text-base cs:px-5 cs:py-4 cs:min-w-80",
 };
 
 const iconScaleMap: Record<Scale, string> = {
+  xs: "cs:h-3 cs:w-3",
   sm: "cs:h-4 cs:w-4",
   md: "cs:h-5 cs:w-5",
+  lg: "cs:h-6 cs:w-6",
 };
 
 function SuccessIcon({ className }: { className?: string }) {
@@ -149,33 +155,47 @@ export function Toast({
   onClose,
   className,
 }: ToastProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion);
   const timerRef = useRef<ReturnType<typeof setTimeout>>(null);
-  const styles = variantStyles[variant];
   const Icon = variantIcons[variant];
+
+  // Resolve variant color via semantic color map from UIColorProvider context
+  const uiColor = useUIColor();
+  const semanticMap = uiColor?.semanticColors;
+  const resolvedColor = resolveSemanticColor(variant, semanticMap);
+  const styles = isPresetColor(resolvedColor)
+    ? presetToastStyles[resolvedColor]
+    : presetToastStyles[variant === "success" ? "green" : variant === "error" ? "red" : variant === "warning" ? "amber" : "blue"];
 
   // Animate in
   useEffect(() => {
+    if (prefersReducedMotion) return;
     const frame = requestAnimationFrame(() => setIsVisible(true));
     return () => cancelAnimationFrame(frame);
-  }, []);
+  }, [prefersReducedMotion]);
 
   // Auto-dismiss
   useEffect(() => {
     if (duration === 0) return;
+    const exitDelay = prefersReducedMotion ? 0 : 200;
     timerRef.current = setTimeout(() => {
       setIsVisible(false);
-      setTimeout(() => onClose?.(), 200);
+      setTimeout(() => onClose?.(), exitDelay);
     }, duration);
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
     };
-  }, [duration, onClose]);
+  }, [duration, onClose, prefersReducedMotion]);
 
   const handleClose = useCallback(() => {
+    if (prefersReducedMotion) {
+      onClose?.();
+      return;
+    }
     setIsVisible(false);
     setTimeout(() => onClose?.(), 200);
-  }, [onClose]);
+  }, [onClose, prefersReducedMotion]);
 
   const role = variant === "error" ? "alert" : "status";
   const ariaLive = variant === "error" ? "assertive" : "polite";
@@ -186,7 +206,7 @@ export function Toast({
       aria-live={ariaLive}
       aria-atomic="true"
       className={clsx(
-        "cs:flex cs:items-start cs:gap-3 cs:rounded-md cs:border cs:shadow-lg cs:font-sans cs:transition-all cs:duration-200 cs:ease-in-out",
+        "cs:flex cs:items-start cs:gap-3 cs:rounded-md cs:border cs:shadow-lg cs:font-sans cs:transition-all cs:duration-200 cs:ease-in-out cs:motion-reduce:transition-none",
         styles.bg,
         styles.border,
         styles.text,
@@ -205,7 +225,7 @@ export function Toast({
           onClick={handleClose}
           aria-label="Close"
           className={clsx(
-            "cs:shrink-0 cs:rounded cs:p-0.5 cs:transition-opacity cs:hover:opacity-70 cs:focus:outline-2 cs:focus:outline-offset-1",
+            `cs:shrink-0 cs:rounded-md cs:p-0.5 cs:transition-opacity cs:hover:opacity-70 ${FOCUS_RING}`,
             styles.text,
           )}
         >

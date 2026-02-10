@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { type ReactNode, useId, useMemo } from "react";
+import { resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { Label } from "../Label/Label";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -34,8 +35,10 @@ interface FormFieldHelpProps {
 }
 
 const scaleTextMap: Record<Scale, string> = {
+  xs: "cs:text-[0.625rem]",
   sm: "cs:text-xs",
   md: "cs:text-sm",
+  lg: "cs:text-base",
 };
 
 export function FormField({
@@ -51,7 +54,7 @@ export function FormField({
   const helpId = `${id}-help`;
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = contextUIColor ?? color;
+  const finalColor = resolveColor(contextUIColor ?? color);
 
   const contextValue = useMemo<FormFieldContextType>(
     () => ({

@@ -11,7 +11,7 @@ const meta: Meta<typeof TextArea> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -93,4 +93,27 @@ export const Disabled: Story = {
     isInvalid: false,
     disabled: true,
   },
+};
+
+export const Scales: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
+        <TextArea label="コメント" scale="xs" placeholder="入力してください" rows={3} />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
+        <TextArea label="コメント" scale="sm" placeholder="入力してください" rows={3} />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
+        <TextArea label="コメント" scale="md" placeholder="入力してください" rows={3} />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
+        <TextArea label="コメント" scale="lg" placeholder="入力してください" rows={3} />
+      </div>
+    </div>
+  ),
 };

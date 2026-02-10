@@ -16,6 +16,13 @@ import * as PillBoxStories from '../PillBox/PillBox.stories';
 import * as TextAreaStories from '../TextArea/TextArea.stories';
 import * as PhoneInputStories from '../PhoneInput/PhoneInput.stories';
 import * as RadioGroupStories from '../RadioGroup/RadioGroup.stories';
+import * as BadgeStories from '../Badge/Badge.stories';
+import * as FormFieldStories from '../FormField/FormField.stories';
+import * as ProgressStories from '../Progress/Progress.stories';
+import * as SpinnerStories from '../Spinner/Spinner.stories';
+import * as TabsStories from '../Tabs/Tabs.stories';
+import * as ToastStories from '../Toast/Toast.stories';
+import * as TooltipStories from '../Tooltip/Tooltip.stories';
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
@@ -33,6 +40,13 @@ const PillBoxComposed = composeStories(PillBoxStories);
 const TextAreaComposed = composeStories(TextAreaStories);
 const PhoneInputComposed = composeStories(PhoneInputStories);
 const RadioGroupComposed = composeStories(RadioGroupStories);
+const BadgeComposed = composeStories(BadgeStories);
+const FormFieldComposed = composeStories(FormFieldStories);
+const ProgressComposed = composeStories(ProgressStories);
+const SpinnerComposed = composeStories(SpinnerStories);
+const TabsComposed = composeStories(TabsStories);
+const ToastComposed = composeStories(ToastStories);
+const TooltipComposed = composeStories(TooltipStories);
 
 describe('Accessibility Tests', () => {
   describe('Button Component A11y', () => {
@@ -147,6 +161,76 @@ describe('Accessibility Tests', () => {
 
   describe('RadioGroup Component A11y', () => {
     Object.entries(RadioGroupComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Badge Component A11y', () => {
+    Object.entries(BadgeComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('FormField Component A11y', () => {
+    Object.entries(FormFieldComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Progress Component A11y', () => {
+    Object.entries(ProgressComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Spinner Component A11y', () => {
+    Object.entries(SpinnerComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Tabs Component A11y', () => {
+    Object.entries(TabsComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Toast Component A11y', () => {
+    Object.entries(ToastComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Tooltip Component A11y', () => {
+    Object.entries(TooltipComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);

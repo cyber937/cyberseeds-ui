@@ -88,6 +88,13 @@ export default function Page() {
 | `Modal` | Dialog with `Modal.Header`, `Modal.Body`, `Modal.Footer` compound components |
 | `Tabs` | Tab navigation with `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, WAI-ARIA keyboard navigation |
 
+### Theming
+
+| Component | Description |
+| --- | --- |
+| `UIColorProvider` | Global color context for all child components, supports preset/custom/semantic colors |
+| `ThemeProvider` | Dark mode management with `"light"` / `"dark"` / `"system"` modes |
+
 ### Feedback
 
 | Component | Description |
@@ -110,7 +117,7 @@ export default function Page() {
 | --- | --- |
 | `Tooltip` | Hover/focus tooltip with auto-flip positioning, delay, and `role="tooltip"` |
 
-All components support `scale` (`"sm"` | `"md"`) and `color` props using the Tailwind v4 color palette or custom color objects.
+All components support `scale` (`"xs"` | `"sm"` | `"md"` | `"lg"`) and `color` props using the Tailwind v4 color palette, custom color objects, or semantic color names.
 
 ## Color Theming
 
@@ -127,6 +134,7 @@ All components support `scale` (`"sm"` | `"md"`) and `color` props using the Tai
 ```tsx
 import { Button } from 'cyberseeds-ui';
 
+// Full specification
 const brand = {
   base: '#6D28D9',
   hover: '#5B21B6',
@@ -134,7 +142,22 @@ const brand = {
   focus: '#7C3AED',
 };
 
+// Or just specify base — shades are auto-generated via OKLCH
+const simple = { base: '#6D28D9' };
+
 <Button color={brand}>Custom Brand</Button>
+<Button color={simple}>Auto Shades</Button>
+```
+
+### Semantic colors
+
+Use semantic color names that map to preset colors:
+
+```tsx
+<Button color="success">OK</Button>   {/* → green */}
+<Button color="error">Delete</Button> {/* → red */}
+<Button color="warning">Caution</Button> {/* → amber */}
+<Button color="info">Details</Button> {/* → blue */}
 ```
 
 ### Global color via context
@@ -156,6 +179,27 @@ function App() {
 ```
 
 Individual components can override the context color with an explicit `color` prop.
+
+### Dark mode
+
+Use `ThemeProvider` for system-aware or manual dark mode:
+
+```tsx
+import { ThemeProvider, useTheme } from 'cyberseeds-ui';
+
+function App() {
+  return (
+    <ThemeProvider mode="system">
+      <MyApp />
+    </ThemeProvider>
+  );
+}
+
+function ThemeToggle() {
+  const { mode, setMode, resolvedTheme } = useTheme();
+  return <button onClick={() => setMode(mode === 'dark' ? 'light' : 'dark')}>Toggle</button>;
+}
+```
 
 ### Available preset colors
 
@@ -188,15 +232,16 @@ function MyComponent() {
 ## Type Exports
 
 ```tsx
-import type { Color, PresetColor, CustomColor, Scale, Variant } from 'cyberseeds-ui';
+import type { Color, PresetColor, CustomColor, SemanticColor, Scale, Variant } from 'cyberseeds-ui';
 ```
 
 | Type | Values |
 | --- | --- |
 | `PresetColor` | `"red"` \| `"orange"` \| `"amber"` \| ... (22 colors) |
-| `CustomColor` | `{ base, hover, active, focus, ... }` |
-| `Color` | `PresetColor \| CustomColor` |
-| `Scale` | `"sm"` \| `"md"` |
+| `SemanticColor` | `"success"` \| `"warning"` \| `"error"` \| `"info"` |
+| `CustomColor` | `{ base, hover?, active?, focus?, light?, lightText?, border?, dark? }` |
+| `Color` | `PresetColor \| CustomColor \| SemanticColor` |
+| `Scale` | `"xs"` \| `"sm"` \| `"md"` \| `"lg"` |
 | `Variant` | `"primary"` \| `"secondary"` |
 
 ## Development
@@ -236,7 +281,7 @@ src/
     Badge/            # Badge, Badge.Wrapper
     Button/           # Button, Button.Icon
     Checkbox/         # Checkbox
-    Constants/        # Color maps, color utilities
+    Constants/        # Color maps, color utilities, design tokens, shade generator
     FormField/        # FormField, FormField.Label/Error/Help, useFormField
     GroupBox/         # GroupBox
     Input/            # Input
@@ -254,6 +299,7 @@ src/
     TextArea/         # TextArea
     Toast/            # Toast, ToastProvider, useToast
     Tooltip/          # Tooltip
+    ThemeProvider/    # ThemeProvider, useTheme (dark mode)
     UIColorProvider/  # UIColorProvider, useUIColor
     __tests__/        # Integration and accessibility tests
     index.tsx         # Library entry point

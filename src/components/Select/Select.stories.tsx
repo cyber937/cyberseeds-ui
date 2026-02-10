@@ -9,7 +9,7 @@ const meta: Meta<typeof Select> = {
   argTypes: {
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -60,17 +60,39 @@ export const Default: Story = {
 
 export const Scale: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2">
-      <Select scale="md" aria-label="標準サイズ">
-        <SelectOption key="0" label="選んでください" value="0" />
-        <SelectOption key="1" label="テスト" value="1" />
-        <SelectOption key="2" label="テスト2" value="2" />
-      </Select>
-      <Select scale="sm" aria-label="小サイズ">
-        <SelectOption key="0" label="選んでください" value="0" />
-        <SelectOption key="1" label="テスト" value="1" />
-        <SelectOption key="2" label="テスト2" value="2" />
-      </Select>
+    <div className="cs:grid cs:grid-cols-4 cs:gap-4">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
+        <Select scale="xs" aria-label="極小サイズ">
+          <SelectOption key="0" label="選んでください" value="0" />
+          <SelectOption key="1" label="テスト" value="1" />
+          <SelectOption key="2" label="テスト2" value="2" />
+        </Select>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
+        <Select scale="sm" aria-label="小サイズ">
+          <SelectOption key="0" label="選んでください" value="0" />
+          <SelectOption key="1" label="テスト" value="1" />
+          <SelectOption key="2" label="テスト2" value="2" />
+        </Select>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
+        <Select scale="md" aria-label="標準サイズ">
+          <SelectOption key="0" label="選んでください" value="0" />
+          <SelectOption key="1" label="テスト" value="1" />
+          <SelectOption key="2" label="テスト2" value="2" />
+        </Select>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
+        <Select scale="lg" aria-label="大サイズ">
+          <SelectOption key="0" label="選んでください" value="0" />
+          <SelectOption key="1" label="テスト" value="1" />
+          <SelectOption key="2" label="テスト2" value="2" />
+        </Select>
+      </div>
     </div>
   ),
 };
@@ -78,7 +100,8 @@ export const Scale: Story = {
 export const Invalid: Story = {
   args: {
     scale: "md",
-    isInvalid: true
+    isInvalid: true,
+    "aria-label": "選択",
   },
   render: (args) => (
     <Select {...args}>

@@ -12,7 +12,7 @@ const meta: Meta<typeof FormField> = {
   argTypes: {
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     isInvalid: { control: "boolean" },
     isRequired: { control: "boolean" },
@@ -106,8 +106,8 @@ export const WithSelect: Story = {
 export const Scales: Story = {
   render: () => (
     <div className="cs:grid cs:grid-cols-2 cs:gap-6">
-      <GroupBox label="Standard (md)">
-        <FormField scale="md" isRequired>
+      <GroupBox label="Extra Small (xs)">
+        <FormField scale="xs" isRequired>
           <FormField.Label>メールアドレス</FormField.Label>
           <Input type="email" placeholder="example@email.com" />
           <FormField.Help>有効なメールアドレスを入力</FormField.Help>
@@ -115,6 +115,20 @@ export const Scales: Story = {
       </GroupBox>
       <GroupBox label="Small (sm)">
         <FormField scale="sm" isRequired>
+          <FormField.Label>メールアドレス</FormField.Label>
+          <Input type="email" placeholder="example@email.com" />
+          <FormField.Help>有効なメールアドレスを入力</FormField.Help>
+        </FormField>
+      </GroupBox>
+      <GroupBox label="Standard (md)">
+        <FormField scale="md" isRequired>
+          <FormField.Label>メールアドレス</FormField.Label>
+          <Input type="email" placeholder="example@email.com" />
+          <FormField.Help>有効なメールアドレスを入力</FormField.Help>
+        </FormField>
+      </GroupBox>
+      <GroupBox label="Large (lg)">
+        <FormField scale="lg" isRequired>
           <FormField.Label>メールアドレス</FormField.Label>
           <Input type="email" placeholder="example@email.com" />
           <FormField.Help>有効なメールアドレスを入力</FormField.Help>

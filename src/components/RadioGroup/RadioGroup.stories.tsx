@@ -10,7 +10,7 @@ const meta: Meta<typeof RadioGroup> = {
   argTypes: {
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -62,28 +62,54 @@ export const Default: Story = {
 
 export const Scale: Story = {
   render: () => {
-    const [standardSender, setStandarGender] = useState<string>("male");
-    const [smallSender, setSmallGender] = useState<string>("male");
+    const [xsVal, setXsVal] = useState<string>("male");
+    const [smVal, setSmVal] = useState<string>("male");
+    const [mdVal, setMdVal] = useState<string>("male");
+    const [lgVal, setLgVal] = useState<string>("male");
     return (
-      <div className="cs:grid cs:grid-cols-2 cs:gap-4">
-        <GroupBox label="Standard Size">
+      <div className="cs:grid cs:grid-cols-4 cs:gap-4">
+        <GroupBox label="Extra Small (xs)">
           <RadioGroup
-            scale="md"
+            scale="xs"
             color="blue"
-            value={standardSender}
-            onChange={setStandarGender}
+            value={xsVal}
+            onChange={setXsVal}
           >
             <RadioGroup.Option label="男性" value="male" />
             <RadioGroup.Option label="女性" value="female" />
             <RadioGroup.Option label="その他" value="other" />
           </RadioGroup>
         </GroupBox>
-        <GroupBox label="Small Size">
+        <GroupBox label="Small (sm)">
           <RadioGroup
             scale="sm"
             color="blue"
-            value={smallSender}
-            onChange={setSmallGender}
+            value={smVal}
+            onChange={setSmVal}
+          >
+            <RadioGroup.Option label="男性" value="male" />
+            <RadioGroup.Option label="女性" value="female" />
+            <RadioGroup.Option label="その他" value="other" />
+          </RadioGroup>
+        </GroupBox>
+        <GroupBox label="Standard (md)">
+          <RadioGroup
+            scale="md"
+            color="blue"
+            value={mdVal}
+            onChange={setMdVal}
+          >
+            <RadioGroup.Option label="男性" value="male" />
+            <RadioGroup.Option label="女性" value="female" />
+            <RadioGroup.Option label="その他" value="other" />
+          </RadioGroup>
+        </GroupBox>
+        <GroupBox label="Large (lg)">
+          <RadioGroup
+            scale="lg"
+            color="blue"
+            value={lgVal}
+            onChange={setLgVal}
           >
             <RadioGroup.Option label="男性" value="male" />
             <RadioGroup.Option label="女性" value="female" />

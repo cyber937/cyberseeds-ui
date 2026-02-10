@@ -18,7 +18,7 @@ describe('Select Component', () => {
     it('renders Scale story correctly', () => {
       render(<Scale />);
       const selects = screen.getAllByRole('combobox');
-      expect(selects).toHaveLength(2);
+      expect(selects).toHaveLength(4);
     });
   });
 

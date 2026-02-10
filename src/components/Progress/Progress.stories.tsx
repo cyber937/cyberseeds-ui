@@ -17,7 +17,7 @@ const meta: Meta<typeof Progress> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     showValue: { control: "boolean" },
     animated: { control: "boolean" },
@@ -48,12 +48,18 @@ export const WithLabel: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-6">
-      <GroupBox label="Standard (md)">
-        <Progress value={65} scale="md" color="blue" />
+    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <GroupBox label="Extra Small (xs)">
+        <Progress value={65} scale="xs" color="blue" />
       </GroupBox>
       <GroupBox label="Small (sm)">
         <Progress value={65} scale="sm" color="blue" />
+      </GroupBox>
+      <GroupBox label="Standard (md)">
+        <Progress value={65} scale="md" color="blue" />
+      </GroupBox>
+      <GroupBox label="Large (lg)">
+        <Progress value={65} scale="lg" color="blue" />
       </GroupBox>
     </div>
   ),

@@ -9,7 +9,7 @@ const meta: Meta<typeof Switch> = {
   argTypes: {
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -71,23 +71,51 @@ export const Primary: Story = {
 
 export const Scale: Story = {
   render: () => {
-    const [standardSwitch, setStandardSwitch] = useState<boolean>(true);
-    const [smallSwitch, setSmallSwitch] = useState<boolean>(true);
+    const [xsSwitch, setXsSwitch] = useState<boolean>(true);
+    const [smSwitch, setSmSwitch] = useState<boolean>(true);
+    const [mdSwitch, setMdSwitch] = useState<boolean>(true);
+    const [lgSwitch, setLgSwitch] = useState<boolean>(true);
     return (
-      <div className="cs:grid cs:grid-cols-2">
-        <Switch
-          checked={standardSwitch}
-          onClick={() => setStandardSwitch(!standardSwitch)}
-          onLabel="オン"
-          offLabel="オフ"
-        />
-        <Switch
-          scale="sm"
-          checked={smallSwitch}
-          onClick={() => setSmallSwitch(!smallSwitch)}
-          onLabel="オン"
-          offLabel="オフ"
-        />
+      <div className="cs:grid cs:grid-cols-4 cs:gap-4">
+        <div>
+          <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
+          <Switch
+            scale="xs"
+            checked={xsSwitch}
+            onClick={() => setXsSwitch(!xsSwitch)}
+            onLabel="オン"
+            offLabel="オフ"
+          />
+        </div>
+        <div>
+          <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
+          <Switch
+            scale="sm"
+            checked={smSwitch}
+            onClick={() => setSmSwitch(!smSwitch)}
+            onLabel="オン"
+            offLabel="オフ"
+          />
+        </div>
+        <div>
+          <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
+          <Switch
+            checked={mdSwitch}
+            onClick={() => setMdSwitch(!mdSwitch)}
+            onLabel="オン"
+            offLabel="オフ"
+          />
+        </div>
+        <div>
+          <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
+          <Switch
+            scale="lg"
+            checked={lgSwitch}
+            onClick={() => setLgSwitch(!lgSwitch)}
+            onLabel="オン"
+            offLabel="オフ"
+          />
+        </div>
       </div>
     );
   },

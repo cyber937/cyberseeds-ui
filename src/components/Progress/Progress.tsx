@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { backgroundColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isPresetColor } from "../Constants/colorUtils";
+import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
@@ -16,13 +16,17 @@ interface ProgressProps {
 }
 
 const trackHeightMap: Record<Scale, string> = {
+  xs: "cs:h-1",
   sm: "cs:h-1.5",
   md: "cs:h-2.5",
+  lg: "cs:h-3.5",
 };
 
 const labelScaleMap: Record<Scale, string> = {
+  xs: "cs:text-[0.625rem]",
   sm: "cs:text-xs",
   md: "cs:text-sm",
+  lg: "cs:text-base",
 };
 
 export function Progress({
@@ -36,11 +40,11 @@ export function Progress({
   className,
 }: ProgressProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = contextUIColor ?? color;
+  const finalColor = resolveColor(contextUIColor ?? color);
 
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
-  const customStyle = !isPresetColor(finalColor)
+  const customStyle = isCustomColor(finalColor)
     ? customColorToCSSVars(finalColor)
     : undefined;
 
@@ -54,7 +58,7 @@ export function Progress({
           )}
         >
           {label && (
-            <span className="cs:text-gray-700 cs:dark:text-gray-300 cs:font-medium">
+            <span className="cs:text-gray-700 cs:dark:text-gray-400 cs:font-medium">
               {label}
             </span>
           )}
@@ -79,7 +83,7 @@ export function Progress({
         <div
           style={{ width: `${percentage}%`, ...customStyle }}
           className={clsx(
-            "cs:h-full cs:rounded-full cs:transition-all cs:duration-300 cs:ease-in-out",
+            "cs:h-full cs:rounded-full cs:transition-all cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none",
             animated && "cs-progress-animated",
             isPresetColor(finalColor)
               ? backgroundColorMap[finalColor]

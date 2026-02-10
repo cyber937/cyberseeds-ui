@@ -21,7 +21,7 @@ const meta: Meta<typeof Badge> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     max: { control: "number" },
   },
@@ -93,12 +93,12 @@ export const WithMax: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-6">
-      <GroupBox label="Standard (md)">
+    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <GroupBox label="Extra Small (xs)">
         <div className="cs:flex cs:gap-2 cs:items-center">
-          <Badge scale="md" color="blue">12</Badge>
-          <Badge scale="md" variant="outline" color="red">New</Badge>
-          <Badge scale="md" variant="dot" color="green" />
+          <Badge scale="xs" color="blue">12</Badge>
+          <Badge scale="xs" variant="outline" color="red">New</Badge>
+          <Badge scale="xs" variant="dot" color="green" />
         </div>
       </GroupBox>
       <GroupBox label="Small (sm)">
@@ -106,6 +106,20 @@ export const Scales: Story = {
           <Badge scale="sm" color="blue">12</Badge>
           <Badge scale="sm" variant="outline" color="red">New</Badge>
           <Badge scale="sm" variant="dot" color="green" />
+        </div>
+      </GroupBox>
+      <GroupBox label="Standard (md)">
+        <div className="cs:flex cs:gap-2 cs:items-center">
+          <Badge scale="md" color="blue">12</Badge>
+          <Badge scale="md" variant="outline" color="red">New</Badge>
+          <Badge scale="md" variant="dot" color="green" />
+        </div>
+      </GroupBox>
+      <GroupBox label="Large (lg)">
+        <div className="cs:flex cs:gap-2 cs:items-center">
+          <Badge scale="lg" color="blue">12</Badge>
+          <Badge scale="lg" variant="outline" color="red">New</Badge>
+          <Badge scale="lg" variant="dot" color="green" />
         </div>
       </GroupBox>
     </div>
