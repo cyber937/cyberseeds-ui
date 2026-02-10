@@ -1,6 +1,8 @@
-import React, { useId, useRef } from "react";
+import React, { useCallback, useId, useRef } from "react";
 import { focusOutlineColorMap } from "../Constants/colorMap";
+import { customColorToCSSVars, isPresetColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
+import { useFormField } from "../FormField/FormFieldContext";
 import { Label } from "../Label/Label";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
@@ -20,7 +22,7 @@ const formatPhoneNumber = (value: string) => {
 interface PhoneInputProps
   extends Omit<
     React.InputHTMLAttributes<HTMLInputElement>,
-    "onChange" | "value"
+    "onChange" | "value" | "color"
   > {
   label?: string;
   scale?: Scale;
@@ -31,6 +33,11 @@ interface PhoneInputProps
   onChange?: (value: string) => void;
 }
 
+const scaleMap: Record<Scale, string> = {
+  sm: "cs:px-2 cs:py-1 cs:text-xs",
+  md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
+};
+
 export function PhoneInput({
   label,
   scale = "md",
@@ -40,22 +47,30 @@ export function PhoneInput({
   value,
   onChange,
   id: externalId,
+  className = "",
   ...props
 }: PhoneInputProps) {
   const generatedId = useId();
-  const id = externalId ?? generatedId;
+  const formField = useFormField();
+  const id = externalId ?? formField?.id ?? generatedId;
   const inputRef = useRef<HTMLInputElement>(null);
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
   const finalUIColor = contextUIColor ?? color;
+  const mergedInvalid = isInvalid || formField?.isInvalid || false;
+  const mergedDisabled = props.disabled || formField?.isDisabled || false;
+  const mergedScale = scale ?? formField?.scale ?? "md";
 
-  const scaleMap: Record<Scale, string> = {
-    sm: "cs:px-2 cs:py-1 cs:text-xs",
-    md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
-  };
+  const describedBy = formField
+    ? [formField.errorId, formField.helpId].join(" ")
+    : undefined;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const customStyle = !isPresetColor(finalUIColor)
+    ? customColorToCSSVars(finalUIColor)
+    : undefined;
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
     const originalFormatted = input.value;
     const originalCursor = input.selectionStart || 0;
@@ -93,9 +108,9 @@ export function PhoneInput({
     setTimeout(() => {
       inputRef.current?.setSelectionRange(newCursor, newCursor);
     }, 0);
-  };
+  }, [onChange]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Backspace") {
       const input = e.currentTarget;
       const cursorPos = input.selectionStart ?? 0;
@@ -136,7 +151,7 @@ export function PhoneInput({
         }, 0);
       }
     }
-  };
+  }, [onChange]);
 
   return (
     <div>
@@ -144,7 +159,7 @@ export function PhoneInput({
         <Label
           htmlFor={id}
           text={label}
-          scale={scale}
+          scale={mergedScale}
           className="cs:ml-2"
           require={require}
         />
@@ -153,17 +168,20 @@ export function PhoneInput({
         ref={inputRef}
         id={id}
         type="tel"
-        aria-invalid={isInvalid || undefined}
+        aria-invalid={mergedInvalid || undefined}
+        aria-describedby={describedBy}
+        disabled={mergedDisabled || undefined}
         value={value ? formatPhoneNumber(String(value)) : ""}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder="(123) 456-7890"
         maxLength={16}
+        style={customStyle}
         className={`cs:block cs:w-full cs:rounded-md cs:disabled:bg-amber-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 placeholder:cs:text-gray-400 cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200 cs:-outline-offset-1 cs:outline-gray-300 cs:placeholder:text-gray-400 cs:focus:outline-2 cs:focus:-outline-offset-2 cs:dark:disabled:text-gray-800 cs:transition-colors cs:duration-200 cs:ease-in-out ${
-          isInvalid
+          mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
             : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"
-        } ${scaleMap[scale]} ${focusOutlineColorMap[finalUIColor]}`}
+        } ${scaleMap[mergedScale]} ${isPresetColor(finalUIColor) ? focusOutlineColorMap[finalUIColor] : "cs-custom-focus"} ${className}`}
         {...props}
       />
     </div>

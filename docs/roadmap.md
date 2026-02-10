@@ -38,13 +38,13 @@ cyberseeds-ui の改善計画とロードマップ。
 
 > 詳細: [custom-color-proposal.md](./custom-color-proposal.md)
 
-- [ ] `Color` 型を `PresetColor | CustomColor` に拡張
-- [ ] CSS カスタムプロパティ (`--cs-color-*`) の導入
-- [ ] `UIColorProvider` でカスタムカラーオブジェクトを受け付け
-- [ ] プリセット22色の CSS変数マッピング定義
-- [ ] `base` のみ指定時の自動シェード生成
-- [ ] 各コンポーネントを CSS変数参照に段階的移行
-- [ ] ダークモード用カスタムカラーの対応
+- [x] `Color` 型を `PresetColor | CustomColor` に拡張
+- [x] CSS カスタムプロパティ (`--cs-ui-*`) の導入
+- [x] `UIColorProvider` でカスタムカラーオブジェクトを受け付け
+- [x] 各コンポーネントを CustomColor 対応 (Button, Switch, Checkbox, Radio, PillBox, Input, TextArea, PhoneInput)
+- [ ] `base` のみ指定時の自動シェード生成 (将来対応)
+- [ ] プリセット22色の CSS変数マッピング定義 (将来対応)
+- [ ] ダークモード用カスタムカラーの対応 (将来対応)
 
 ### セマンティックカラー
 
@@ -64,7 +64,7 @@ cyberseeds-ui の改善計画とロードマップ。
 - [ ] `border-radius` の統一（`rounded-md` vs `rounded-lg` の整理）
 - [ ] disabled 背景色を `amber-100` → `gray-100` / `gray-200` に変更
 
-## v0.5.0 — 新規コンポーネント追加
+## v0.5.0 — 新規コンポーネント追加 ✅
 
 > 詳細: [new-components-proposal.md](./new-components-proposal.md)
 
@@ -72,16 +72,16 @@ cyberseeds-ui の改善計画とロードマップ。
 
 | コンポーネント | 説明 | 既存への影響 |
 | --- | --- | --- |
-| **FormField** | Label + Input + Error + Help の統合ラッパー | Input, Select, TextArea に `useFormField` hook 追加 |
+| **FormField** | Label + Input + Error + Help の統合ラッパー | Input, Select, TextArea, PhoneInput に `useFormField` hook 追加 |
 | **Toast** | フィードバック通知 (宣言的 API + `useToast` hook) | 新規 ToastProvider |
 
-- [ ] FormField: Context ベースで `aria-describedby` を自動関連付け
-- [ ] FormField: `isInvalid`, `isRequired`, `isDisabled` をコンテキスト経由で子要素に伝播
-- [ ] FormField: Error に `role="alert"` + `aria-live="polite"` を適用
-- [ ] Toast: `success` / `error` / `warning` / `info` の4バリアント
-- [ ] Toast: 宣言的 API（`<Toast>` 単体）と命令的 API（`useToast` hook）の両対応
-- [ ] Toast: ToastProvider で配置位置・自動消去・スタックを管理
-- [ ] Toast: スライドイン/アウトのアニメーション（Modal と同じ CSS transition パターン）
+- [x] FormField: Context ベースで `aria-describedby` を自動関連付け
+- [x] FormField: `isInvalid`, `isRequired`, `isDisabled` をコンテキスト経由で子要素に伝播
+- [x] FormField: Error に `role="alert"` + `aria-live="polite"` を適用
+- [x] Toast: `success` / `error` / `warning` / `info` の4バリアント
+- [x] Toast: 宣言的 API（`<Toast>` 単体）と命令的 API（`useToast` hook）の両対応
+- [x] Toast: ToastProvider で配置位置・自動消去・スタックを管理
+- [x] Toast: スライドイン/アウトのアニメーション（Modal と同じ CSS transition パターン）
 
 ### 中優先度
 
@@ -90,11 +90,12 @@ cyberseeds-ui の改善計画とロードマップ。
 | **Tooltip** | ホバー/フォーカスで補足情報をポップアップ | なし |
 | **Badge** | 通知カウント・ドット・ステータス表示 | なし |
 
-- [ ] Tooltip: `position` (top/bottom/left/right)、`delay`、Escape キーで閉じる
-- [ ] Tooltip: `aria-describedby` + `role="tooltip"` でアクセシビリティ対応
-- [ ] Badge: `solid` / `outline` / `dot` の3バリアント
-- [ ] Badge: `max` prop でカウント上限 (例: 99+)
-- [ ] Badge: `Badge.Wrapper` で要素に付加（position: absolute）
+- [x] Tooltip: `position` (top/bottom/left/right)、`delay`、Escape キーで閉じる
+- [x] Tooltip: `aria-describedby` + `role="tooltip"` でアクセシビリティ対応
+- [x] Tooltip: ビューポート端での自動フリップ（`getBoundingClientRect` による検知）
+- [x] Badge: `solid` / `outline` / `dot` の3バリアント
+- [x] Badge: `max` prop でカウント上限 (例: 99+)
+- [x] Badge: `Badge.Wrapper` で要素に付加（position: absolute）
 
 ### 低優先度
 
@@ -104,10 +105,11 @@ cyberseeds-ui の改善計画とロードマップ。
 | **Spinner** | 回転アニメーションのローディングインジケーター | なし |
 | **Progress** | バー型の進捗表示 | なし |
 
-- [ ] Tabs: WAI-ARIA Tabs パターン準拠（Arrow キーでタブ移動）
-- [ ] Tabs: 制御/非制御の両モード対応 (`value` / `defaultValue`)
-- [ ] Spinner: SVG ベース、`role="status"` + `aria-label`
-- [ ] Progress: `role="progressbar"` + `aria-valuenow`、パーセント表示オプション
+- [x] Tabs: WAI-ARIA Tabs パターン準拠（Arrow キーでタブ移動）
+- [x] Tabs: 制御/非制御の両モード対応 (`value` / `defaultValue`)
+- [x] Spinner: SVG ベース、`role="status"` + `aria-label`
+- [x] Progress: `role="progressbar"` + `aria-valuenow`、パーセント表示オプション
+- [x] Progress: ストライプアニメーション（`animated` prop）
 
 ## v0.6.0 — アクセシビリティ強化
 

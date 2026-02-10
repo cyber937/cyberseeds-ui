@@ -1,4 +1,4 @@
-export type Color =
+export type PresetColor =
   | "red"
   | "orange"
   | "amber"
@@ -21,5 +21,17 @@ export type Color =
   | "zinc"
   | "neutral"
   | "stone";
+
+export interface CustomColor {
+  base: string;
+  hover: string;
+  active: string;
+  focus: string;
+  light: string;
+  lightText: string;
+  border: string;
+}
+
+export type Color = PresetColor | CustomColor;
 export type Scale = "sm" | "md";
 export type Variant = "primary" | "secondary";
