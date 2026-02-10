@@ -1,2 +1,0 @@
-"use client";
-const s=new Set(["red","orange","amber","yellow","lime","green","emerald","teal","cyan","sky","blue","indigo","violet","purple","fuchsia","pink","rose","slate","gray","zinc","neutral","stone"]);function t(e){return typeof e=="string"&&s.has(e)}function i(e){return typeof e=="object"&&e!==null&&"base"in e}function n(e){return{"--cs-ui-base":e.base,"--cs-ui-hover":e.hover,"--cs-ui-active":e.active,"--cs-ui-focus":e.focus,"--cs-ui-light":e.light,"--cs-ui-lightText":e.lightText,"--cs-ui-border":e.border}}export{i as a,n as c,t as i};
