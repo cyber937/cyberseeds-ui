@@ -2,18 +2,26 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "./Accordion/Accordion";
+import { Badge } from "./Badge/Badge";
 import { Button } from "./Button/Button";
 import { Checkbox } from "./Checkbox/Checkbox";
 import type { Color } from "./DesignSystemUtils";
+import { FormField } from "./FormField/FormField";
 import { GroupBox } from "./GroupBox/GroupBox";
 import { Input } from "./Input/Input";
+import { Label } from "./Label/Label";
 import { Modal } from "./Modal/Modal";
 import { PhoneInput } from "./PhoneInput/PhoneInput";
 import { PillBox } from "./PillBox/PillBox";
+import { Progress } from "./Progress/Progress";
 import { RadioGroup } from "./RadioGroup/RadioGroup";
 import { Select, SelectOption } from "./Select/Select";
+import { Spinner } from "./Spinner/Spinner";
 import { Switch } from "./Switch/Switch";
+import { Tabs } from "./Tabs/Tabs";
 import { TextArea } from "./TextArea/TextArea";
+import { Toast } from "./Toast/Toast";
+import { Tooltip } from "./Tooltip/Tooltip";
 import { UIColorProvider } from "./UIColorProvider/UIColorContext";
 
 interface OverviewProps {
@@ -21,10 +29,12 @@ interface OverviewProps {
 }
 
 const Overview = ({ initialColor }: OverviewProps) => {
-  const [isModalOpen, setIsMobalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [phoneNumber, setPhoneNumber] = useState<string>("");
   const [language, setLanguage] = useState<string>("");
   const [switchValue, setSwitchValue] = useState<boolean>(true);
+  const [tabValue, setTabValue] = useState<string>("tab1");
+  const [showToast, setShowToast] = useState<boolean>(false);
 
   const [color, setColor] = useState<Color>(initialColor);
 
@@ -35,64 +45,160 @@ const Overview = ({ initialColor }: OverviewProps) => {
   return (
     <div>
       <UIColorProvider initialColor={color}>
-        <GroupBox label="Groupbox" className="cs:space-y-4">
-          <Accordion >
+        <GroupBox label="GroupBox" className="cs:space-y-4">
+          {/* Accordion */}
+          <Accordion>
             <AccordionItem title="1. Accordion">
-              Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+              Lorem Ipsum is simply dummy text of the printing and typesetting
+              industry.
             </AccordionItem>
             <AccordionItem title="2. Accordion">
-              Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+              Contrary to popular belief, Lorem Ipsum is not simply random text.
             </AccordionItem>
           </Accordion>
+
+          {/* Badge */}
+          <div className="cs:flex cs:items-center cs:gap-2">
+            <Label text="Badge" />
+            <Badge variant="solid" color={color}>
+              3
+            </Badge>
+            <Badge variant="outline" color={color}>
+              New
+            </Badge>
+            <Badge variant="dot" color={color} />
+          </div>
+
+          {/* Button */}
           <div className="cs:flex cs:gap-4">
-            <Button onClick={() => setIsMobalOpen(!isModalOpen)}>
-              Open Modal
-            </Button>
+            <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
             <Button variant="secondary">Secondary</Button>
           </div>
-          <Checkbox label="Check" />
+
+          {/* Checkbox */}
+          <Checkbox label="Checkbox" />
+
+          {/* FormField + Input */}
+          <FormField isRequired>
+            <Input label="FormField + Input" placeholder="Required field" />
+          </FormField>
+
+          {/* Input */}
           <Input label="Input" placeholder="Input" />
+
+          {/* PhoneInput */}
           <PhoneInput
             label="Phone Number"
             value={phoneNumber}
             onChange={setPhoneNumber}
           />
+
+          {/* PillBox */}
           <div className="cs:flex cs:gap-2">
-            <PillBox label="Pillbox" />
-            <PillBox label="Pillbox" color="red" />
-            <PillBox label="Pillbox" color="green" />
-            <PillBox label="Pillbox" color="yellow" />
-            <PillBox label="Pillbox" color="gray" />
+            <PillBox label="PillBox" />
+            <PillBox label="PillBox" color="red" />
+            <PillBox label="PillBox" color="green" />
+            <PillBox label="PillBox" color="yellow" />
+            <PillBox label="PillBox" color="gray" />
           </div>
-          <GroupBox label="Radio Group">
+
+          {/* Progress */}
+          <div className="cs:space-y-2">
+            <Label text="Progress" />
+            <Progress value={65} showValue animated />
+          </div>
+
+          {/* RadioGroup */}
+          <GroupBox label="RadioGroup">
             <RadioGroup value={language} onChange={setLanguage}>
               <RadioGroup.Option label="English" value="english" />
               <RadioGroup.Option label="Spanish" value="spanish" />
               <RadioGroup.Option label="French" value="french" />
             </RadioGroup>
           </GroupBox>
+
+          {/* Select */}
           <Select>
-            <SelectOption key="0" label="Select Fruit" value="0" />
-            <SelectOption key="1" label="Apple" value="1" />
-            <SelectOption key="2" label="Banana" value="2" />
-            <SelectOption key="3" label="Orange" value="2" />
+            <SelectOption label="Select Fruit" value="0" />
+            <SelectOption label="Apple" value="1" />
+            <SelectOption label="Banana" value="2" />
+            <SelectOption label="Orange" value="3" />
           </Select>
+
+          {/* Spinner */}
+          <div className="cs:flex cs:items-center cs:gap-3">
+            <Label text="Spinner" />
+            <Spinner scale="sm" />
+            <Spinner scale="md" />
+          </div>
+
+          {/* Switch */}
           <Switch
             checked={switchValue}
             onClick={() => setSwitchValue(!switchValue)}
             onLabel="On"
             offLabel="Off"
           />
+
+          {/* Tabs */}
+          <Tabs value={tabValue} onChange={setTabValue}>
+            <Tabs.List>
+              <Tabs.Trigger value="tab1">Tab 1</Tabs.Trigger>
+              <Tabs.Trigger value="tab2">Tab 2</Tabs.Trigger>
+              <Tabs.Trigger value="tab3">Tab 3</Tabs.Trigger>
+            </Tabs.List>
+            <Tabs.Content value="tab1">Content of Tab 1</Tabs.Content>
+            <Tabs.Content value="tab2">Content of Tab 2</Tabs.Content>
+            <Tabs.Content value="tab3">Content of Tab 3</Tabs.Content>
+          </Tabs>
+
+          {/* TextArea */}
           <TextArea placeholder="Please type some texts." />
+
+          {/* Toast */}
+          <div className="cs:space-y-2">
+            <Button
+              variant="secondary"
+              onClick={() => setShowToast(!showToast)}
+            >
+              {showToast ? "Hide Toast" : "Show Toast"}
+            </Button>
+            {showToast && (
+              <div className="cs:space-y-2">
+                <Toast variant="success" onClose={() => setShowToast(false)}>
+                  Success message
+                </Toast>
+                <Toast variant="error" onClose={() => setShowToast(false)}>
+                  Error message
+                </Toast>
+                <Toast variant="warning" onClose={() => setShowToast(false)}>
+                  Warning message
+                </Toast>
+                <Toast variant="info" onClose={() => setShowToast(false)}>
+                  Info message
+                </Toast>
+              </div>
+            )}
+          </div>
+
+          {/* Tooltip */}
+          <div className="cs:flex cs:items-center cs:gap-4">
+            <Tooltip content="Tooltip on top" position="top">
+              <Button>Tooltip</Button>
+            </Tooltip>
+            <Tooltip content="Tooltip on right" position="right">
+              <Button variant="secondary">Tooltip</Button>
+            </Tooltip>
+          </div>
         </GroupBox>
+
+        {/* Modal */}
         {isModalOpen && (
           <Modal>
             <Modal.Header>Modal Header</Modal.Header>
-            <Modal.Body>This is modal example</Modal.Body>
+            <Modal.Body>This is a modal example.</Modal.Body>
             <Modal.Footer>
-              <Button onClick={() => setIsMobalOpen(!isModalOpen)}>
-                Close
-              </Button>
+              <Button onClick={() => setIsModalOpen(false)}>Close</Button>
             </Modal.Footer>
           </Modal>
         )}
@@ -125,6 +231,7 @@ const meta: Meta<typeof Overview> = {
         "purple",
         "fuchsia",
         "pink",
+        "rose",
         "gray",
         "zinc",
         "neutral",

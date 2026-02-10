@@ -8,6 +8,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { useTouchDevice } from "../../hooks/useTouchDevice";
 
 type TooltipPosition = "top" | "bottom" | "left" | "right";
 
@@ -99,6 +100,7 @@ export function Tooltip({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const tooltipId = useId();
+  const isTouch = useTouchDevice();
 
   const show = useCallback(() => {
     timerRef.current = setTimeout(() => setIsVisible(true), delay);
@@ -107,6 +109,10 @@ export function Tooltip({
   const hide = useCallback(() => {
     if (timerRef.current) clearTimeout(timerRef.current);
     setIsVisible(false);
+  }, []);
+
+  const toggle = useCallback(() => {
+    setIsVisible((prev) => !prev);
   }, []);
 
   // Resolve position after tooltip becomes visible (before paint)
@@ -128,6 +134,18 @@ export function Tooltip({
     return () => document.removeEventListener("keydown", handleEscape);
   }, [isVisible, hide]);
 
+  // Close on outside touch
+  useEffect(() => {
+    if (!isTouch || !isVisible) return;
+    const handleOutsideTouch = (e: TouchEvent) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+        hide();
+      }
+    };
+    document.addEventListener("touchstart", handleOutsideTouch);
+    return () => document.removeEventListener("touchstart", handleOutsideTouch);
+  }, [isTouch, isVisible, hide]);
+
   useEffect(() => {
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -138,12 +156,16 @@ export function Tooltip({
     <div
       ref={wrapperRef}
       className="cs:relative cs:inline-block"
-      onMouseEnter={show}
-      onMouseLeave={hide}
-      onFocus={show}
-      onBlur={hide}
+      onMouseEnter={isTouch ? undefined : show}
+      onMouseLeave={isTouch ? undefined : hide}
+      onFocus={isTouch ? undefined : show}
+      onBlur={isTouch ? undefined : hide}
+      onClick={isTouch ? toggle : undefined}
     >
-      <div aria-describedby={isVisible ? tooltipId : undefined}>
+      <div
+        aria-describedby={isVisible ? tooltipId : undefined}
+        aria-expanded={isTouch ? isVisible : undefined}
+      >
         {children}
       </div>
       {isVisible && (
@@ -152,7 +174,7 @@ export function Tooltip({
           id={tooltipId}
           role="tooltip"
           className={clsx(
-            "cs:absolute cs:z-40 cs:whitespace-nowrap cs:rounded-md cs:px-2 cs:py-1 cs:text-xs cs:font-sans cs:bg-gray-900 cs:text-white cs:dark:bg-gray-100 cs:dark:text-gray-900 cs:shadow-md cs:pointer-events-none",
+            "cs:absolute cs:z-40 cs:whitespace-nowrap cs:max-w-[calc(100vw-2rem)] cs:max-md:whitespace-normal cs:rounded-md cs:px-2 cs:py-1 cs:text-xs cs:font-sans cs:bg-gray-900 cs:text-white cs:dark:bg-gray-100 cs:dark:text-gray-900 cs:shadow-md cs:pointer-events-none",
             positionClasses[resolvedPosition],
             className,
           )}

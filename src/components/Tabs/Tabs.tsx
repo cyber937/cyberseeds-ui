@@ -3,12 +3,14 @@ import {
   type KeyboardEvent,
   type ReactNode,
   useCallback,
+  useEffect,
   useId,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { isPresetColor, resolveColor } from "../Constants/colorUtils";
-import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
+import { FOCUS_RING, TOUCH_TARGET_MIN, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 import { TabsContext, useTabsContext } from "./TabsContext";
@@ -138,6 +140,33 @@ export function Tabs({
 }
 
 function TabsList({ children, className }: TabsListProps) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const updateScrollState = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 0);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+  }, []);
+
+  useEffect(() => {
+    updateScrollState();
+    const el = scrollRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(updateScrollState);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [updateScrollState]);
+
+  const scroll = useCallback((direction: "left" | "right") => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = el.clientWidth * 0.75;
+    el.scrollBy({ left: direction === "left" ? -amount : amount, behavior: "smooth" });
+  }, []);
+
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
     const tabs = Array.from(
       e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])'),
@@ -169,16 +198,50 @@ function TabsList({ children, className }: TabsListProps) {
     }
   }, []);
 
+  const showScrollButtons = canScrollLeft || canScrollRight;
+
   return (
-    <div
-      role="tablist"
-      onKeyDown={handleKeyDown}
-      className={clsx(
-        "cs:flex cs:border-b cs:border-gray-200 cs:dark:border-gray-700",
-        className,
+    <div className="cs:relative cs:flex cs:items-center">
+      {showScrollButtons && (
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden="true"
+          disabled={!canScrollLeft}
+          onClick={() => scroll("left")}
+          className="cs:flex cs:shrink-0 cs:items-center cs:justify-center cs:size-8 cs:rounded-full cs:text-gray-400 cs:dark:text-gray-500 cs:disabled:opacity-0 cs:hover:not-disabled:text-gray-600 cs:dark:hover:not-disabled:text-gray-300 cs:hover:not-disabled:bg-gray-100 cs:dark:hover:not-disabled:bg-gray-800 cs:transition-opacity cs:duration-150"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" className="cs:size-5" aria-hidden="true">
+            <path fillRule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clipRule="evenodd" />
+          </svg>
+        </button>
       )}
-    >
-      {children}
+      <div
+        ref={scrollRef}
+        role="tablist"
+        onKeyDown={handleKeyDown}
+        onScroll={updateScrollState}
+        className={clsx(
+          "cs:flex cs:flex-1 cs:min-w-0 cs:overflow-x-auto cs:overflow-y-hidden cs-scrollbar-none cs:-mb-px cs:border-b cs:border-gray-200 cs:dark:border-gray-700",
+          className,
+        )}
+      >
+        {children}
+      </div>
+      {showScrollButtons && (
+        <button
+          type="button"
+          tabIndex={-1}
+          aria-hidden="true"
+          disabled={!canScrollRight}
+          onClick={() => scroll("right")}
+          className="cs:flex cs:shrink-0 cs:items-center cs:justify-center cs:size-8 cs:rounded-full cs:text-gray-400 cs:dark:text-gray-500 cs:disabled:opacity-0 cs:hover:not-disabled:text-gray-600 cs:dark:hover:not-disabled:text-gray-300 cs:hover:not-disabled:bg-gray-100 cs:dark:hover:not-disabled:bg-gray-800 cs:transition-opacity cs:duration-150"
+        >
+          <svg viewBox="0 0 20 20" fill="currentColor" className="cs:size-5" aria-hidden="true">
+            <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 }
@@ -188,6 +251,13 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
   const isActive = ctx.activeValue === value;
   const tabId = `${ctx.baseId}-tab-${value}`;
   const panelId = `${ctx.baseId}-panel-${value}`;
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (isActive && buttonRef.current) {
+      buttonRef.current.scrollIntoView?.({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    }
+  }, [isActive]);
 
   const activeClasses = isActive
     ? clsx(
@@ -200,6 +270,7 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
 
   return (
     <button
+      ref={buttonRef}
       type="button"
       role="tab"
       id={tabId}
@@ -209,7 +280,7 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
       disabled={disabled}
       onClick={() => ctx.onChange(value)}
       className={clsx(
-        `cs:font-medium ${TRANSITION_FAST} ${FOCUS_RING} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
+        `cs:font-medium cs:whitespace-nowrap ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
         scaleMap[ctx.scale ?? "md"],
         activeClasses,
         className,

@@ -52,7 +52,7 @@ export const Radio = memo(function Radio({
     : undefined;
 
   return (
-    <div className={`cs:flex cs:items-center ${gapScaleMap[scale]}`}>
+    <div className={`cs:flex cs:items-center cs:max-md:min-h-11 ${gapScaleMap[scale]}`}>
       <input
         id={id}
         type="radio"

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useState } from "react";
+import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 type ModalContextType = {
@@ -24,6 +25,7 @@ const widthMap = {
 export function Modal({ width = "md", children, onClose }: ModalProps) {
   const headerId = useId();
   const prefersReducedMotion = useReducedMotion();
+  useBodyScrollLock(true);
 
   const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
@@ -74,7 +76,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
         onClick={handleBackdropClick}
       >
         <div
-          className={`cs:transition cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none cs:absolute cs:bg-white cs:dark:bg-gray-800 cs:shadow-xl cs:rounded-md cs:p-2 cs:flex cs:flex-col cs:max-h-[90vh] cs:transform ${
+          className={`cs:transition cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none cs:absolute cs:bg-white cs:dark:bg-gray-800 cs:shadow-xl cs:rounded-md cs:max-md:rounded-none cs:p-2 cs:flex cs:flex-col cs:max-h-[90dvh] cs:max-md:max-h-full cs:max-md:w-full cs:max-md:h-full cs:transform ${
             isVisible
               ? "cs:opacity-100 cs:scale-100"
               : "cs:opacity-0 cs:scale-95"
@@ -106,7 +108,7 @@ Modal.Body = function ModalBody({ children }: { children: ReactNode }) {
 
 Modal.Footer = function ModalFooter({ children }: { children: ReactNode }) {
   return (
-    <div className="cs:px-4 cs:pt-2 cs:flex cs:justify-end cs:space-x-2">
+    <div className="cs:px-4 cs:pt-2 cs:flex cs:flex-wrap cs:justify-end cs:gap-2">
       {children}
     </div>
   );

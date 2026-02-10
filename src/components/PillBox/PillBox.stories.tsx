@@ -56,7 +56,7 @@ export const Default: Story = {
 export const Color: Story = {
   render: () => (
     <div className="cs:space-y-4">
-      <div className="cs:grid cs:grid-cols-5 cs:gap-6">
+      <div className="cs:grid cs:grid-cols-2 cs:sm:grid-cols-3 cs:md:grid-cols-5 cs:gap-4 cs:md:gap-6">
         <PillBox label="Red" color="red" />
         <PillBox label="Orange" color="orange" />
         <PillBox label="Amber" color="amber" />

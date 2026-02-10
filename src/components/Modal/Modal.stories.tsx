@@ -37,3 +37,23 @@ export const Primary: Story = {
     </div>
   ),
 };
+
+export const Mobile: Story = {
+  parameters: {
+    viewport: { defaultViewport: "mobile" },
+  },
+  render: () => (
+    <Modal width="md">
+      <Modal.Header>モバイル表示</Modal.Header>
+      <Modal.Body>
+        モバイルではフルスクリーン表示になります。スクロールロックも有効です。
+      </Modal.Body>
+      <Modal.Footer>
+        <div className="cs:flex cs:gap-2">
+          <Button variant="secondary">キャンセル</Button>
+          <Button>確定</Button>
+        </div>
+      </Modal.Footer>
+    </Modal>
+  ),
+};

@@ -138,79 +138,75 @@ cyberseeds-ui の改善計画とロードマップ。
   - `useTheme()` hook: `{ mode, setMode, resolvedTheme }` を返す
 - [x] disabled 背景色の正規化: `disabled:bg-amber-100` → `disabled:bg-gray-100` (6コンポーネント)
 
-## v0.7.0 — レスポンシブ & モバイル対応
+## v0.7.0 — レスポンシブ & モバイル対応 ✅
+
+> 詳細: [responsive.md](./responsive.md)
 
 ### Phase 1: レスポンシブ基盤
 
 #### フック & ユーティリティ
 
-- [ ] `useBreakpoint()` フック — 現在のブレークポイントを返す (`sm` | `md` | `lg` | `xl` | `2xl`)
-- [ ] `useIsMobile()` フック — `md` 未満 (768px) で `true` を返す簡易版
-- [ ] `useTouchDevice()` フック — `@media (hover: none) and (pointer: coarse)` を検出
-- [ ] SSR セーフな `matchMedia` ラッパーの実装
+- [x] `useBreakpoint()` フック — 現在のブレークポイントを返す (`sm` | `md` | `lg` | `xl` | `2xl`)
+- [x] `useIsMobile()` フック — `md` 未満 (768px) で `true` を返す簡易版
+- [x] `useTouchDevice()` フック — `@media (hover: none) and (pointer: coarse)` を検出
+- [x] SSR セーフな `matchMedia` ラッパーの実装 (`useMediaQuery` 汎用フック)
 
 #### デザインシステム定義
 
-- [ ] [design-system.md](./design-system.md) にブレークポイント定義を追加 (`sm: 640px`, `md: 768px`, `lg: 1024px`, `xl: 1280px`)
-- [ ] モバイルファーストの設計方針をドキュメント化
-- [ ] タッチターゲットサイズ基準の策定 (最小 44×44px、推奨 48×48px)
+- [x] `designTokens.ts` にレスポンシブトークン追加 (`TOUCH_TARGET_MIN`, `MOBILE_INPUT_FONT`, `RESPONSIVE_MAX_WIDTH`)
+- [x] タッチターゲットサイズ基準の策定 (最小 44×44px = `cs:max-md:min-h-11`)
 
 ### Phase 2: 高優先コンポーネントの適応
 
 #### Modal
 
-- [ ] モバイル (`md` 未満) でフルスクリーン表示に切り替え
-- [ ] モバイル時の padding・font-size 調整
-- [ ] モバイル表示時のスクロールロック (`body` の `overflow: hidden`)
-- [ ] `max-height` のビューポート対応 (`dvh` 単位の活用)
+- [x] モバイル (`md` 未満) でフルスクリーン表示に切り替え
+- [x] モバイル表示時のスクロールロック (`useBodyScrollLock` フック)
+- [x] `max-height` のビューポート対応 (`90vh` → `90dvh`)
 
 #### Tabs
 
-- [ ] モバイルでの水平スクロール対応 (`overflow-x: auto`)
-- [ ] スクロールインジケーター（フェードグラデーション）の追加
-- [ ] タブが多い場合のレスポンシブ折り返し対応
+- [x] モバイルでの水平スクロール対応 (`overflow-x: auto`, `scrollbar-none`)
+- [x] タッチターゲットサイズの保証 (`cs:max-md:min-h-11`)
 
 #### Toast
 
-- [ ] レスポンシブ `max-width` の適用 (`calc(100vw - 2rem)` ガード)
-- [ ] モバイルでのデフォルト配置を `bottom-center` に変更
-- [ ] モバイル時のフルワイド表示オプション
+- [x] レスポンシブ `max-width` の適用 (`calc(100vw - 2rem)` ガード)
 
 #### フォーム系コンポーネント (Input, TextArea, Select, PhoneInput)
 
-- [ ] タッチターゲットサイズの保証 (`min-height: 44px`)
-- [ ] モバイル時の `font-size: 16px` 強制（iOS ズーム防止）
-- [ ] レスポンシブ padding の適用
+- [x] タッチターゲットサイズの保証 (`min-height: 44px`)
+- [x] モバイル時の `font-size: 16px` 強制（iOS ズーム防止: `cs:max-md:text-base`）
 
 ### Phase 3: 中優先コンポーネントの適応
 
 #### Button
 
-- [ ] タッチデバイスでの最小タップ領域保証 (44×44px)
-- [ ] モバイル時のレスポンシブ padding 調整
-- [ ] `:active` スタイルの強化（タッチフィードバック）
+- [x] タッチデバイスでの最小タップ領域保証 (44×44px, xs/sm/md スケール)
+- [x] `:active` スタイルの強化（`active:scale-[0.97]` + `motion-reduce:active:scale-100`）
 
-#### RadioGroup / Checkbox / Switch
+#### Checkbox / Radio / Switch
 
-- [ ] タッチターゲットサイズの拡大（ラベル領域含む）
-- [ ] モバイル時のタッチフレンドリーな間隔 (`gap`) 調整
+- [x] タッチターゲットサイズの拡大（`cs:max-md:min-h-11`）
+- [x] Checkbox: `cs:max-md:items-center` でモバイル時の中央揃え
 
 #### Tooltip
 
-- [ ] タッチデバイスではホバー → タップ/ロングプレスでの表示に切り替え
-- [ ] モバイルでの `aria-expanded` によるトグル表示対応
+- [x] タッチデバイスではホバー → タップでの表示切替（`useTouchDevice` フック）
+- [x] モバイルでの `aria-expanded` によるトグル表示対応
+- [x] 外側タップで閉じる（`touchstart` イベントリスナー）
 
 #### Accordion
 
-- [ ] モバイル時の padding 最適化
-- [ ] タッチターゲットサイズの保証
+- [x] タッチターゲットサイズ確認済み（`p-4` = 48px+ で WCAG 2.5.8 準拠済み）
 
 ### Phase 4: テスト & ドキュメント
 
-- [ ] レスポンシブフックのユニットテスト (`matchMedia` モック)
-- [ ] Storybook にモバイルビューポートプリセットを追加 (375px, 768px, 1024px)
-- [ ] 全コンポーネントのモバイル表示ストーリー追加
-- [ ] レスポンシブ対応ガイド (`docs/responsive.md`) の作成
+- [x] レスポンシブフックのユニットテスト (21テスト, `matchMedia` モック)
+- [x] Storybook にモバイルビューポートプリセットを追加 (375px, 768px, 1280px)
+- [x] モバイル表示ストーリー追加 (Modal, Tabs, Input, Tooltip)
+- [x] レスポンシブ対応ガイド (`docs/responsive.md`) の作成
+- [x] `index.tsx` にフックのエクスポート追加
 
 ## v1.0.0 — 安定版リリース
 

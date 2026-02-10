@@ -48,7 +48,7 @@ export const Positions: Story = {
 
 export const WithDelay: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-3 cs:gap-6">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-3 cs:gap-4 cs:md:gap-6">
       <GroupBox label="No delay (0ms)">
         <Tooltip content="即座に表示" delay={0}>
           <Button color="blue">Hover</Button>
@@ -112,6 +112,27 @@ export const AutoFlip: Story = {
       <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
         <Tooltip content="十分なスペースがあるので上に表示" position="top">
           <Button color="gray">中央 (top→top)</Button>
+        </Tooltip>
+      </div>
+    </div>
+  ),
+};
+
+export const TouchToggle: Story = {
+  parameters: {
+    viewport: { defaultViewport: "mobile" },
+  },
+  render: () => (
+    <div className="cs:space-y-8 cs:py-16 cs:text-center">
+      <p className="cs:text-xs cs:text-gray-500">
+        タッチデバイスではタップでツールチップを表示/非表示できます。外側をタップすると閉じます。
+      </p>
+      <div className="cs:flex cs:justify-center cs:gap-8">
+        <Tooltip content="タップで表示" position="bottom">
+          <Button color="blue">タップ</Button>
+        </Tooltip>
+        <Tooltip content="もう一度タップで閉じます" position="bottom">
+          <Button color="green">トグル</Button>
         </Tooltip>
       </div>
     </div>

@@ -168,7 +168,7 @@ export const PerComponent: Story = {
         <PillBox label="Forest" color={forest} />
       </div>
 
-      <div className="cs:grid cs:grid-cols-3 cs:gap-4">
+      <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-3 cs:gap-4">
         <Input label="Indigo" color={indigo} placeholder="Focus me" />
         <Input label="Coral" color={coral} placeholder="Focus me" />
         <Input label="Forest" color={forest} placeholder="Focus me" />
@@ -180,7 +180,7 @@ export const PerComponent: Story = {
 /** Side-by-side comparison: preset vs custom color */
 export const PresetVsCustom: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-8">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:gap-4 cs:sm:gap-8">
       <div>
         <h3 className="cs:text-sm cs:font-semibold cs:text-gray-700 cs:mb-4">
           Preset: indigo
