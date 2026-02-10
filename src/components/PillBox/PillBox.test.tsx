@@ -64,8 +64,9 @@ describe('PillBox Component', () => {
     it('applies correct color classes', () => {
       render(<PillBox label="Red Pill" color="red" />);
       const pillbox = screen.getByText('Red Pill');
-      expect(pillbox).toHaveClass('cs:bg-red-200');
-      expect(pillbox).toHaveClass('cs:text-red-800');
+      expect(pillbox).toHaveClass('cs-pill');
+      expect(pillbox.style.getPropertyValue('--cs-ui-light')).toBeTruthy();
+      expect(pillbox.style.getPropertyValue('--cs-ui-lightText')).toBeTruthy();
     });
   });
 
@@ -87,7 +88,8 @@ describe('PillBox Component', () => {
       );
 
       const pillbox = screen.getByText('Blue Pill');
-      expect(pillbox).toHaveClass('cs:bg-blue-200');
+      expect(pillbox).toHaveClass('cs-pill');
+      expect(pillbox.style.getPropertyValue('--cs-ui-light')).toBeTruthy();
     });
   });
 

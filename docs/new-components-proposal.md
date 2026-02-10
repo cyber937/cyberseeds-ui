@@ -1,5 +1,10 @@
 # New Components Proposal
 
+> **Status: ALL IMPLEMENTED** — All 7 components proposed in this document have been
+> implemented and shipped. FormField and Toast in v0.5.0, Tooltip and Badge in v0.5.0,
+> Tabs, Spinner, and Progress in v0.5.0. This document is retained as a **historical
+> design specification** for reference.
+
 cyberseeds-ui に追加する新規コンポーネントの詳細設計提案。
 
 既存コンポーネントの設計パターン（Compound Components, UIColorContext 統合,

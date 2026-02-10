@@ -112,7 +112,7 @@ describe("Custom Color Support", () => {
       expect(btn).toBeInTheDocument();
       expect(btn.style.getPropertyValue("--cs-ui-base")).toBe("#4f46e5");
       expect(btn.style.getPropertyValue("--cs-ui-hover")).toBe("#4338ca");
-      expect(btn.className).toContain("cs-custom-btn-primary");
+      expect(btn.className).toContain("cs-btn-primary");
     });
 
     it("Button secondary variant works with custom color (no custom bg)", () => {
@@ -123,7 +123,7 @@ describe("Custom Color Support", () => {
       );
       const btn = screen.getByRole("button");
       expect(btn).toBeInTheDocument();
-      expect(btn.className).not.toContain("cs-custom-btn-primary");
+      expect(btn.className).not.toContain("cs-btn-primary");
     });
 
     it("Switch renders with custom color when checked", () => {
@@ -131,7 +131,7 @@ describe("Custom Color Support", () => {
       const switchEl = screen.getByRole("switch");
       expect(switchEl).toBeInTheDocument();
       expect(switchEl.style.getPropertyValue("--cs-ui-base")).toBe("#4f46e5");
-      expect(switchEl.className).toContain("cs-custom-bg");
+      expect(switchEl.className).toContain("cs-bg");
     });
 
     it("Switch does not apply custom style when unchecked", () => {
@@ -145,7 +145,7 @@ describe("Custom Color Support", () => {
       const checkbox = screen.getByRole("checkbox");
       expect(checkbox).toBeInTheDocument();
       expect(checkbox.style.getPropertyValue("--cs-ui-base")).toBe("#4f46e5");
-      expect(checkbox.className).toContain("cs-custom-checked");
+      expect(checkbox.className).toContain("cs-checked");
     });
 
     it("Radio renders with custom color", () => {
@@ -153,7 +153,7 @@ describe("Custom Color Support", () => {
       const radio = screen.getByRole("radio");
       expect(radio).toBeInTheDocument();
       expect(radio.style.getPropertyValue("--cs-ui-base")).toBe("#4f46e5");
-      expect(radio.className).toContain("cs-custom-checked");
+      expect(radio.className).toContain("cs-checked");
     });
 
     it("PillBox renders with custom color", () => {
@@ -162,7 +162,7 @@ describe("Custom Color Support", () => {
       expect(pill).toBeInTheDocument();
       expect(pill.style.getPropertyValue("--cs-ui-light")).toBe("#e0e7ff");
       expect(pill.style.getPropertyValue("--cs-ui-lightText")).toBe("#312e81");
-      expect(pill.className).toContain("cs-custom-pill");
+      expect(pill.className).toContain("cs-pill");
     });
 
     it("Input renders with custom color", () => {
@@ -170,7 +170,7 @@ describe("Custom Color Support", () => {
       const input = screen.getByRole("textbox");
       expect(input).toBeInTheDocument();
       expect(input.style.getPropertyValue("--cs-ui-focus")).toBe("#4f46e5");
-      expect(input.className).toContain("cs-custom-focus");
+      expect(input.className).toContain("cs-focus-visible");
     });
 
     it("TextArea renders with custom color", () => {
@@ -178,7 +178,7 @@ describe("Custom Color Support", () => {
       const textarea = screen.getByRole("textbox");
       expect(textarea).toBeInTheDocument();
       expect(textarea.style.getPropertyValue("--cs-ui-focus")).toBe("#4f46e5");
-      expect(textarea.className).toContain("cs-custom-focus");
+      expect(textarea.className).toContain("cs-focus-visible");
     });
 
     it("PhoneInput renders with custom color", () => {
@@ -186,7 +186,7 @@ describe("Custom Color Support", () => {
       const input = screen.getByRole("textbox");
       expect(input).toBeInTheDocument();
       expect(input.style.getPropertyValue("--cs-ui-focus")).toBe("#4f46e5");
-      expect(input.className).toContain("cs-custom-focus");
+      expect(input.className).toContain("cs-focus-visible");
     });
   });
 
@@ -197,7 +197,6 @@ describe("Custom Color Support", () => {
           <Button>Themed</Button>
         </UIColorProvider>
       );
-      // The wrapper div should have CSS vars
       const wrapper = container.querySelector(
         "div[style]"
       ) as HTMLElement | null;
@@ -205,15 +204,18 @@ describe("Custom Color Support", () => {
       expect(wrapper!.style.getPropertyValue("--cs-ui-base")).toBe("#4f46e5");
     });
 
-    it("does not inject wrapper div when given PresetColor", () => {
+    it("injects CSS vars wrapper when given PresetColor (unified color system)", () => {
       const { container } = render(
         <UIColorProvider initialColor="blue">
           <Button>Themed</Button>
         </UIColorProvider>
       );
-      // Button should be rendered directly (no extra wrapper with style)
-      const wrappers = container.querySelectorAll("div[style]");
-      expect(wrappers.length).toBe(0);
+      // All colors now go through the unified CSS variable path
+      const wrapper = container.querySelector(
+        "div[style]"
+      ) as HTMLElement | null;
+      expect(wrapper).not.toBeNull();
+      expect(wrapper!.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
     });
 
     it("children components pick up custom color from context", () => {
@@ -223,7 +225,47 @@ describe("Custom Color Support", () => {
         </UIColorProvider>
       );
       const btn = screen.getByRole("button");
-      expect(btn.className).toContain("cs-custom-btn-primary");
+      expect(btn.className).toContain("cs-btn-primary");
+    });
+
+    it("resolves semantic color map when semanticColors are provided", () => {
+      const { container } = render(
+        <UIColorProvider
+          initialColor="success"
+          semanticColors={{ success: "green" }}
+        >
+          <Button>Semantic</Button>
+        </UIColorProvider>
+      );
+      const wrapper = container.querySelector("div[style]") as HTMLElement | null;
+      expect(wrapper).not.toBeNull();
+      expect(wrapper!.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
+    });
+
+    it("applies dark color CSS vars when darkColor is provided and dark mode active", () => {
+      // Mock dark mode
+      document.documentElement.classList.add("dark");
+      try {
+        const darkCustomColor: CustomColor = {
+          base: "#818cf8",
+          hover: "#6366f1",
+          active: "#4f46e5",
+          focus: "#818cf8",
+          light: "#312e81",
+          lightText: "#e0e7ff",
+          border: "#6366f1",
+        };
+        const { container } = render(
+          <UIColorProvider initialColor="blue" darkColor={darkCustomColor}>
+            <Button>Dark</Button>
+          </UIColorProvider>
+        );
+        const wrapper = container.querySelector("div[style]") as HTMLElement | null;
+        expect(wrapper).not.toBeNull();
+        expect(wrapper!.style.getPropertyValue("--cs-ui-base")).toBe("#818cf8");
+      } finally {
+        document.documentElement.classList.remove("dark");
+      }
     });
   });
 });

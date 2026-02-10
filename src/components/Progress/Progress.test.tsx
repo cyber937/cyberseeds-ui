@@ -79,8 +79,9 @@ describe("Progress Component", () => {
   describe("Colors", () => {
     it("renders with default blue color", () => {
       const { container } = render(<Progress value={50} />);
-      const bar = container.querySelector("[role='progressbar'] > div");
-      expect(bar).toHaveClass("cs:bg-blue-600");
+      const bar = container.querySelector("[role='progressbar'] > div") as HTMLElement;
+      expect(bar).toHaveClass("cs-progress");
+      expect(bar.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
     });
 
     it("renders with different preset colors", () => {

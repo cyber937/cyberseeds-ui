@@ -3,7 +3,7 @@ export { Badge } from "./Badge/Badge";
 export { Button } from "./Button/Button";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { LIGHT_BG_COLORS } from "./Constants/colorContrast";
-export { isCustomColor, isPresetColor, isSemanticColor, resolveColor } from "./Constants/colorUtils";
+export { colorToCSSVars, isCustomColor, isPresetColor, isSemanticColor, resolveColor } from "./Constants/colorUtils";
 export { generateShadesFromBase, resolveCustomColor } from "./Constants/colorShadeGenerator";
 export { createSemanticColorMap } from "./Constants/semanticColor";
 export type { SemanticColorMap, SemanticColorName } from "./Constants/semanticColor";

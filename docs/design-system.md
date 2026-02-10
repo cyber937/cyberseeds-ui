@@ -17,26 +17,28 @@ cyberseeds-ui のデザインシステムの基盤を定義するドキュメン
 | Pink | `pink` `rose` |
 | Neutral | `slate` `gray` `zinc` `neutral` `stone` |
 
-各カラーは以下の用途で使用される:
+各カラーは CSS 変数 (`--cs-ui-*`) を通じて以下の用途で使用される:
 
-| 用途 | シェード | 例 |
+| CSS 変数 | 用途 | 例 |
 | --- | --- | --- |
-| Background (primary) | 600 | `cs:bg-blue-600` |
-| Background (hover) | 500 | `cs:hover:bg-blue-500` |
-| Background (active) | 400 | `cs:active:bg-blue-400` |
-| Focus outline | 600 | `cs:focus:outline-blue-600` |
-| PillBox background | 200 | `cs:bg-blue-200` |
-| PillBox text | 800 | `cs:text-blue-800` |
-| PillBox outline | 400 | `cs:outline-blue-400` |
+| `--cs-ui-base` | 主要背景色 (ボタン背景等) | `oklch(0.546 0.245 262.881)` |
+| `--cs-ui-hover` | ホバー時の背景色 | 自動生成 or 明示指定 |
+| `--cs-ui-active` | アクティブ時の背景色 | 自動生成 or 明示指定 |
+| `--cs-ui-focus` | フォーカスリング色 | 自動生成 or 明示指定 |
+| `--cs-ui-light` | 薄い背景 (PillBox等) | 自動生成 or 明示指定 |
+| `--cs-ui-lightText` | 薄い背景上のテキスト | 自動生成 or 明示指定 |
+| `--cs-ui-border` | ボーダー/アウトライン | 自動生成 or 明示指定 |
 
 ### Scale
 
-コンポーネントのサイズを2段階で制御。
+コンポーネントのサイズを4段階で制御。
 
 | Scale | 用途 | パディング例 | フォントサイズ |
 | --- | --- | --- | --- |
+| `xs` | 極小UI | `px-1.5 py-0.5` | `text-[0.625rem]` |
 | `sm` | コンパクトUI | `px-2 py-1` | `text-xs` |
 | `md` | 標準 (デフォルト) | `px-3 py-1.5` | `text-sm` |
+| `lg` | 大型UI | `px-4 py-2` | `text-base` |
 
 ### Variant
 
@@ -49,13 +51,19 @@ cyberseeds-ui のデザインシステムの基盤を定義するドキュメン
 
 ## カラーシステムのアーキテクチャ
 
-### 現在の構成
+> Updated for v1.0.0 — 全カラーが CSS 変数ベースに統一済み。
+
+### 構成
 
 ```
-DesignSystemUtils.tsx    → Color, Scale, Variant 型定義
-Constants/colorMap.ts    → 共有カラーマップ (focus, checked, background)
-UIColorContext.tsx        → グローバルカラー Provider
-各コンポーネント内         → ローカルカラーマップ (hover, active 等)
+DesignSystemUtils.tsx              → Color, Scale, Variant 型定義
+Constants/presetColorVars.ts       → 22プリセット → OKLCH CSS変数値マッピング
+Constants/colorUtils.ts            → colorToCSSVars(), isPresetColor(), resolveColor()
+Constants/colorShadeGenerator.ts   → base のみ指定時の自動シェード生成
+Constants/colorContrast.ts         → LIGHT_BG_COLORS (amber/yellow/lime のコントラスト判定)
+Constants/semanticColor.ts         → success/warning/error/info → プリセットカラーマッピング
+Constants/designTokens.ts          → FOCUS_RING, TRANSITION_*, TOUCH_TARGET_MIN 定数
+UIColorContext.tsx                 → グローバルカラー Provider (CSS変数注入)
 ```
 
 ### カラー適用の優先順位
@@ -66,21 +74,36 @@ UIColorContext.tsx        → グローバルカラー Provider
 3. デフォルト値 "blue"（フォールバック）
 ```
 
+### カラー解決フロー
+
 ```tsx
-// 例: Input コンポーネントでのカラー解決
-const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-const finalUIColor = contextUIColor ?? color; // prop > context > default
+// 1. カラー解決 (セマンティック → プリセット/カスタム)
+const resolved = resolveColor(finalColor, semanticMap);
+
+// 2. CSS変数生成 (プリセットもカスタムも同じパス)
+const cssVars = colorToCSSVars(resolved);
+// → { "--cs-ui-base": "oklch(...)", "--cs-ui-hover": "oklch(...)", ... }
+
+// 3. UIColorProvider が wrapper div に CSS変数を注入
+<div style={{ display: "contents", ...cssVars }}>{children}</div>
+
+// 4. コンポーネントは CSS クラスで参照
+<button className="cs-btn-primary">  // index.css で var(--cs-ui-*) を参照
 ```
 
-### カラーマップの分布
+### CSS クラスと CSS 変数の対応
 
-| ファイル | マップ名 | 用途 |
+| CSS クラス | 参照する CSS 変数 | 使用コンポーネント |
 | --- | --- | --- |
-| `Constants/colorMap.ts` | `focusOutlineColorMap` | Input, Select, TextArea のフォーカスリング |
-| `Constants/colorMap.ts` | `checkedFocusOutlineColorMap` | Checkbox, Radio のチェック時スタイル |
-| `Constants/colorMap.ts` | `backgroundColorMap` | Button, Switch の背景色 |
-| `Button.tsx` | `activeColorMap` | Button の hover/active 色 |
-| `PillBox.tsx` | `colorMap` | PillBox の背景/テキスト/アウトライン |
+| `cs-btn-primary` | `--cs-ui-base`, `--cs-ui-hover`, `--cs-ui-active` | Button |
+| `cs-bg` | `--cs-ui-base` | Switch |
+| `cs-focus-visible` | `--cs-ui-focus` | Input, Select, TextArea, PhoneInput |
+| `cs-checked` | `--cs-ui-base`, `--cs-ui-focus` | Checkbox, Radio |
+| `cs-pill` | `--cs-ui-light`, `--cs-ui-lightText`, `--cs-ui-border` | PillBox |
+| `cs-badge-solid/outline/dot` | `--cs-ui-base`, `--cs-ui-border` | Badge |
+| `cs-spinner` | `--cs-ui-base` | Spinner |
+| `cs-progress` | `--cs-ui-base` | Progress |
+| `cs-tab-active` | `--cs-ui-base` | Tabs |
 
 ## Tailwind CSS v4 統合
 

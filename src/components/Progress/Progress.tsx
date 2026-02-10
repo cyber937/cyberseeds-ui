@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import { backgroundColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
-import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
+import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface ProgressProps {
@@ -44,9 +43,7 @@ export function Progress({
 
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 
-  const customStyle = isCustomColor(finalColor)
-    ? customColorToCSSVars(finalColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(finalColor);
 
   return (
     <div className={clsx("cs:w-full cs:font-sans", className)}>
@@ -81,13 +78,11 @@ export function Progress({
         )}
       >
         <div
-          style={{ width: `${percentage}%`, ...customStyle }}
+          style={{ width: `${percentage}%`, ...colorStyle }}
           className={clsx(
             "cs:h-full cs:rounded-full cs:transition-all cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none",
             animated && "cs-progress-animated",
-            isPresetColor(finalColor)
-              ? backgroundColorMap[finalColor]
-              : "cs-custom-progress",
+            "cs-progress",
           )}
         />
       </div>

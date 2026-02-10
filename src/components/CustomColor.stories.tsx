@@ -60,7 +60,7 @@ const CustomColorDemo = ({ brandColor }: CustomColorDemoProps) => {
   return (
     <UIColorProvider initialColor={brandColor}>
       <GroupBox label="CustomColor Demo" className="cs:space-y-4">
-        <div className="cs:flex cs:gap-4">
+        <div className="cs:flex cs:flex-wrap cs:gap-4">
           <Button>Primary</Button>
           <Button variant="secondary">Secondary</Button>
           <Button disabled>Disabled</Button>
@@ -76,7 +76,7 @@ const CustomColorDemo = ({ brandColor }: CustomColorDemoProps) => {
           onChange={setPhoneNumber}
         />
 
-        <div className="cs:flex cs:gap-2">
+        <div className="cs:flex cs:flex-wrap cs:gap-2">
           <PillBox label="Custom Pill" />
           <PillBox label="Another Pill" />
         </div>
@@ -144,25 +144,25 @@ export const PerComponent: Story = {
         Per-component custom color (without UIColorProvider)
       </h3>
 
-      <div className="cs:flex cs:gap-4">
+      <div className="cs:flex cs:flex-wrap cs:gap-4">
         <Button color={indigo}>Indigo</Button>
         <Button color={coral}>Coral</Button>
         <Button color={forest}>Forest</Button>
       </div>
 
-      <div className="cs:flex cs:gap-4">
+      <div className="cs:flex cs:flex-wrap cs:gap-4">
         <Checkbox label="Indigo" color={indigo} />
         <Checkbox label="Coral" color={coral} />
         <Checkbox label="Forest" color={forest} />
       </div>
 
-      <div className="cs:flex cs:gap-4">
+      <div className="cs:flex cs:flex-wrap cs:gap-4">
         <Radio label="Indigo" color={indigo} name="custom-radio" value="indigo" />
         <Radio label="Coral" color={coral} name="custom-radio" value="coral" />
         <Radio label="Forest" color={forest} name="custom-radio" value="forest" />
       </div>
 
-      <div className="cs:flex cs:gap-2">
+      <div className="cs:flex cs:flex-wrap cs:gap-2">
         <PillBox label="Indigo" color={indigo} />
         <PillBox label="Coral" color={coral} />
         <PillBox label="Forest" color={forest} />

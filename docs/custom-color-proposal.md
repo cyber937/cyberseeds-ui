@@ -1,5 +1,16 @@
 # Custom Color 対応 提案書
 
+> **Status: IMPLEMENTED** — The CSS variable-based color system proposed in this document
+> has been fully implemented. CustomColor support was added in v0.4.0, and in v1.0.0 the
+> entire color system (including preset colors) was unified through CSS variables.
+> The old `Record<Color, string>` color maps have been deleted.
+> This document is retained as a **historical design specification** for reference.
+>
+> **Current implementation files:**
+> - `Constants/colorUtils.ts` — `colorToCSSVars()`, `isPresetColor()`, `resolveColor()`
+> - `Constants/presetColorVars.ts` — 22 preset colors → OKLCH values
+> - `Constants/colorShadeGenerator.ts` — Auto shade generation from `base`
+
 ## 背景
 
 現在のカラーシステムは Tailwind CSS v4 の22色プリセットに限定されている。
