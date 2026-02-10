@@ -41,23 +41,23 @@ export const Default: Story = {
 
 export const Variants: Story = {
   render: () => (
-    <div className="cs:flex cs:items-center cs:gap-4">
+    <div className="cs:flex cs:flex-wrap cs:items-center cs:gap-4">
       <GroupBox label="Solid">
-        <div className="cs:flex cs:gap-2">
+        <div className="cs:flex cs:flex-wrap cs:gap-2">
           <Badge variant="solid" color="blue">3</Badge>
           <Badge variant="solid" color="red">New</Badge>
           <Badge variant="solid" color="green">Active</Badge>
         </div>
       </GroupBox>
       <GroupBox label="Outline">
-        <div className="cs:flex cs:gap-2">
+        <div className="cs:flex cs:flex-wrap cs:gap-2">
           <Badge variant="outline" color="blue">3</Badge>
           <Badge variant="outline" color="red">New</Badge>
           <Badge variant="outline" color="green">Active</Badge>
         </div>
       </GroupBox>
       <GroupBox label="Dot">
-        <div className="cs:flex cs:gap-2 cs:items-center">
+        <div className="cs:flex cs:flex-wrap cs:gap-2 cs:items-center">
           <Badge variant="dot" color="green" />
           <Badge variant="dot" color="red" />
           <Badge variant="dot" color="amber" />
@@ -81,7 +81,7 @@ export const Colors: Story = {
 
 export const WithMax: Story = {
   render: () => (
-    <div className="cs:flex cs:items-center cs:gap-4">
+    <div className="cs:flex cs:flex-wrap cs:items-center cs:gap-4">
       <Badge color="red" max={99}>{5}</Badge>
       <Badge color="red" max={99}>{42}</Badge>
       <Badge color="red" max={99}>{99}</Badge>
@@ -95,28 +95,28 @@ export const Scales: Story = {
   render: () => (
     <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <GroupBox label="Extra Small (xs)">
-        <div className="cs:flex cs:gap-2 cs:items-center">
+        <div className="cs:flex cs:flex-wrap cs:gap-2 cs:items-center">
           <Badge scale="xs" color="blue">12</Badge>
           <Badge scale="xs" variant="outline" color="red">New</Badge>
           <Badge scale="xs" variant="dot" color="green" />
         </div>
       </GroupBox>
       <GroupBox label="Small (sm)">
-        <div className="cs:flex cs:gap-2 cs:items-center">
+        <div className="cs:flex cs:flex-wrap cs:gap-2 cs:items-center">
           <Badge scale="sm" color="blue">12</Badge>
           <Badge scale="sm" variant="outline" color="red">New</Badge>
           <Badge scale="sm" variant="dot" color="green" />
         </div>
       </GroupBox>
       <GroupBox label="Standard (md)">
-        <div className="cs:flex cs:gap-2 cs:items-center">
+        <div className="cs:flex cs:flex-wrap cs:gap-2 cs:items-center">
           <Badge scale="md" color="blue">12</Badge>
           <Badge scale="md" variant="outline" color="red">New</Badge>
           <Badge scale="md" variant="dot" color="green" />
         </div>
       </GroupBox>
       <GroupBox label="Large (lg)">
-        <div className="cs:flex cs:gap-2 cs:items-center">
+        <div className="cs:flex cs:flex-wrap cs:gap-2 cs:items-center">
           <Badge scale="lg" color="blue">12</Badge>
           <Badge scale="lg" variant="outline" color="red">New</Badge>
           <Badge scale="lg" variant="dot" color="green" />
@@ -128,7 +128,7 @@ export const Scales: Story = {
 
 export const WithWrapper: Story = {
   render: () => (
-    <div className="cs:flex cs:gap-8 cs:items-center">
+    <div className="cs:flex cs:flex-wrap cs:gap-8 cs:items-center">
       <Badge.Wrapper>
         <div className="cs:h-10 cs:w-10 cs:bg-gray-200 cs:rounded-full cs:flex cs:items-center cs:justify-center">
           <span className="cs:text-gray-600 cs:text-sm">U</span>

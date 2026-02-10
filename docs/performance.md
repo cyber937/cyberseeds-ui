@@ -2,7 +2,16 @@
 
 cyberseeds-ui のパフォーマンス分析と最適化ガイドライン。
 
-## 現状の問題点
+> **Note**: This document was written during v0.3.1 development. All optimizations listed below
+> have been **implemented and verified** in subsequent releases (v0.3.1–v1.0.0).
+> The document is retained as a reference for the optimization patterns used in this codebase.
+>
+> **v1.0.0 update**: `Constants/colorMap.ts` and its 3 shared color maps
+> (`focusOutlineColorMap`, `checkedFocusOutlineColorMap`, `backgroundColorMap`)
+> have been **deleted** and replaced by the CSS variable system (`colorToCSSVars()`).
+> References to these files below are historical.
+
+## 問題点と最適化 (v0.3.1 時点の分析 — 全て修正済み)
 
 ### 1. Context value の参照不安定（最重要）
 
@@ -172,7 +181,7 @@ onChange={() => ctx.onChange?.(value)}
 
 ### 4. React.memo の未使用
 
-全14コンポーネントで `React.memo` が未使用。
+v0.3.1 時点では全14コンポーネントで `React.memo` が未使用だった（v0.3.1 で Label, PillBox, Radio, Modal.Header に適用済み）。
 純粋な表示コンポーネントは `React.memo` でラップすることで、
 props が変わらない場合の再レンダーを防げる。
 
@@ -202,7 +211,7 @@ export const Label = memo(function Label({ ... }) { ... });
 
 | 項目 | 詳細 |
 | --- | --- |
-| 共有カラーマップのモジュールスコープ定義 | `Constants/colorMap.ts` の3マップは `as const` で正しく定義 |
+| CSS変数ベースのカラーシステム | v1.0.0 で `colorToCSSVars()` に統一。旧カラーマップ (`Constants/colorMap.ts`) は削除済み |
 | CSS コード分割 | `vite.config.ts` で `cssCodeSplit: true` |
 | ツリーシェイキング | `package.json` の `sideEffects: false` |
 | 外部依存の除外 | `external: ["react", "react-dom", "clsx"]` |

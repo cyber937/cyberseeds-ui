@@ -208,26 +208,31 @@ cyberseeds-ui の改善計画とロードマップ。
 - [x] レスポンシブ対応ガイド (`docs/responsive.md`) の作成
 - [x] `index.tsx` にフックのエクスポート追加
 
-## v1.0.0 — 安定版リリース
+## v1.0.0 — 安定版リリース ✅
+
+> マイグレーションガイド: [MIGRATION.md](../MIGRATION.md)
 
 ### Breaking Changes
 
-- [ ] 旧カラーマップ (`Record<Color, string>`) の完全削除
-- [ ] CSS変数ベースのカラーシステムに完全移行
-- [ ] `Color` 型の旧定義を `PresetColor` にリネーム
+- [x] 旧カラーマップ (`Record<Color, string>`) の完全削除 — `colorMap.ts`, `constants.ts` 削除
+- [x] CSS変数ベースのカラーシステムに完全移行 — `colorToCSSVars()` で統一
+- [x] CSS クラス名を `cs-custom-*` → `cs-*` にリネーム
 
 ### ドキュメント & DX
 
-- [ ] Storybook に「Foundations」ページ追加（カラーパレット、タイポグラフィ、スペーシング）
-- [ ] 各コンポーネントの Do / Don't パターンをストーリーに追加
-- [ ] Storybook MDX でデザインシステム全体のドキュメント整備
-- [ ] カスタムカラーの使い方ガイド
+- [x] Storybook に「Foundations」ページ追加（カラーパレット、タイポグラフィ、スペーシング）
+- [x] Storybook MDX でデザインシステム全体のドキュメント整備
+- [x] カスタムカラーの使い方ガイド（Foundations MDX + CustomColor stories）
+- [ ] 各コンポーネントの Do / Don't パターンをストーリーに追加（v1.1.0 で対応予定）
 
 ### テスト & 品質
 
-- [ ] 全22色 × ライト/ダーク × 全コンポーネントのコントラスト比自動テスト
-- [ ] Visual Regression Testing (Chromatic) の導入
-- [ ] E2E テスト (Playwright) でのキーボードナビゲーション検証
+- [x] 全22色 × 全コンポーネントのカラーシステム統合テスト（655 テスト）
+- [x] コントラスト比テスト（LIGHT_BG_COLORS のダークテキスト切替検証）
+- [x] カバレッジ: 93%+ statements, 88%+ branches
+- [x] cyberseeds-ui-rhf ビルド修正 (`moduleResolution: "bundler"`)
+- [ ] Visual Regression Testing (Chromatic) の導入（v1.1.0 で対応予定）
+- [ ] E2E テスト (Playwright) でのキーボードナビゲーション検証（v1.1.0 で対応予定）
 
 ## 関連ドキュメント
 
@@ -237,4 +242,5 @@ cyberseeds-ui の改善計画とロードマップ。
 - [Accessibility Guidelines](./accessibility.md) — アクセシビリティ方針
 - [Performance Guidelines](./performance.md) — パフォーマンス分析と最適化ガイドライン
 - [New Components Proposal](./new-components-proposal.md) — 新規コンポーネントの詳細設計提案
-- [Responsive Guide](./responsive.md) — レスポンシブ対応ガイド (v0.7.0 で作成予定)
+- [Responsive Guide](./responsive.md) — レスポンシブ対応ガイド
+- [Migration Guide](../MIGRATION.md) — v0.7.0 → v1.0.0 マイグレーションガイド

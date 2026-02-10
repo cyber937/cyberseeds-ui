@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { useId } from "react";
-import { backgroundColorMap, focusOutlineColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -60,9 +59,7 @@ export function Switch({
 
   const finalUIColor = resolveColor(contextUIColor ?? color);
 
-  const customStyle = isCustomColor(finalUIColor) && checked
-    ? customColorToCSSVars(finalUIColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(finalUIColor);
 
   return (
     <div className="cs:flex cs:gap-1 cs:items-center cs:max-md:min-h-11">
@@ -73,15 +70,13 @@ export function Switch({
         aria-checked={checked}
         aria-labelledby={labelId}
         disabled={disabled}
-        style={customStyle}
+        style={checked ? colorStyle : undefined}
         className={clsx(
           `cs:flex cs:items-center cs:rounded-full cs:transition-colors cs:duration-300 cs:motion-reduce:transition-none ${scaleMap[scale]}`,
           `${FOCUS_RING}`,
-          isPresetColor(finalUIColor) ? focusOutlineColorMap[finalUIColor] : "cs-custom-focus-visible",
+          "cs-focus-visible",
           checked
-            ? isPresetColor(finalUIColor)
-              ? `${backgroundColorMap[finalUIColor]} cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-700`
-              : "cs-custom-bg cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-700"
+            ? "cs-bg cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-700"
             : "cs:bg-gray-300 cs:dark:bg-gray-600 cs:disabled:bg-gray-200 cs:dark:disabled:bg-gray-700"
         )}
         {...props}

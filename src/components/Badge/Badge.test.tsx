@@ -19,22 +19,25 @@ describe("Badge Component", () => {
   describe("Variants", () => {
     it("renders solid variant by default", () => {
       const { container } = render(<Badge>5</Badge>);
-      const badge = container.firstElementChild;
-      expect(badge).toHaveClass("cs:bg-blue-600");
+      const badge = container.firstElementChild as HTMLElement;
+      expect(badge).toHaveClass("cs-badge-solid");
+      expect(badge.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
     });
 
     it("renders outline variant", () => {
       const { container } = render(<Badge variant="outline">5</Badge>);
-      const badge = container.firstElementChild;
+      const badge = container.firstElementChild as HTMLElement;
       expect(badge).toHaveClass("cs:border");
-      expect(badge).toHaveClass("cs:border-blue-400");
+      expect(badge).toHaveClass("cs-badge-outline");
+      expect(badge.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
     });
 
     it("renders dot variant", () => {
       const { container } = render(<Badge variant="dot" />);
-      const badge = container.firstElementChild;
+      const badge = container.firstElementChild as HTMLElement;
       expect(badge).toHaveClass("cs:rounded-full");
-      expect(badge).toHaveClass("cs:bg-blue-500");
+      expect(badge).toHaveClass("cs-badge-dot");
+      expect(badge.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
       expect(badge).toHaveAttribute("aria-hidden", "true");
     });
   });

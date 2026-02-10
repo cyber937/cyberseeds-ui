@@ -58,7 +58,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
           </Accordion>
 
           {/* Badge */}
-          <div className="cs:flex cs:items-center cs:gap-2">
+          <div className="cs:flex cs:flex-wrap cs:items-center cs:gap-2">
             <Label text="Badge" />
             <Badge variant="solid" color={color}>
               3
@@ -70,7 +70,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
           </div>
 
           {/* Button */}
-          <div className="cs:flex cs:gap-4">
+          <div className="cs:flex cs:flex-wrap cs:gap-4">
             <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
             <Button variant="secondary">Secondary</Button>
           </div>
@@ -94,7 +94,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
           />
 
           {/* PillBox */}
-          <div className="cs:flex cs:gap-2">
+          <div className="cs:flex cs:flex-wrap cs:gap-2">
             <PillBox label="PillBox" />
             <PillBox label="PillBox" color="red" />
             <PillBox label="PillBox" color="green" />
@@ -126,7 +126,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
           </Select>
 
           {/* Spinner */}
-          <div className="cs:flex cs:items-center cs:gap-3">
+          <div className="cs:flex cs:flex-wrap cs:items-center cs:gap-3">
             <Label text="Spinner" />
             <Spinner scale="sm" />
             <Spinner scale="md" />
@@ -182,7 +182,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
           </div>
 
           {/* Tooltip */}
-          <div className="cs:flex cs:items-center cs:gap-4">
+          <div className="cs:flex cs:flex-wrap cs:items-center cs:gap-4">
             <Tooltip content="Tooltip on top" position="top">
               <Button>Tooltip</Button>
             </Tooltip>

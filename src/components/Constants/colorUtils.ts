@@ -1,5 +1,6 @@
 import type { Color, CustomColor, PresetColor } from "../DesignSystemUtils";
 import { resolveCustomColor } from "./colorShadeGenerator";
+import { PRESET_COLOR_VARS } from "./presetColorVars";
 import { isSemanticColor as isSemanticColorCheck, resolveSemanticColor } from "./semanticColor";
 import type { SemanticColorMap } from "./semanticColor";
 
@@ -48,4 +49,18 @@ export function customColorToCSSVars(color: CustomColor, isDark?: boolean): Reac
     "--cs-ui-lightText": effective.lightText,
     "--cs-ui-border": effective.border,
   } as React.CSSProperties;
+}
+
+/**
+ * Convert any resolved Color (PresetColor or CustomColor) to CSS variable properties.
+ * Unifies both color types into the same CSS variable path.
+ */
+export function colorToCSSVars(
+  color: PresetColor | CustomColor,
+  isDark?: boolean,
+): React.CSSProperties {
+  if (isPresetColor(color)) {
+    return customColorToCSSVars(PRESET_COLOR_VARS[color], isDark);
+  }
+  return customColorToCSSVars(color, isDark);
 }

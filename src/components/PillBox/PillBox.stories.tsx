@@ -86,7 +86,7 @@ export const Color: Story = {
 
 export const Scale: Story = {
   render: () => (
-    <div className="cs:flex cs:gap-4 cs:items-center">
+    <div className="cs:flex cs:flex-wrap cs:gap-4 cs:items-center">
       <PillBox label="XS" color="red" scale="xs" />
       <PillBox label="SM" color="red" scale="sm" />
       <PillBox label="MD" color="red" scale="md" />

@@ -9,9 +9,9 @@ import {
   useRef,
   useState,
 } from "react";
-import { isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING, TOUCH_TARGET_MIN, TRANSITION_FAST } from "../Constants/designTokens";
-import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
+import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 import { TabsContext, useTabsContext } from "./TabsContext";
 
@@ -42,56 +42,6 @@ interface TabsContentProps {
   value: string;
   className?: string;
 }
-
-const borderColorMap: Record<PresetColor, string> = {
-  red: "cs:border-red-600 cs:dark:border-red-400",
-  orange: "cs:border-orange-600 cs:dark:border-orange-400",
-  amber: "cs:border-amber-600 cs:dark:border-amber-400",
-  yellow: "cs:border-yellow-600 cs:dark:border-yellow-400",
-  lime: "cs:border-lime-600 cs:dark:border-lime-400",
-  green: "cs:border-green-600 cs:dark:border-green-400",
-  emerald: "cs:border-emerald-600 cs:dark:border-emerald-400",
-  teal: "cs:border-teal-600 cs:dark:border-teal-400",
-  cyan: "cs:border-cyan-600 cs:dark:border-cyan-400",
-  sky: "cs:border-sky-600 cs:dark:border-sky-400",
-  blue: "cs:border-blue-600 cs:dark:border-blue-400",
-  indigo: "cs:border-indigo-600 cs:dark:border-indigo-400",
-  violet: "cs:border-violet-600 cs:dark:border-violet-400",
-  purple: "cs:border-purple-600 cs:dark:border-purple-400",
-  fuchsia: "cs:border-fuchsia-600 cs:dark:border-fuchsia-400",
-  pink: "cs:border-pink-600 cs:dark:border-pink-400",
-  rose: "cs:border-rose-600 cs:dark:border-rose-400",
-  slate: "cs:border-slate-600 cs:dark:border-slate-400",
-  gray: "cs:border-gray-600 cs:dark:border-gray-400",
-  zinc: "cs:border-zinc-600 cs:dark:border-zinc-400",
-  neutral: "cs:border-neutral-600 cs:dark:border-neutral-400",
-  stone: "cs:border-stone-600 cs:dark:border-stone-400",
-};
-
-const textColorMap: Record<PresetColor, string> = {
-  red: "cs:text-red-600 cs:dark:text-red-400",
-  orange: "cs:text-orange-600 cs:dark:text-orange-400",
-  amber: "cs:text-amber-600 cs:dark:text-amber-400",
-  yellow: "cs:text-yellow-600 cs:dark:text-yellow-400",
-  lime: "cs:text-lime-600 cs:dark:text-lime-400",
-  green: "cs:text-green-600 cs:dark:text-green-400",
-  emerald: "cs:text-emerald-600 cs:dark:text-emerald-400",
-  teal: "cs:text-teal-600 cs:dark:text-teal-400",
-  cyan: "cs:text-cyan-600 cs:dark:text-cyan-400",
-  sky: "cs:text-sky-600 cs:dark:text-sky-400",
-  blue: "cs:text-blue-600 cs:dark:text-blue-400",
-  indigo: "cs:text-indigo-600 cs:dark:text-indigo-400",
-  violet: "cs:text-violet-600 cs:dark:text-violet-400",
-  purple: "cs:text-purple-600 cs:dark:text-purple-400",
-  fuchsia: "cs:text-fuchsia-600 cs:dark:text-fuchsia-400",
-  pink: "cs:text-pink-600 cs:dark:text-pink-400",
-  rose: "cs:text-rose-600 cs:dark:text-rose-400",
-  slate: "cs:text-slate-600 cs:dark:text-slate-400",
-  gray: "cs:text-gray-600 cs:dark:text-gray-400",
-  zinc: "cs:text-zinc-600 cs:dark:text-zinc-400",
-  neutral: "cs:text-neutral-600 cs:dark:text-neutral-400",
-  stone: "cs:text-stone-600 cs:dark:text-stone-400",
-};
 
 const scaleMap: Record<Scale, string> = {
   xs: "cs:text-[0.625rem] cs:px-2 cs:py-1",
@@ -134,7 +84,7 @@ export function Tabs({
 
   return (
     <TabsContext.Provider value={contextValue}>
-      <div className={clsx("cs:font-sans", className)}>{children}</div>
+      <div className={clsx("cs:font-sans cs:text-gray-900 cs:dark:text-gray-300", className)}>{children}</div>
     </TabsContext.Provider>
   );
 }
@@ -253,6 +203,8 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
   const panelId = `${ctx.baseId}-panel-${value}`;
   const buttonRef = useRef<HTMLButtonElement>(null);
 
+  const colorStyle = colorToCSSVars(ctx.color);
+
   useEffect(() => {
     if (isActive && buttonRef.current) {
       buttonRef.current.scrollIntoView?.({ behavior: "smooth", block: "nearest", inline: "nearest" });
@@ -260,12 +212,7 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
   }, [isActive]);
 
   const activeClasses = isActive
-    ? clsx(
-        "cs:border-b-2 cs:-mb-px",
-        isPresetColor(ctx.color) && borderColorMap[ctx.color],
-        isPresetColor(ctx.color) && textColorMap[ctx.color],
-        !isPresetColor(ctx.color) && "cs-custom-tab-active",
-      )
+    ? "cs:border-b-2 cs:-mb-px cs-tab-active"
     : "cs:text-gray-500 cs:dark:text-gray-400 cs:hover:text-gray-700 cs:dark:hover:text-gray-300";
 
   return (
@@ -278,6 +225,7 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
       aria-controls={panelId}
       tabIndex={isActive ? 0 : -1}
       disabled={disabled}
+      style={isActive ? colorStyle : undefined}
       onClick={() => ctx.onChange(value)}
       className={clsx(
         `cs:font-medium cs:whitespace-nowrap ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,

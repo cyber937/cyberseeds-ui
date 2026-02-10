@@ -1,14 +1,14 @@
 "use client";
 
 import { createContext, useContext } from "react";
-import type { Color, Scale } from "../DesignSystemUtils";
+import type { CustomColor, PresetColor, Scale } from "../DesignSystemUtils";
 
 export interface TabsContextType {
   activeValue: string;
   onChange: (value: string) => void;
   baseId: string;
   scale?: Scale;
-  color: Color;
+  color: PresetColor | CustomColor;
 }
 
 export const TabsContext = createContext<TabsContextType | undefined>(undefined);

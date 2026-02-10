@@ -1,121 +1,121 @@
 @import "tailwindcss" prefix(cs);
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Custom Color Support — CSS variable-based styles for CustomColor objects */
-.cs-custom-btn-primary {
+/* Color System — CSS variable-based styles for all colors (v1.0.0 unified) */
+.cs-btn-primary {
   background-color: var(--cs-ui-base);
 }
-.cs-custom-btn-primary:hover {
+.cs-btn-primary:hover {
   background-color: var(--cs-ui-hover);
 }
-.cs-custom-btn-primary:active {
+.cs-btn-primary:active {
   background-color: var(--cs-ui-active);
 }
-.cs-custom-btn-primary:disabled {
+.cs-btn-primary:disabled {
   background-color: var(--cs-color-gray-200);
   border: 1px solid var(--cs-ui-active);
 }
-.cs-custom-bg {
+.cs-bg {
   background-color: var(--cs-ui-base);
 }
-.cs-custom-focus:focus {
+.cs-focus:focus {
   outline-color: var(--cs-ui-focus);
 }
-.cs-custom-focus-visible:focus-visible {
+.cs-focus-visible:focus-visible {
   outline-color: var(--cs-ui-focus);
 }
-.cs-custom-checked:checked {
+.cs-checked:checked {
   border-color: var(--cs-ui-base);
   background-color: var(--cs-ui-base);
 }
-.cs-custom-checked:focus-visible {
+.cs-checked:focus-visible {
   outline-color: var(--cs-ui-focus);
 }
-.cs-custom-pill {
+.cs-pill {
   outline-color: var(--cs-ui-border);
   background-color: var(--cs-ui-light);
   color: var(--cs-ui-lightText);
 }
-:is(.dark, .dark *) .cs-custom-pill {
+:is(.dark, .dark *) .cs-pill {
   outline-color: color-mix(in oklch, var(--cs-ui-border) 70%, white 30%);
   background-color: color-mix(in oklch, var(--cs-ui-base) 20%, transparent);
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
-/* Custom color: Button primary dark mode */
-:is(.dark, .dark *) .cs-custom-btn-primary {
+/* Button primary dark mode */
+:is(.dark, .dark *) .cs-btn-primary {
   background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
 }
-:is(.dark, .dark *) .cs-custom-btn-primary:hover {
+:is(.dark, .dark *) .cs-btn-primary:hover {
   background-color: color-mix(in oklch, var(--cs-ui-hover) 85%, white 15%);
 }
-:is(.dark, .dark *) .cs-custom-btn-primary:active {
+:is(.dark, .dark *) .cs-btn-primary:active {
   background-color: color-mix(in oklch, var(--cs-ui-active) 85%, white 15%);
 }
-:is(.dark, .dark *) .cs-custom-btn-primary:disabled {
+:is(.dark, .dark *) .cs-btn-primary:disabled {
   background-color: var(--cs-color-gray-700, #374151);
   border-color: var(--cs-color-gray-600, #4b5563);
 }
 
-/* Custom color: Background dark mode */
-:is(.dark, .dark *) .cs-custom-bg {
+/* Background dark mode */
+:is(.dark, .dark *) .cs-bg {
   background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
 }
 
-/* Custom color: Checked state dark mode */
-:is(.dark, .dark *) .cs-custom-checked:checked {
+/* Checked state dark mode */
+:is(.dark, .dark *) .cs-checked:checked {
   border-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
   background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
 }
 
-/* Custom color: Badge variants */
-.cs-custom-badge-solid {
+/* Badge variants */
+.cs-badge-solid {
   background-color: var(--cs-ui-base);
   color: white;
 }
-:is(.dark, .dark *) .cs-custom-badge-solid {
+:is(.dark, .dark *) .cs-badge-solid {
   background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
   color: white;
 }
 
-.cs-custom-badge-outline {
+.cs-badge-outline {
   border-color: var(--cs-ui-border);
   color: var(--cs-ui-lightText);
 }
-:is(.dark, .dark *) .cs-custom-badge-outline {
+:is(.dark, .dark *) .cs-badge-outline {
   border-color: color-mix(in oklch, var(--cs-ui-border) 70%, white 30%);
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
-.cs-custom-badge-dot {
+.cs-badge-dot {
   background-color: var(--cs-ui-base);
 }
-:is(.dark, .dark *) .cs-custom-badge-dot {
+:is(.dark, .dark *) .cs-badge-dot {
   background-color: color-mix(in oklch, var(--cs-ui-base) 70%, white 30%);
 }
 
-/* Custom color: Spinner */
-.cs-custom-spinner {
+/* Spinner */
+.cs-spinner {
   color: var(--cs-ui-base);
 }
-:is(.dark, .dark *) .cs-custom-spinner {
+:is(.dark, .dark *) .cs-spinner {
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
-/* Custom color: Progress bar */
-.cs-custom-progress {
+/* Progress bar */
+.cs-progress {
   background-color: var(--cs-ui-base);
 }
-:is(.dark, .dark *) .cs-custom-progress {
+:is(.dark, .dark *) .cs-progress {
   background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
 }
 
-/* Custom color: Tab active state */
-.cs-custom-tab-active {
+/* Tab active state */
+.cs-tab-active {
   border-color: var(--cs-ui-base);
   color: var(--cs-ui-base);
 }
-:is(.dark, .dark *) .cs-custom-tab-active {
+:is(.dark, .dark *) .cs-tab-active {
   border-color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }

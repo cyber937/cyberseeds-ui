@@ -1,7 +1,6 @@
 import { memo, useId } from "react";
 import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
-import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import { TRANSITION_SLOW } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -47,17 +46,15 @@ export const Radio = memo(function Radio({
 
   const finalUIColor = resolveColor(contextUIColor ?? color);
 
-  const customStyle = isCustomColor(finalUIColor)
-    ? customColorToCSSVars(finalUIColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(finalUIColor);
 
   return (
     <div className={`cs:flex cs:items-center cs:max-md:min-h-11 ${gapScaleMap[scale]}`}>
       <input
         id={id}
         type="radio"
-        style={customStyle}
-        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-200 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 ${isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor) ? "cs:before:bg-gray-900" : "cs:before:bg-white"} cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${TRANSITION_SLOW} ${radioScaleMap[scale]} ${isPresetColor(finalUIColor) ? checkedFocusOutlineColorMap[finalUIColor] : "cs-custom-checked"}`}
+        style={colorStyle}
+        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-200 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 ${isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor) ? "cs:before:bg-gray-900" : "cs:before:bg-white"} cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${TRANSITION_SLOW} ${radioScaleMap[scale]} cs-checked`}
         {...props}
       />
       {label && (

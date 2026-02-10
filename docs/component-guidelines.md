@@ -2,6 +2,8 @@
 
 cyberseeds-ui のコンポーネント設計における規約とベストプラクティス。
 
+> Updated for v1.0.0
+
 ## ファイル構成
 
 ```
@@ -10,11 +12,14 @@ src/components/
     ComponentName.tsx          # コンポーネント本体
     ComponentName.stories.tsx  # Storybook ストーリー
     ComponentName.test.tsx     # ユニットテスト
+    index.tsx                  # (Context/Hook がある場合のみ)
 ```
 
 - 1コンポーネント = 1ディレクトリ
 - ファイル名はパスカルケース
 - エクスポートは `src/components/index.tsx` で一元管理
+- `index.tsx` は Context や Hook など複数のエクスポートファイルがある場合のみ作成
+- Label, Radio, UIColorProvider はテスト/ストーリーを省略 (それぞれ FormField, RadioGroup, `__tests__/customColor.test.tsx` 経由でテスト済み)
 
 ## Props 設計
 
@@ -104,14 +109,36 @@ const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 const finalUIColor = contextUIColor ?? color;
 ```
 
-### カラーマップの使い分け
+### カラーの適用 (v1.0.0 CSS 変数方式)
 
-| マップ | import 元 | 使用コンポーネント |
+全コンポーネントで `colorToCSSVars()` を使用して CSS 変数を生成し、
+セマンティック CSS クラス (`cs-btn-primary`, `cs-checked` 等) で参照する:
+
+```tsx
+import { colorToCSSVars, resolveColor, isPresetColor } from "../Constants/colorUtils";
+import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
+
+// CSS 変数を生成
+const cssVars = colorToCSSVars(finalColor);
+
+// コントラスト判定 (amber/yellow/lime のみ)
+const needsDarkText = isPresetColor(finalColor) && LIGHT_BG_COLORS.has(finalColor);
+
+// JSX: CSS 変数をスタイルに、CSS クラスを className に
+<button style={cssVars} className={clsx("cs-btn-primary", needsDarkText && "cs:text-gray-900")}>
+```
+
+| CSS クラス | 定義元 (`src/index.css`) | 使用コンポーネント |
 | --- | --- | --- |
-| `focusOutlineColorMap` | `Constants/colorMap.ts` | Input, Select, TextArea, PhoneInput |
-| `checkedFocusOutlineColorMap` | `Constants/colorMap.ts` | Checkbox, Radio |
-| `backgroundColorMap` | `Constants/colorMap.ts` | Button, Switch |
-| ローカルマップ | コンポーネント内定義 | Button (hover/active), PillBox |
+| `cs-btn-primary` | `--cs-ui-base/hover/active` | Button |
+| `cs-focus-visible` | `--cs-ui-focus` | Input, Select, TextArea, PhoneInput |
+| `cs-checked` | `--cs-ui-base/focus` | Checkbox, Radio |
+| `cs-bg` | `--cs-ui-base` | Switch |
+| `cs-pill` | `--cs-ui-light/lightText/border` | PillBox |
+| `cs-badge-*` | `--cs-ui-base/border` | Badge |
+| `cs-spinner` | `--cs-ui-base` | Spinner |
+| `cs-progress` | `--cs-ui-base` | Progress |
+| `cs-tab-active` | `--cs-ui-base` | Tabs |
 
 ## スケーリング
 

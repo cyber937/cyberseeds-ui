@@ -181,6 +181,36 @@ describe('PhoneInput Component', () => {
       expect(input).toBeInTheDocument();
     });
 
+    it('handles backspace at closing paren position', () => {
+      const handleChange = vi.fn();
+      render(<PhoneInput value="1234567890" onChange={handleChange} />);
+      const input = screen.getByRole('textbox') as HTMLInputElement;
+      // Formatted: (123) 456-7890  — ")" is at index 4, cursor at 5 means raw[4]=")"
+      Object.defineProperty(input, 'selectionStart', { get: () => 5, configurable: true });
+      fireEvent.keyDown(input, { key: 'Backspace' });
+      expect(handleChange).toHaveBeenCalled();
+    });
+
+    it('handles backspace at hyphen position', () => {
+      const handleChange = vi.fn();
+      render(<PhoneInput value="1234567890" onChange={handleChange} />);
+      const input = screen.getByRole('textbox') as HTMLInputElement;
+      // Formatted: (123) 456-7890 — "-" is at index 9, cursor at 10 means raw[9]="-"
+      Object.defineProperty(input, 'selectionStart', { get: () => 10, configurable: true });
+      fireEvent.keyDown(input, { key: 'Backspace' });
+      expect(handleChange).toHaveBeenCalled();
+    });
+
+    it('handles backspace at space after closing paren', () => {
+      const handleChange = vi.fn();
+      render(<PhoneInput value="1234567890" onChange={handleChange} />);
+      const input = screen.getByRole('textbox') as HTMLInputElement;
+      // Formatted: (123) 456-7890 — " " is at index 5, ")" at index 4, cursor at 6
+      Object.defineProperty(input, 'selectionStart', { get: () => 6, configurable: true });
+      fireEvent.keyDown(input, { key: 'Backspace' });
+      expect(handleChange).toHaveBeenCalled();
+    });
+
     it('handles keyDown events', () => {
       render(<PhoneInput />);
       const input = screen.getByRole('textbox');

@@ -7,7 +7,7 @@ import reactRefresh from "eslint-plugin-react-refresh";
 import globals from "globals";
 import tseslint from "typescript-eslint";
 
-export default tseslint.config({ ignores: ["dist"] }, {
+export default tseslint.config({ ignores: ["dist", "storybook-static", "coverage"] }, {
   extends: [js.configs.recommended, ...tseslint.configs.recommended],
   files: ["**/*.{ts,tsx}"],
   languageOptions: {

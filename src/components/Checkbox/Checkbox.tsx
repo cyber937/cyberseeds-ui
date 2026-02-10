@@ -1,7 +1,6 @@
 import { useId } from "react";
 import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
-import { checkedFocusOutlineColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
@@ -53,9 +52,7 @@ export function Checkbox({
 
   const finalUIColor = resolveColor(contextUIColor ?? color);
 
-  const customStyle = isCustomColor(finalUIColor)
-    ? customColorToCSSVars(finalUIColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(finalUIColor);
 
   return (
     <div className={`cs:flex cs:max-md:min-h-11 cs:max-md:items-center ${gapScaleMap[scale]}`}>
@@ -66,8 +63,8 @@ export function Checkbox({
           <input
             id={id}
             type="checkbox"
-            style={customStyle}
-            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:checked:bg-gray-200 cs:forced-colors:appearance-auto ${isPresetColor(finalUIColor) ? checkedFocusOutlineColorMap[finalUIColor] : "cs-custom-checked"}`}
+            style={colorStyle}
+            className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:checked:bg-gray-200 cs:forced-colors:appearance-auto cs-checked`}
             {...props}
           />
           <svg
