@@ -57,7 +57,7 @@ export function TextArea({
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
         style={colorStyle}
-        className={`cs:w-full cs:dark:bg-gray-800 cs:dark:text-gray-400 cs:rounded-md cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:outline-1 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} ${TRANSITION_NORMAL} ${
+        className={`cs:block cs:w-full cs:dark:bg-gray-800 cs:dark:text-gray-400 cs:rounded-md cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:outline-1 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} ${TRANSITION_NORMAL} ${
           mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
             : "cs:text-gray-900 cs:bg-white cs:outline-gray-300"
