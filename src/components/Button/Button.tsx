@@ -23,9 +23,9 @@ interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const scaleMap: Record<Scale, string> = {
-  xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem]",
-  sm: "cs:px-2 cs:py-1 cs:text-xs",
-  md: "cs:px-3 cs:py-1.5 cs:text-sm",
+  xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem] cs:max-md:min-h-11",
+  sm: "cs:px-2 cs:py-1 cs:text-xs cs:max-md:min-h-11",
+  md: "cs:px-3 cs:py-1.5 cs:text-sm cs:max-md:min-h-11",
   lg: "cs:px-4 cs:py-2 cs:text-base",
 };
 
@@ -90,7 +90,7 @@ export function Button({
     <ButtonContext.Provider value={buttonContextValue}>
       <button
         style={customStyle}
-        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantMap[variant]} ${isPresetColor(finalUIColor) ? focusOutlineColorMap[finalUIColor] : "cs-custom-focus-visible"} ${className}`}
+        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantMap[variant]} ${isPresetColor(finalUIColor) ? focusOutlineColorMap[finalUIColor] : "cs-custom-focus-visible"} ${className}`}
         {...props}
       >
         {children}

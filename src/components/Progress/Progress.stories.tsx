@@ -48,7 +48,7 @@ export const WithLabel: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <GroupBox label="Extra Small (xs)">
         <Progress value={65} scale="xs" color="blue" />
       </GroupBox>

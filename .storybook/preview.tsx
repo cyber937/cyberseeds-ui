@@ -21,6 +21,7 @@ function ThemeWrapper({ isDark, children }: { isDark: boolean; children: React.R
 
 const preview: Preview = {
   parameters: {
+    layout: "padded",
     backgrounds: {
       options: {
         light: { name: "Light", value: "#F7F9F2" },
@@ -37,26 +38,19 @@ const preview: Preview = {
     a11y: {
       test: "todo",
     },
-  },
-  globalTypes: {
-    theme: {
-      description: "Theme mode",
-      toolbar: {
-        title: "Theme",
-        icon: "moon",
-        items: [
-          { value: "light", title: "Light", icon: "sun" },
-          { value: "dark", title: "Dark", icon: "moon" },
-        ],
-        dynamicTitle: true,
+    viewport: {
+      options: {
+        "small-mobile": { name: "Small Mobile", styles: { width: "320px", height: "568px" } },
+        mobile: { name: "Mobile", styles: { width: "375px", height: "667px" } },
+        tablet: { name: "Tablet", styles: { width: "768px", height: "1024px" } },
+        desktop: { name: "Desktop", styles: { width: "1280px", height: "800px" } },
       },
     },
   },
   decorators: [
     (Story, context) => {
-      const theme = context.globals.theme || "light";
       const bgValue = context.globals.backgrounds?.value;
-      const isDark = theme === "dark" || bgValue === "dark" || bgValue === "#1a1a2e";
+      const isDark = bgValue === "dark" || bgValue === "#1a1a2e";
       return (
         <ThemeWrapper isDark={isDark}>
           <Story />
@@ -66,7 +60,6 @@ const preview: Preview = {
   ],
   initialGlobals: {
     backgrounds: { value: "light" },
-    theme: "light",
   },
 };
 

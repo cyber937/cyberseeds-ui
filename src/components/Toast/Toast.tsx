@@ -52,10 +52,10 @@ const presetToastStyles: Record<PresetColor, ToastStyleSet> = {
 };
 
 const scaleMap: Record<Scale, string> = {
-  xs: "cs:text-[0.625rem] cs:px-2 cs:py-1.5 cs:min-w-48",
-  sm: "cs:text-xs cs:px-3 cs:py-2 cs:min-w-56",
-  md: "cs:text-sm cs:px-4 cs:py-3 cs:min-w-72",
-  lg: "cs:text-base cs:px-5 cs:py-4 cs:min-w-80",
+  xs: "cs:text-[0.625rem] cs:px-2 cs:py-1.5 cs:min-w-48 cs:max-md:min-w-0 cs:max-w-[calc(100vw-2rem)]",
+  sm: "cs:text-xs cs:px-3 cs:py-2 cs:min-w-56 cs:max-md:min-w-0 cs:max-w-[calc(100vw-2rem)]",
+  md: "cs:text-sm cs:px-4 cs:py-3 cs:min-w-72 cs:max-md:min-w-0 cs:max-w-[calc(100vw-2rem)]",
+  lg: "cs:text-base cs:px-5 cs:py-4 cs:min-w-80 cs:max-md:min-w-0 cs:max-w-[calc(100vw-2rem)]",
 };
 
 const iconScaleMap: Record<Scale, string> = {

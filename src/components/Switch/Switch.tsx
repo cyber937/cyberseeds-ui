@@ -65,7 +65,7 @@ export function Switch({
     : undefined;
 
   return (
-    <div className="cs:flex cs:gap-1 cs:items-center">
+    <div className="cs:flex cs:gap-1 cs:items-center cs:max-md:min-h-11">
       <button
         id={id}
         type="button"

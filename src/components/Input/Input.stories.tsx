@@ -108,7 +108,7 @@ export const Disabled: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
         <Input label="メール" scale="xs" placeholder="example@email.com" />
@@ -125,6 +125,23 @@ export const Scales: Story = {
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
         <Input label="メール" scale="lg" placeholder="example@email.com" />
       </div>
+    </div>
+  ),
+};
+
+export const MobileTouch: Story = {
+  parameters: {
+    viewport: { defaultViewport: "mobile" },
+  },
+  render: () => (
+    <div className="cs:space-y-4">
+      <p className="cs:text-xs cs:text-gray-500">
+        モバイルではタッチターゲット44px以上・フォントサイズ16px（iOSズーム防止）が適用されます。
+      </p>
+      <Input label="メール" scale="xs" placeholder="extra small" />
+      <Input label="メール" scale="sm" placeholder="small" />
+      <Input label="メール" scale="md" placeholder="standard" />
+      <Input label="メール" scale="lg" placeholder="large" />
     </div>
   ),
 };

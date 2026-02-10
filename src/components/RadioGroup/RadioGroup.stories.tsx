@@ -67,7 +67,7 @@ export const Scale: Story = {
     const [mdVal, setMdVal] = useState<string>("male");
     const [lgVal, setLgVal] = useState<string>("male");
     return (
-      <div className="cs:grid cs:grid-cols-4 cs:gap-4">
+      <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
         <GroupBox label="Extra Small (xs)">
           <RadioGroup
             scale="xs"

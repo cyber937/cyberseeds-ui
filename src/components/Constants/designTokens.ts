@@ -19,3 +19,14 @@ export const TRANSITION_SLOW =
   "cs:transition-all cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none" as const;
 export const TRANSITION_TRANSFORM_SLOW =
   "cs:transition-transform cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none" as const;
+
+// ===== Responsive Tokens =====
+// Touch target minimum (WCAG 2.5.8: Target Size)
+export const TOUCH_TARGET_MIN = "cs:max-md:min-h-11" as const; // 44px on mobile
+
+// Mobile-safe font size (prevents iOS auto-zoom on input focus)
+export const MOBILE_INPUT_FONT = "cs:max-md:text-base" as const; // 16px on mobile
+
+// Responsive max-width guard (prevents overflow on narrow viewports)
+export const RESPONSIVE_MAX_WIDTH =
+  "cs:max-w-[calc(100vw-2rem)]" as const;

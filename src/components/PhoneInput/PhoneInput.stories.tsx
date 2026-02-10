@@ -57,7 +57,7 @@ export const Scales: Story = {
     const [md, setMd] = useState("");
     const [lg, setLg] = useState("");
     return (
-      <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
         <div>
           <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
           <PhoneInput label="電話番号" scale="xs" value={xs} onChange={setXs} />
