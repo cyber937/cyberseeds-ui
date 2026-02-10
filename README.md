@@ -15,7 +15,7 @@ Designed for clean, accessible, and maintainable interfaces in modern web applic
 - Tree-shakable, TypeScript-friendly components with full type exports
 - **WAI-ARIA** compliant accessibility across all components
 - Global color theming via `UIColorProvider` context with custom color support
-- Interactive component catalog with **Storybook 9**
+- Interactive component catalog with **Storybook 10**
 - Tested with **Vitest**, **React Testing Library**, and **jest-axe**
 
 ## Installation
@@ -315,7 +315,7 @@ src/
 | Styling | Tailwind CSS v4 |
 | Build | Vite 6 |
 | Testing | Vitest 3.2, React Testing Library, jest-axe |
-| Documentation | Storybook 9 |
+| Documentation | Storybook 10 |
 
 ## License
 
