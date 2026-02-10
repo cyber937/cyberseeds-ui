@@ -107,7 +107,7 @@ export const Color: Story = {
 export const Scale: Story = {
   render: () => (
     <UIColorProvider initialColor="gray">
-      <div className="cs:flex cs:gap-4 cs:items-center">
+      <div className="cs:flex cs:flex-wrap cs:gap-4 cs:items-center">
         <Button scale="xs">XS</Button>
         <Button scale="sm">SM</Button>
         <Button>MD</Button>
@@ -119,7 +119,7 @@ export const Scale: Story = {
 
 export function PrimaryAndSecondary() {
   return (
-    <div className="cs:flex cs:gap-4">
+    <div className="cs:flex cs:flex-wrap cs:gap-4">
       <Button>
         <Button.Icon>
           <svg

@@ -29,7 +29,7 @@ export const Default: Story = {
 
 export const Positions: Story = {
   render: () => (
-    <div className="cs:flex cs:items-center cs:justify-center cs:gap-8 cs:py-16">
+    <div className="cs:flex cs:flex-wrap cs:items-center cs:justify-center cs:gap-8 cs:py-16">
       <Tooltip content="上に表示" position="top">
         <Button color="blue">Top</Button>
       </Tooltip>
@@ -127,7 +127,7 @@ export const TouchToggle: Story = {
       <p className="cs:text-xs cs:text-gray-500">
         タッチデバイスではタップでツールチップを表示/非表示できます。外側をタップすると閉じます。
       </p>
-      <div className="cs:flex cs:justify-center cs:gap-8">
+      <div className="cs:flex cs:flex-wrap cs:justify-center cs:gap-8">
         <Tooltip content="タップで表示" position="bottom">
           <Button color="blue">タップ</Button>
         </Tooltip>

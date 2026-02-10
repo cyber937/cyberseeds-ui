@@ -35,8 +35,9 @@ describe("Spinner Component", () => {
   describe("Colors", () => {
     it("renders with default blue color", () => {
       const { container } = render(<Spinner />);
-      const svg = container.querySelector("svg");
-      expect(svg).toHaveClass("cs:text-blue-600");
+      const svg = container.querySelector("svg") as SVGElement;
+      expect(svg).toHaveClass("cs-spinner");
+      expect((svg as unknown as HTMLElement).style.getPropertyValue("--cs-ui-base")).toBeTruthy();
     });
 
     it("renders with different preset colors", () => {

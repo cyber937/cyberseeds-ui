@@ -1,6 +1,5 @@
 import React, { useId } from "react";
-import { focusOutlineColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING_INSET, TRANSITION_NORMAL } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
@@ -47,9 +46,7 @@ export function Input({
     ? [formField.errorId, formField.helpId].join(" ")
     : undefined;
 
-  const customStyle = isCustomColor(finalUIColor)
-    ? customColorToCSSVars(finalUIColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(finalUIColor);
 
   return (
     <div>
@@ -67,12 +64,11 @@ export function Input({
         aria-invalid={mergedInvalid || undefined}
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
-        style={customStyle}
+        style={colorStyle}
         className={`cs:w-full cs:items-center cs:rounded-md cs:dark:text-gray-400 cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} cs:self-start ${TRANSITION_NORMAL} ${mergedInvalid
           ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
           : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"
-          } ${scaleMap[mergedScale]} ${isPresetColor(finalUIColor) ? focusOutlineColorMap[finalUIColor] : "cs-custom-focus-visible"
-          } ${className}`}
+          } ${scaleMap[mergedScale]} cs-focus-visible ${className}`}
         {...props}
       />
     </div>

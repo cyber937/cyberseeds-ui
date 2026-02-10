@@ -7,7 +7,7 @@ import {
   useMemo,
   useState
 } from "react";
-import { customColorToCSSVars, isCustomColor, isSemanticColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, customColorToCSSVars, isSemanticColor, resolveColor } from "../Constants/colorUtils";
 import { createSemanticColorMap } from "../Constants/semanticColor";
 import type { SemanticColorMap } from "../Constants/semanticColor";
 import type { Color, CustomColor } from "../DesignSystemUtils";
@@ -61,21 +61,17 @@ export function UIColorProvider({
     // SSR or no DOM — not dark
   }
 
-  // Determine CSS vars: use darkColor in dark mode if provided, otherwise use effectiveColor
-  let cssVars: React.CSSProperties | undefined;
+  // All colors (preset and custom) now get CSS variables via the unified path
+  let cssVars: React.CSSProperties;
   if (isDark && darkColor) {
     cssVars = customColorToCSSVars(darkColor);
-  } else if (isCustomColor(effectiveColor)) {
-    cssVars = customColorToCSSVars(effectiveColor, isDark);
+  } else {
+    cssVars = colorToCSSVars(effectiveColor, isDark);
   }
 
   return (
     <UIColorContext.Provider value={contextValue}>
-      {cssVars ? (
-        <div style={{ display: "contents", ...cssVars }}>{children}</div>
-      ) : (
-        children
-      )}
+      <div style={{ display: "contents", ...cssVars }}>{children}</div>
     </UIColorContext.Provider>
   );
 }

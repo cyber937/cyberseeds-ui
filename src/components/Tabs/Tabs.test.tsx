@@ -109,6 +109,16 @@ describe("Tabs Component", () => {
     });
   });
 
+  describe("Context error", () => {
+    it("throws when sub-component is used outside Tabs", () => {
+      const spy = vi.spyOn(console, "error").mockImplementation(() => {});
+      expect(() => render(<Tabs.Trigger value="x">Orphan</Tabs.Trigger>)).toThrow(
+        "Tabs sub-components must be used within a Tabs component",
+      );
+      spy.mockRestore();
+    });
+  });
+
   describe("Disabled tabs", () => {
     it("renders disabled tab", () => {
       render(

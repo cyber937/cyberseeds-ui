@@ -1,8 +1,8 @@
 import clsx from "clsx";
 import { memo } from "react";
 
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
-import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
+import type { Color, Scale } from "../DesignSystemUtils";
 
 interface PillBoxProps {
   label: string;
@@ -10,31 +10,6 @@ interface PillBoxProps {
   color?: Color;
   className?: string;
 }
-
-const colorMap: Record<PresetColor, string> = {
-  red: "cs:outline-red-400 cs:bg-red-200 cs:text-red-800 cs:dark:outline-red-600 cs:dark:bg-red-900/30 cs:dark:text-red-300",
-  orange: "cs:outline-orange-400 cs:bg-orange-200 cs:text-orange-800 cs:dark:outline-orange-600 cs:dark:bg-orange-900/30 cs:dark:text-orange-300",
-  amber: "cs:outline-amber-400 cs:bg-amber-200 cs:text-amber-800 cs:dark:outline-amber-600 cs:dark:bg-amber-900/30 cs:dark:text-amber-300",
-  yellow: "cs:outline-yellow-400 cs:bg-yellow-200 cs:text-yellow-800 cs:dark:outline-yellow-600 cs:dark:bg-yellow-900/30 cs:dark:text-yellow-300",
-  lime: "cs:outline-lime-400 cs:bg-lime-200 cs:text-lime-800 cs:dark:outline-lime-600 cs:dark:bg-lime-900/30 cs:dark:text-lime-300",
-  green: "cs:outline-green-400 cs:bg-green-200 cs:text-green-800 cs:dark:outline-green-600 cs:dark:bg-green-900/30 cs:dark:text-green-300",
-  emerald: "cs:outline-emerald-400 cs:bg-emerald-200 cs:text-emerald-800 cs:dark:outline-emerald-600 cs:dark:bg-emerald-900/30 cs:dark:text-emerald-300",
-  teal: "cs:outline-teal-400 cs:bg-teal-200 cs:text-teal-800 cs:dark:outline-teal-600 cs:dark:bg-teal-900/30 cs:dark:text-teal-300",
-  cyan: "cs:outline-cyan-400 cs:bg-cyan-200 cs:text-cyan-800 cs:dark:outline-cyan-600 cs:dark:bg-cyan-900/30 cs:dark:text-cyan-300",
-  sky: "cs:outline-sky-400 cs:bg-sky-200 cs:text-sky-800 cs:dark:outline-sky-600 cs:dark:bg-sky-900/30 cs:dark:text-sky-300",
-  blue: "cs:outline-blue-400 cs:bg-blue-200 cs:text-blue-800 cs:dark:outline-blue-600 cs:dark:bg-blue-900/30 cs:dark:text-blue-300",
-  indigo: "cs:outline-indigo-400 cs:bg-indigo-200 cs:text-indigo-800 cs:dark:outline-indigo-600 cs:dark:bg-indigo-900/30 cs:dark:text-indigo-300",
-  violet: "cs:outline-violet-400 cs:bg-violet-200 cs:text-violet-800 cs:dark:outline-violet-600 cs:dark:bg-violet-900/30 cs:dark:text-violet-300",
-  purple: "cs:outline-purple-400 cs:bg-purple-200 cs:text-purple-800 cs:dark:outline-purple-600 cs:dark:bg-purple-900/30 cs:dark:text-purple-300",
-  fuchsia: "cs:outline-fuchsia-400 cs:bg-fuchsia-200 cs:text-fuchsia-800 cs:dark:outline-fuchsia-600 cs:dark:bg-fuchsia-900/30 cs:dark:text-fuchsia-300",
-  pink: "cs:outline-pink-400 cs:bg-pink-200 cs:text-pink-800 cs:dark:outline-pink-600 cs:dark:bg-pink-900/30 cs:dark:text-pink-300",
-  rose: "cs:outline-rose-400 cs:bg-rose-200 cs:text-rose-800 cs:dark:outline-rose-600 cs:dark:bg-rose-900/30 cs:dark:text-rose-300",
-  slate: "cs:outline-slate-400 cs:bg-slate-200 cs:text-slate-800 cs:dark:outline-slate-600 cs:dark:bg-slate-900/30 cs:dark:text-slate-300",
-  gray: "cs:outline-gray-400 cs:bg-gray-200 cs:text-gray-800 cs:dark:outline-gray-600 cs:dark:bg-gray-900/30 cs:dark:text-gray-300",
-  zinc: "cs:outline-zinc-400 cs:bg-zinc-200 cs:text-zinc-800 cs:dark:outline-zinc-600 cs:dark:bg-zinc-900/30 cs:dark:text-zinc-300",
-  neutral: "cs:outline-neutral-400 cs:bg-neutral-200 cs:text-neutral-800 cs:dark:outline-neutral-600 cs:dark:bg-neutral-900/30 cs:dark:text-neutral-300",
-  stone: "cs:outline-stone-400 cs:bg-stone-200 cs:text-stone-800 cs:dark:outline-stone-600 cs:dark:bg-stone-900/30 cs:dark:text-stone-300",
-};
 
 const scaleMap: Record<Scale, string> = {
   xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.5rem]",
@@ -53,14 +28,12 @@ export const PillBox = memo(function PillBox({
   const baseClasses =
     "cs:inline-block cs:font-medium cs:rounded-full cs:outline-1 cs:font-sans cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start";
 
-  const customStyle = isCustomColor(resolvedColor)
-    ? customColorToCSSVars(resolvedColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(resolvedColor);
 
   return (
     <span
-      style={customStyle}
-      className={clsx(baseClasses, scaleMap[scale], isPresetColor(resolvedColor) ? colorMap[resolvedColor] : "cs-custom-pill", className)}
+      style={colorStyle}
+      className={clsx(baseClasses, scaleMap[scale], "cs-pill", className)}
     >
       {label}
     </span>

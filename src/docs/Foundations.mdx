@@ -1,0 +1,163 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Foundations/Overview" />
+
+# Cyberseeds UI — Design Foundations
+
+Cyberseeds UI is built on a consistent set of design tokens that ensure visual harmony across all components.
+
+## Color System (v1.0.0)
+
+All colors are applied via **CSS custom properties**, enabling both preset and custom colors to follow the same code path.
+
+### Preset Colors (22)
+
+<table>
+  <thead>
+    <tr><th>Category</th><th>Colors</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Warm</td><td><code>red</code>, <code>orange</code>, <code>amber</code>, <code>yellow</code></td></tr>
+    <tr><td>Green</td><td><code>lime</code>, <code>green</code>, <code>emerald</code>, <code>teal</code></td></tr>
+    <tr><td>Blue</td><td><code>cyan</code>, <code>sky</code>, <code>blue</code>, <code>indigo</code></td></tr>
+    <tr><td>Purple</td><td><code>violet</code>, <code>purple</code>, <code>fuchsia</code></td></tr>
+    <tr><td>Pink</td><td><code>pink</code>, <code>rose</code></td></tr>
+    <tr><td>Neutral</td><td><code>slate</code>, <code>gray</code>, <code>zinc</code>, <code>neutral</code>, <code>stone</code></td></tr>
+  </tbody>
+</table>
+
+### Semantic Colors
+
+<table>
+  <thead>
+    <tr><th>Name</th><th>Default Mapping</th><th>Usage</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>success</code></td><td><code>green</code></td><td>Positive outcomes</td></tr>
+    <tr><td><code>warning</code></td><td><code>amber</code></td><td>Caution states</td></tr>
+    <tr><td><code>error</code></td><td><code>red</code></td><td>Error states</td></tr>
+    <tr><td><code>info</code></td><td><code>blue</code></td><td>Informational</td></tr>
+  </tbody>
+</table>
+
+Semantic mappings can be customized via `UIColorProvider`:
+
+```tsx
+<UIColorProvider
+  initialColor="success"
+  semanticColors={{ success: "emerald", error: "rose" }}
+>
+```
+
+### Custom Colors
+
+Provide an object with OKLCH or hex values:
+
+```tsx
+const brand: CustomColor = {
+  base: "#4f46e5",     // Primary shade
+  hover: "#4338ca",    // Hover state
+  active: "#3730a3",   // Active/pressed
+  focus: "#4f46e5",    // Focus ring
+  light: "#e0e7ff",    // Light background (PillBox, etc.)
+  lightText: "#312e81", // Text on light background
+  border: "#a5b4fc",   // Border color
+};
+
+// Or provide only `base` for automatic shade generation:
+const simple: CustomColor = { base: "#4f46e5" };
+```
+
+### CSS Variables
+
+All components consume these variables:
+
+<table>
+  <thead>
+    <tr><th>Variable</th><th>Usage</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>--cs-ui-base</code></td><td>Primary background, checked state</td></tr>
+    <tr><td><code>--cs-ui-hover</code></td><td>Hover background</td></tr>
+    <tr><td><code>--cs-ui-active</code></td><td>Active/pressed background</td></tr>
+    <tr><td><code>--cs-ui-focus</code></td><td>Focus ring color</td></tr>
+    <tr><td><code>--cs-ui-light</code></td><td>Light variant background</td></tr>
+    <tr><td><code>--cs-ui-lightText</code></td><td>Text on light background</td></tr>
+    <tr><td><code>--cs-ui-border</code></td><td>Border color</td></tr>
+  </tbody>
+</table>
+
+### Color Resolution Order
+
+1. Component `color` prop
+2. `UIColorProvider` context
+3. Default (`"blue"`)
+
+---
+
+## Scale System
+
+Four sizes available on all sized components:
+
+<table>
+  <thead>
+    <tr><th>Scale</th><th>Font Size</th><th>Use Case</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>xs</code></td><td>0.625rem (10px)</td><td>Compact UI, badges</td></tr>
+    <tr><td><code>sm</code></td><td>0.75rem (12px)</td><td>Secondary actions</td></tr>
+    <tr><td><code>md</code></td><td>0.875rem (14px)</td><td><strong>Default</strong> — primary UI</td></tr>
+    <tr><td><code>lg</code></td><td>1rem (16px)</td><td>Large / hero sections</td></tr>
+  </tbody>
+</table>
+
+---
+
+## Spacing & Layout
+
+- **Tailwind CSS v4** with `cs:` namespace prefix
+- Touch targets: minimum 44×44px on mobile (`cs:max-md:min-h-11`)
+- Responsive breakpoints: `sm` (640px), `md` (768px), `lg` (1024px), `xl` (1280px)
+
+---
+
+## Typography
+
+- Font family: `cs:font-sans` (system UI stack)
+- Font weights: `cs:font-medium` (buttons, labels), `cs:font-normal` (body)
+
+---
+
+## Motion
+
+- Fast transitions: `150ms ease-in-out` (hover, focus)
+- Normal transitions: `200ms ease-in-out` (color changes)
+- Slow transitions: `300ms ease-in-out` (layout shifts)
+- Respects `prefers-reduced-motion` via `cs:motion-reduce:transition-none`
+
+---
+
+## Theming
+
+### Dark Mode
+
+Use `ThemeProvider` to manage theme:
+
+```tsx
+<ThemeProvider mode="system">
+  <App />
+</ThemeProvider>
+```
+
+Modes: `"light"` | `"dark"` | `"system"`
+
+### UIColorProvider
+
+Sets the accent color for all child components:
+
+```tsx
+<UIColorProvider initialColor="indigo">
+  <Button>Uses indigo</Button>
+  <Input label="Also indigo" />
+</UIColorProvider>
+```

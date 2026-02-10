@@ -1,6 +1,5 @@
 import React, { useCallback, useId, useRef } from "react";
-import { focusOutlineColorMap } from "../Constants/colorMap";
-import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING_INSET, TRANSITION_NORMAL } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
@@ -69,9 +68,7 @@ export function PhoneInput({
     ? [formField.errorId, formField.helpId].join(" ")
     : undefined;
 
-  const customStyle = isCustomColor(finalUIColor)
-    ? customColorToCSSVars(finalUIColor)
-    : undefined;
+  const colorStyle = colorToCSSVars(finalUIColor);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.currentTarget;
@@ -179,12 +176,12 @@ export function PhoneInput({
         onKeyDown={handleKeyDown}
         placeholder="(123) 456-7890"
         maxLength={16}
-        style={customStyle}
+        style={colorStyle}
         className={`cs:block cs:w-full cs:rounded-md cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:font-sans cs:outline-1 placeholder:cs:text-gray-400 cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-400 cs:-outline-offset-1 cs:outline-gray-300 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} cs:dark:disabled:text-gray-800 ${TRANSITION_NORMAL} ${
           mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
             : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"
-        } ${scaleMap[mergedScale]} ${isPresetColor(finalUIColor) ? focusOutlineColorMap[finalUIColor] : "cs-custom-focus-visible"} ${className}`}
+        } ${scaleMap[mergedScale]} cs-focus-visible ${className}`}
         {...props}
       />
     </div>

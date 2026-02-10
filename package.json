@@ -1,6 +1,6 @@
 {
   "name": "cyberseeds-ui",
-  "version": "0.7.0",
+  "version": "1.0.0",
   "license": "MIT",
   "keywords": [
     "react-components"
@@ -11,7 +11,7 @@
     "dist",
     "dist/style.css"
   ],
-  "main": "dist/cyberseeds-ui-umd.cjs",
+  "main": "dist/cyberseeds-ui.js",
   "module": "dist/cyberseeds-ui.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
@@ -19,7 +19,6 @@
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/cyberseeds-ui.js",
-      "require": "./dist/cyberseeds-ui-umd.cjs",
       "default": "./dist/cyberseeds-ui.js"
     },
     "./style.css": {
