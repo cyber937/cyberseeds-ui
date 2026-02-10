@@ -8,7 +8,7 @@ const meta: Meta<typeof Checkbox> = {
   argTypes: {
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -88,6 +88,29 @@ export const Color: Story = {
       <div className="cs:grid cs:grid-cols-5 cs:gap-6">
         <Checkbox label="Neutral" {...args} color="neutral"></Checkbox>
         <Checkbox label="Stone" {...args} color="stone"></Checkbox>
+      </div>
+    </div>
+  ),
+};
+
+export const Scales: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
+        <Checkbox label="利用規約に同意" scale="xs" color="blue" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
+        <Checkbox label="利用規約に同意" scale="sm" color="blue" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
+        <Checkbox label="利用規約に同意" scale="md" color="blue" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
+        <Checkbox label="利用規約に同意" scale="lg" color="blue" />
       </div>
     </div>
   ),

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useState } from "react";
+import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 type ModalContextType = {
   close?: () => void;
@@ -22,8 +23,9 @@ const widthMap = {
 
 export function Modal({ width = "md", children, onClose }: ModalProps) {
   const headerId = useId();
+  const prefersReducedMotion = useReducedMotion();
 
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
@@ -35,14 +37,19 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
   );
 
   useEffect(() => {
-    // 次のフレームで visible を true にしてアニメーション開始
-    const timeout = requestAnimationFrame(() => setIsVisible(true));
     document.addEventListener("keydown", handleKeyDown);
+
+    // reduced motion: 即座に表示（アニメーションなし）
+    let frameId: number | undefined;
+    if (!prefersReducedMotion) {
+      frameId = requestAnimationFrame(() => setIsVisible(true));
+    }
+
     return () => {
-      cancelAnimationFrame(timeout);
       document.removeEventListener("keydown", handleKeyDown);
+      if (frameId !== undefined) cancelAnimationFrame(frameId);
     };
-  }, [handleKeyDown]);
+  }, [handleKeyDown, prefersReducedMotion]);
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -61,13 +68,13 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={headerId}
-        className={`cs:transition-opacity cs:duration-200 cs:ease-in-out cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:flex cs:justify-center cs:items-center cs:z-50 cs:text-base cs:sm:text-sm/5 ${
+        className={`cs:transition-opacity cs:duration-200 cs:ease-in-out cs:motion-reduce:transition-none cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:flex cs:justify-center cs:items-center cs:z-50 cs:text-base cs:sm:text-sm/5 ${
           isVisible ? "cs:opacity-100" : "cs:opacity-0"
         }`}
         onClick={handleBackdropClick}
       >
         <div
-          className={`cs:transition cs:duration-300 cs:ease-in-out cs:absolute cs:bg-white cs:dark:bg-gray-800 cs:shadow-xl cs:rounded-md cs:p-2 cs:flex cs:flex-col cs:max-h-[90vh] cs:transform ${
+          className={`cs:transition cs:duration-300 cs:ease-in-out cs:motion-reduce:transition-none cs:absolute cs:bg-white cs:dark:bg-gray-800 cs:shadow-xl cs:rounded-md cs:p-2 cs:flex cs:flex-col cs:max-h-[90vh] cs:transform ${
             isVisible
               ? "cs:opacity-100 cs:scale-100"
               : "cs:opacity-0 cs:scale-95"
@@ -83,7 +90,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
 Modal.Header = memo(function ModalHeader({ children }: { children: ReactNode }) {
   const context = useContext(ModalContext);
   return (
-    <div id={context?.headerId} className="cs:px-4 cs:py-2 cs:font-semibold cs:dark:text-gray-200">
+    <div id={context?.headerId} className="cs:px-4 cs:py-2 cs:font-semibold cs:dark:text-gray-400">
       {children}
     </div>
   );

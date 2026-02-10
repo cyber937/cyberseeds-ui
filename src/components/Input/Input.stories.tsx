@@ -12,7 +12,7 @@ const meta: Meta<typeof Input> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -104,4 +104,27 @@ export const Disabled: Story = {
     isInvalid: false,
     disabled: true,
   },
+};
+
+export const Scales: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
+        <Input label="メール" scale="xs" placeholder="example@email.com" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
+        <Input label="メール" scale="sm" placeholder="example@email.com" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
+        <Input label="メール" scale="md" placeholder="example@email.com" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
+        <Input label="メール" scale="lg" placeholder="example@email.com" />
+      </div>
+    </div>
+  ),
 };

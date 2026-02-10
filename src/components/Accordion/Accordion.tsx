@@ -2,6 +2,7 @@
 
 import { clsx } from "clsx";
 import { ReactNode, useId, useState } from "react";
+import { FOCUS_RING } from "../Constants/designTokens";
 
 interface AccordionItemProps extends React.HTMLAttributes<HTMLDivElement> {
   title: string;
@@ -19,7 +20,7 @@ export function AccordionItem({ title, children, defaultOpen = false, ...props }
     <div className="cs:border-b cs:border-gray-200 cs:dark:border-gray-500 cs:overflow-hidden" {...props}>
       <button
         id={buttonId}
-        className="cs:w-full cs:flex cs:justify-between cs:items-center cs:text-sm cs:p-4 cs:text-left cs:font-medium cs:focus:outline-none cs:cursor-pointer cs:dark:text-gray-200 cs:hover:bg-gray-100 cs:hover:dark:bg-gray-500"
+        className={`cs:w-full cs:flex cs:justify-between cs:items-center cs:text-sm cs:p-4 cs:text-left cs:font-medium ${FOCUS_RING} cs:focus-visible:outline-blue-600 cs:cursor-pointer cs:dark:text-gray-400 cs:hover:bg-gray-100 cs:hover:dark:bg-gray-500`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={panelId}
@@ -27,7 +28,7 @@ export function AccordionItem({ title, children, defaultOpen = false, ...props }
         {title}
         <span
           className={clsx(
-            "cs:transform cs:transition-transform cs:duration-300",
+            "cs:transform cs:transition-transform cs:duration-300 cs:motion-reduce:transition-none",
             isOpen ? "cs:rotate-180" : "cs:rotate-0"
           )}
           aria-hidden="true"
@@ -38,7 +39,7 @@ export function AccordionItem({ title, children, defaultOpen = false, ...props }
         role="region"
         aria-labelledby={buttonId}
         className={clsx(
-          "cs:transition-all cs:duration-200 cs:ease-in-out cs:overflow-hidden cs:px-4",
+          "cs:transition-all cs:duration-200 cs:ease-in-out cs:motion-reduce:transition-none cs:overflow-hidden cs:px-4",
           isOpen ? "cs:max-h-96 cs:opacity-100 cs:py-2" : "cs:max-h-0 cs:opacity-0 cs:py-0"
         )}
       >

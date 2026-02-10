@@ -23,8 +23,8 @@ describe('PillBox Component', () => {
 
     it('renders Scale story correctly', () => {
       render(<Scale />);
-      const pillboxes = screen.getAllByText('Red');
-      expect(pillboxes.length).toBeGreaterThan(0);
+      const pillboxes = screen.getAllByText(/XS|SM|MD|LG/);
+      expect(pillboxes).toHaveLength(4);
     });
   });
 

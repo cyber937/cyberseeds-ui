@@ -8,6 +8,7 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 - すべてのコンポーネントで WAI-ARIA パターンを適用
 - キーボードのみでの操作を保証
 - スクリーンリーダーでの利用を考慮
+- `prefers-reduced-motion` / `prefers-color-scheme` のユーザー設定を尊重
 
 ## コンポーネント別 ARIA 実装
 
@@ -17,6 +18,7 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 <input
   id={id}                              // label との関連付け
   aria-invalid={isInvalid || undefined} // バリデーション状態
+  aria-describedby={descId}            // エラーメッセージ・ヘルプテキスト
 />
 <label htmlFor={id}>...</label>
 ```
@@ -24,6 +26,22 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 - `useId()` で一意のIDを自動生成
 - `aria-invalid` はバリデーションエラー時のみ `true` を設定（`false` は設定しない）
 - `Label` コンポーネントで必須マーク (`*`) を表示
+- `FormField` 経由で `aria-describedby` を自動関連付け
+
+### FormField
+
+```tsx
+<FormField isInvalid isRequired>
+  <FormField.Label>Email</FormField.Label>
+  <Input />
+  <FormField.Error>必須項目です</FormField.Error>
+  <FormField.HelperText>メールアドレスを入力</FormField.HelperText>
+</FormField>
+```
+
+- Context ベースで `aria-describedby` を自動関連付け
+- `isInvalid`, `isRequired`, `isDisabled` をコンテキスト経由で子要素に伝播
+- `FormField.Error` に `role="alert"` + `aria-live="polite"` を適用
 
 ### Checkbox / Radio
 
@@ -95,6 +113,59 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 - `aria-controls` でパネルとの関連を明示
 - パネルは `role="region"` でランドマーク化
 
+### Tabs
+
+```tsx
+<div role="tablist">
+  <button role="tab" aria-selected={isActive} aria-controls={panelId}>
+    Tab 1
+  </button>
+</div>
+<div role="tabpanel" id={panelId} aria-labelledby={tabId}>
+  Content
+</div>
+```
+
+- WAI-ARIA Tabs パターン準拠
+- Arrow キーでタブ間を移動
+- `aria-selected` でアクティブタブを通知
+- `aria-controls` / `aria-labelledby` でタブとパネルを関連付け
+
+### Toast
+
+- `role="status"` + `aria-live="polite"` で通知をスクリーンリーダーに伝達
+- 閉じるボタンに `aria-label` を設定
+- 自動消去タイマーはユーザー操作で一時停止
+
+### Tooltip
+
+```tsx
+<Tooltip content="補足情報">
+  <button>Hover me</button>
+</Tooltip>
+```
+
+- `role="tooltip"` + `aria-describedby` でアクセシビリティ対応
+- Escape キーで閉じる
+- ホバー/フォーカスで表示
+
+### Spinner
+
+- `role="status"` + `aria-label` でローディング状態を通知
+- SVG ベースのアニメーション
+
+### Progress
+
+- `role="progressbar"` + `aria-valuenow` / `aria-valuemin` / `aria-valuemax`
+- パーセント表示オプション
+- `aria-label` でプログレスバーの用途を説明
+
+### Badge
+
+- テキストコンテンツはスクリーンリーダーで読み上げ可能
+- `max` prop で表示上限を設定（例: "99+"）
+- dot バリアントは装飾的要素として扱う
+
 ## キーボードナビゲーション
 
 ### 対応状況
@@ -107,8 +178,13 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 | Switch | フォーカス | トグル | - | - |
 | Input | フォーカス | - | - | - |
 | Select | フォーカス | 開く | - | 選択肢移動 |
+| TextArea | フォーカス | 改行 | - | - |
+| PhoneInput | フォーカス | - | - | - |
 | Modal | トラップ | - | 閉じる | - |
 | Accordion | ヘッダーにフォーカス | 開閉 | - | - |
+| Tabs | タブにフォーカス | タブ選択 | - | タブ間移動 |
+| Toast | 閉じるボタンにフォーカス | 閉じる | - | - |
+| Tooltip | トリガーにフォーカスで表示 | - | 閉じる | - |
 
 ### フォーカス管理
 
@@ -117,13 +193,9 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 - `cs:focus-visible:outline-*` で キーボードフォーカス時のみリングを表示（マウスクリックでは非表示）
 - Modal はフォーカストラップを実装（Tab で外部に抜けない）
 
-## ダークモード対応
+## カラーコントラスト
 
-- すべてのテキストでダークモード時のコントラスト比を確保
-- `cs:dark:text-gray-200`, `cs:dark:text-gray-300` 等で明るいテキストを適用
-- 背景色もダークモード用に調整 (`cs:dark:bg-gray-800`)
-
-### コントラスト比の目標
+### WCAG AA コントラスト比
 
 | 要素 | ライトモード | ダークモード | 目標 |
 | --- | --- | --- | --- |
@@ -132,10 +204,79 @@ cyberseeds-ui のアクセシビリティ方針と実装ガイドライン。
 | プレースホルダ | `gray-400` on `white` | `gray-400` on `gray-800` | 3:1 以上 |
 | disabled | コントラスト比の要件なし | コントラスト比の要件なし | - |
 
+### 明るい背景色のテキストカラー補正
+
+`yellow`, `lime`, `amber` は背景色が明るいため、白テキストでは WCAG AA (4.5:1) を満たさない。
+`LIGHT_BG_COLORS` セット（`src/components/Constants/colorContrast.ts`）で管理し、以下のコンポーネントで `cs:text-gray-900` に切り替えている:
+
+| コンポーネント | 対象 | 変更内容 |
+| --- | --- | --- |
+| Button | primary variant | `cs:text-white` → `cs:text-gray-900` |
+| Badge | solid variant | `cs:text-white` → `cs:text-gray-900` |
+| Checkbox | チェックマーク | `cs:stroke-white` → `cs:stroke-gray-900` |
+| Radio | ドット | `cs:before:bg-white` → `cs:before:bg-gray-900` |
+
+## ダークモード対応
+
+### ThemeProvider
+
+```tsx
+<ThemeProvider mode="system">
+  <App />
+</ThemeProvider>
+```
+
+- `mode="light"` | `"dark"` | `"system"` で切り替え
+- `mode="system"` で `prefers-color-scheme` メディアクエリを監視し、自動でテーマを切り替え
+- `useTheme()` hook で `{ mode, setMode, resolvedTheme }` にアクセス
+- ラッパー div に `.dark` class を自動 toggle
+
+### ダークモードスタイル
+
+- すべてのテキストでダークモード時のコントラスト比を確保
+- `cs:dark:text-gray-200`, `cs:dark:text-gray-300` 等で明るいテキストを適用
+- 背景色もダークモード用に調整 (`cs:dark:bg-gray-800`)
+
+## prefers-reduced-motion 対応
+
+ユーザーがOSレベルで「視覚効果を減らす」を有効にしている場合、アニメーションを無効化または簡素化する。
+
+### useReducedMotion hook
+
+```tsx
+import { useReducedMotion } from "cyberseeds-ui";
+
+const prefersReducedMotion = useReducedMotion();
+```
+
+- `matchMedia("(prefers-reduced-motion: reduce)")` を監視
+- SSR セーフ（`typeof window === "undefined"` 時は `false` を返す）
+
+### CSS レベルの対応
+
+Tailwind の `motion-reduce:` バリアントを使用:
+
+| コンポーネント | 対応内容 |
+| --- | --- |
+| Switch | `cs:motion-reduce:transition-none` (トラック + ノブ) |
+| Accordion | `cs:motion-reduce:transition-none` (シェブロン + パネル) |
+| Modal | `cs:motion-reduce:transition-none` (バックドロップ + ダイアログ) |
+| Toast | `cs:motion-reduce:transition-none` |
+| Progress | `cs:motion-reduce:transition-none` + CSS `@media` でストライプ無効化 |
+| Spinner | `cs:motion-reduce:animate-pulse` (回転 → 点滅に変更) |
+| Button | `cs:motion-reduce:transition-none` |
+| Tabs | `cs:motion-reduce:transition-none` |
+
+### JS レベルの対応
+
+- **Modal**: `useReducedMotion()` で `requestAnimationFrame` アニメーションをバイパス。初期表示時に即座に表示。
+- **Toast**: `useReducedMotion()` でスライドイン/アウトアニメーションをバイパス。自動消去時の退場遅延を0に。
+
 ## 無効化状態 (disabled)
 
 - `disabled` 属性を使用（`aria-disabled` ではなく）
-- 視覚的にグレーアウト (`cs:disabled:bg-amber-100`, `cs:disabled:text-gray-400`)
+- 視覚的にグレーアウト (`cs:disabled:bg-gray-100`, `cs:disabled:text-gray-400`)
+- Checkbox の checked + disabled: `cs:disabled:checked:bg-gray-200`
 - カーソルは `not-allowed` に変更
 - フォーカスリングは非表示
 
@@ -153,35 +294,31 @@ expect(results).toHaveNoViolations();
 
 ### テスト対象
 
-- 全14コンポーネントの基本レンダリング
+- 全21コンポーネントの基本レンダリング
 - ライト/ダークテーマ両方でのテスト
 - キーボードナビゲーションのテスト
 - スクリーンリーダー属性の検証
 - フォーム統合テスト（label + input の関連付け）
 - Modal のフォーカス管理テスト
+- `prefers-reduced-motion` 時の動作テスト
+- `LIGHT_BG_COLORS` によるテキストカラー検証
 
 ### テストファイル
 
-```
+```text
 src/components/__tests__/accessibility.test.tsx  # 統合アクセシビリティテスト
+src/components/__tests__/color-contrast.test.ts  # LIGHT_BG_COLORS テスト
+src/components/__tests__/reduced-motion.test.tsx  # reduced-motion テスト
+src/hooks/useReducedMotion.test.ts                # useReducedMotion hook テスト
+src/components/ThemeProvider/ThemeProvider.test.tsx # ThemeProvider テスト
 src/components/*/ComponentName.test.tsx           # 各コンポーネントのテスト
 ```
 
-## 改善提案
+## 今後の課題
 
-### 現状の課題
-
-1. **disabled 時の背景色** — `cs:disabled:bg-amber-100` は意味的に分かりにくい。`gray-100` / `gray-200` の方が一般的
-2. **エラーメッセージの関連付け** — `aria-describedby` でエラーメッセージを入力フィールドに紐付ける仕組みがない
-3. **ライブリージョン** — 動的なフィードバック（バリデーション結果等）を `aria-live` で通知する仕組みがない
-4. **すべてのカラーでのコントラスト検証** — 22色すべてで WCAG AA を満たしているか未検証（特に `yellow`, `lime`, `amber` の明るい色）
-
-### 推奨改善
-
-| 優先度 | 項目 | 影響範囲 |
+| 優先度 | 項目 | 対象バージョン |
 | --- | --- | --- |
-| 高 | `aria-describedby` でエラーメッセージ関連付け | Input, Select, TextArea |
-| 高 | 明るいカラー (yellow, lime, amber) のコントラスト検証 | 全コンポーネント |
-| 中 | disabled 背景色を gray 系に統一 | 全フォームコンポーネント |
-| 中 | `aria-live="polite"` でバリデーション通知 | FormField (新規) |
-| 低 | `prefers-reduced-motion` 対応 | Switch, Accordion, Modal |
+| 中 | 全22色 × ライト/ダーク × 全コンポーネントのコントラスト比自動テスト | v1.0.0 |
+| 中 | E2E テスト (Playwright) でのキーボードナビゲーション検証 | v1.0.0 |
+| 低 | タッチデバイスでの Tooltip 表示方法 (hover → tap/longpress) | v0.7.0 |
+| 低 | タッチターゲットサイズの保証 (44×44px) | v0.7.0 |

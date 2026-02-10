@@ -21,6 +21,9 @@
 .cs-custom-focus:focus {
   outline-color: var(--cs-ui-focus);
 }
+.cs-custom-focus-visible:focus-visible {
+  outline-color: var(--cs-ui-focus);
+}
 .cs-custom-checked:checked {
   border-color: var(--cs-ui-base);
   background-color: var(--cs-ui-base);
@@ -32,6 +35,89 @@
   outline-color: var(--cs-ui-border);
   background-color: var(--cs-ui-light);
   color: var(--cs-ui-lightText);
+}
+:is(.dark, .dark *) .cs-custom-pill {
+  outline-color: color-mix(in oklch, var(--cs-ui-border) 70%, white 30%);
+  background-color: color-mix(in oklch, var(--cs-ui-base) 20%, transparent);
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+/* Custom color: Button primary dark mode */
+:is(.dark, .dark *) .cs-custom-btn-primary {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-custom-btn-primary:hover {
+  background-color: color-mix(in oklch, var(--cs-ui-hover) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-custom-btn-primary:active {
+  background-color: color-mix(in oklch, var(--cs-ui-active) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-custom-btn-primary:disabled {
+  background-color: var(--cs-color-gray-700, #374151);
+  border-color: var(--cs-color-gray-600, #4b5563);
+}
+
+/* Custom color: Background dark mode */
+:is(.dark, .dark *) .cs-custom-bg {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+
+/* Custom color: Checked state dark mode */
+:is(.dark, .dark *) .cs-custom-checked:checked {
+  border-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Custom color: Badge variants */
+.cs-custom-badge-solid {
+  background-color: var(--cs-ui-base);
+  color: white;
+}
+:is(.dark, .dark *) .cs-custom-badge-solid {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+  color: white;
+}
+
+.cs-custom-badge-outline {
+  border-color: var(--cs-ui-border);
+  color: var(--cs-ui-lightText);
+}
+:is(.dark, .dark *) .cs-custom-badge-outline {
+  border-color: color-mix(in oklch, var(--cs-ui-border) 70%, white 30%);
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+.cs-custom-badge-dot {
+  background-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-custom-badge-dot {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 70%, white 30%);
+}
+
+/* Custom color: Spinner */
+.cs-custom-spinner {
+  color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-custom-spinner {
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+/* Custom color: Progress bar */
+.cs-custom-progress {
+  background-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-custom-progress {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Custom color: Tab active state */
+.cs-custom-tab-active {
+  border-color: var(--cs-ui-base);
+  color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-custom-tab-active {
+  border-color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
 /* Progress bar stripe animation */
@@ -57,4 +143,11 @@
   );
   background-size: 1rem 1rem;
   animation: cs-progress-stripe 1s linear infinite;
+}
+
+/* Reduced motion: disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .cs-progress-animated {
+    animation: none;
+  }
 }

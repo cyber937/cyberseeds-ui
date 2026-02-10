@@ -7,7 +7,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { isPresetColor } from "../Constants/colorUtils";
+import { isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 import { TabsContext, useTabsContext } from "./TabsContext";
@@ -41,58 +42,60 @@ interface TabsContentProps {
 }
 
 const borderColorMap: Record<PresetColor, string> = {
-  red: "cs:border-red-600",
-  orange: "cs:border-orange-600",
-  amber: "cs:border-amber-600",
-  yellow: "cs:border-yellow-600",
-  lime: "cs:border-lime-600",
-  green: "cs:border-green-600",
-  emerald: "cs:border-emerald-600",
-  teal: "cs:border-teal-600",
-  cyan: "cs:border-cyan-600",
-  sky: "cs:border-sky-600",
-  blue: "cs:border-blue-600",
-  indigo: "cs:border-indigo-600",
-  violet: "cs:border-violet-600",
-  purple: "cs:border-purple-600",
-  fuchsia: "cs:border-fuchsia-600",
-  pink: "cs:border-pink-600",
-  rose: "cs:border-rose-600",
-  slate: "cs:border-slate-600",
-  gray: "cs:border-gray-600",
-  zinc: "cs:border-zinc-600",
-  neutral: "cs:border-neutral-600",
-  stone: "cs:border-stone-600",
+  red: "cs:border-red-600 cs:dark:border-red-400",
+  orange: "cs:border-orange-600 cs:dark:border-orange-400",
+  amber: "cs:border-amber-600 cs:dark:border-amber-400",
+  yellow: "cs:border-yellow-600 cs:dark:border-yellow-400",
+  lime: "cs:border-lime-600 cs:dark:border-lime-400",
+  green: "cs:border-green-600 cs:dark:border-green-400",
+  emerald: "cs:border-emerald-600 cs:dark:border-emerald-400",
+  teal: "cs:border-teal-600 cs:dark:border-teal-400",
+  cyan: "cs:border-cyan-600 cs:dark:border-cyan-400",
+  sky: "cs:border-sky-600 cs:dark:border-sky-400",
+  blue: "cs:border-blue-600 cs:dark:border-blue-400",
+  indigo: "cs:border-indigo-600 cs:dark:border-indigo-400",
+  violet: "cs:border-violet-600 cs:dark:border-violet-400",
+  purple: "cs:border-purple-600 cs:dark:border-purple-400",
+  fuchsia: "cs:border-fuchsia-600 cs:dark:border-fuchsia-400",
+  pink: "cs:border-pink-600 cs:dark:border-pink-400",
+  rose: "cs:border-rose-600 cs:dark:border-rose-400",
+  slate: "cs:border-slate-600 cs:dark:border-slate-400",
+  gray: "cs:border-gray-600 cs:dark:border-gray-400",
+  zinc: "cs:border-zinc-600 cs:dark:border-zinc-400",
+  neutral: "cs:border-neutral-600 cs:dark:border-neutral-400",
+  stone: "cs:border-stone-600 cs:dark:border-stone-400",
 };
 
 const textColorMap: Record<PresetColor, string> = {
-  red: "cs:text-red-600",
-  orange: "cs:text-orange-600",
-  amber: "cs:text-amber-600",
-  yellow: "cs:text-yellow-600",
-  lime: "cs:text-lime-600",
-  green: "cs:text-green-600",
-  emerald: "cs:text-emerald-600",
-  teal: "cs:text-teal-600",
-  cyan: "cs:text-cyan-600",
-  sky: "cs:text-sky-600",
-  blue: "cs:text-blue-600",
-  indigo: "cs:text-indigo-600",
-  violet: "cs:text-violet-600",
-  purple: "cs:text-purple-600",
-  fuchsia: "cs:text-fuchsia-600",
-  pink: "cs:text-pink-600",
-  rose: "cs:text-rose-600",
-  slate: "cs:text-slate-600",
-  gray: "cs:text-gray-600",
-  zinc: "cs:text-zinc-600",
-  neutral: "cs:text-neutral-600",
-  stone: "cs:text-stone-600",
+  red: "cs:text-red-600 cs:dark:text-red-400",
+  orange: "cs:text-orange-600 cs:dark:text-orange-400",
+  amber: "cs:text-amber-600 cs:dark:text-amber-400",
+  yellow: "cs:text-yellow-600 cs:dark:text-yellow-400",
+  lime: "cs:text-lime-600 cs:dark:text-lime-400",
+  green: "cs:text-green-600 cs:dark:text-green-400",
+  emerald: "cs:text-emerald-600 cs:dark:text-emerald-400",
+  teal: "cs:text-teal-600 cs:dark:text-teal-400",
+  cyan: "cs:text-cyan-600 cs:dark:text-cyan-400",
+  sky: "cs:text-sky-600 cs:dark:text-sky-400",
+  blue: "cs:text-blue-600 cs:dark:text-blue-400",
+  indigo: "cs:text-indigo-600 cs:dark:text-indigo-400",
+  violet: "cs:text-violet-600 cs:dark:text-violet-400",
+  purple: "cs:text-purple-600 cs:dark:text-purple-400",
+  fuchsia: "cs:text-fuchsia-600 cs:dark:text-fuchsia-400",
+  pink: "cs:text-pink-600 cs:dark:text-pink-400",
+  rose: "cs:text-rose-600 cs:dark:text-rose-400",
+  slate: "cs:text-slate-600 cs:dark:text-slate-400",
+  gray: "cs:text-gray-600 cs:dark:text-gray-400",
+  zinc: "cs:text-zinc-600 cs:dark:text-zinc-400",
+  neutral: "cs:text-neutral-600 cs:dark:text-neutral-400",
+  stone: "cs:text-stone-600 cs:dark:text-stone-400",
 };
 
 const scaleMap: Record<Scale, string> = {
+  xs: "cs:text-[0.625rem] cs:px-2 cs:py-1",
   sm: "cs:text-xs cs:px-3 cs:py-1.5",
   md: "cs:text-sm cs:px-4 cs:py-2",
+  lg: "cs:text-base cs:px-5 cs:py-2.5",
 };
 
 export function Tabs({
@@ -107,7 +110,7 @@ export function Tabs({
   const baseId = useId();
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = contextUIColor ?? color;
+  const finalColor = resolveColor(contextUIColor ?? color);
 
   const isControlled = controlledValue !== undefined;
   const activeValue = isControlled ? controlledValue : uncontrolledValue;
@@ -206,7 +209,7 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
       disabled={disabled}
       onClick={() => ctx.onChange(value)}
       className={clsx(
-        "cs:font-medium cs:transition-colors cs:duration-150 cs:outline-none cs:disabled:opacity-50 cs:disabled:cursor-not-allowed",
+        `cs:font-medium ${TRANSITION_FAST} ${FOCUS_RING} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
         scaleMap[ctx.scale ?? "md"],
         activeClasses,
         className,

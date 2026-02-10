@@ -1,12 +1,30 @@
+import { useEffect } from "react";
 import type { Preview } from "@storybook/react-vite";
 import "../src/index.css";
+
+function ThemeWrapper({ isDark, children }: { isDark: boolean; children: React.ReactNode }) {
+  useEffect(() => {
+    const html = document.documentElement;
+    if (isDark) {
+      html.classList.add("dark");
+    } else {
+      html.classList.remove("dark");
+    }
+  }, [isDark]);
+
+  return (
+    <div className={isDark ? "dark" : ""} style={{ padding: "1rem", minHeight: "100px", backgroundColor: isDark ? "#1a1a2e" : "transparent" }}>
+      {children}
+    </div>
+  );
+}
 
 const preview: Preview = {
   parameters: {
     backgrounds: {
       options: {
-        light: { name: "light", value: "#F7F9F2" }, // ライトテーマ用背景
-        dark: { name: "dark", value: "#333" }, // ダークテーマ用背景
+        light: { name: "Light", value: "#F7F9F2" },
+        dark: { name: "Dark", value: "#1a1a2e" },
       },
     },
     controls: {
@@ -17,26 +35,38 @@ const preview: Preview = {
     },
 
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
       test: "todo",
+    },
+  },
+  globalTypes: {
+    theme: {
+      description: "Theme mode",
+      toolbar: {
+        title: "Theme",
+        icon: "moon",
+        items: [
+          { value: "light", title: "Light", icon: "sun" },
+          { value: "dark", title: "Dark", icon: "moon" },
+        ],
+        dynamicTitle: true,
+      },
     },
   },
   decorators: [
     (Story, context) => {
-      const isDark = context.globals.backgrounds?.value === "dark";
-      const html = document.documentElement;
-      if (isDark) {
-        html.classList.add("dark");
-      } else {
-        html.classList.remove("dark");
-      }
-      return <Story />;
+      const theme = context.globals.theme || "light";
+      const bgValue = context.globals.backgrounds?.value;
+      const isDark = theme === "dark" || bgValue === "dark" || bgValue === "#1a1a2e";
+      return (
+        <ThemeWrapper isDark={isDark}>
+          <Story />
+        </ThemeWrapper>
+      );
     },
   ],
   initialGlobals: {
     backgrounds: { value: "light" },
+    theme: "light",
   },
 };
 

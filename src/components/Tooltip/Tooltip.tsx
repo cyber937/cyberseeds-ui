@@ -152,7 +152,7 @@ export function Tooltip({
           id={tooltipId}
           role="tooltip"
           className={clsx(
-            "cs:absolute cs:z-40 cs:whitespace-nowrap cs:rounded cs:px-2 cs:py-1 cs:text-xs cs:font-sans cs:bg-gray-900 cs:text-white cs:dark:bg-gray-100 cs:dark:text-gray-900 cs:shadow-md cs:pointer-events-none",
+            "cs:absolute cs:z-40 cs:whitespace-nowrap cs:rounded-md cs:px-2 cs:py-1 cs:text-xs cs:font-sans cs:bg-gray-900 cs:text-white cs:dark:bg-gray-100 cs:dark:text-gray-900 cs:shadow-md cs:pointer-events-none",
             positionClasses[resolvedPosition],
             className,
           )}

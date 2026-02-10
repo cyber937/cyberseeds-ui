@@ -11,7 +11,7 @@ const meta: Meta<typeof PillBox> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
     color: {
       control: { type: "select" },
@@ -86,11 +86,11 @@ export const Color: Story = {
 
 export const Scale: Story = {
   render: () => (
-    <div className="cs:space-y-4">
-      <div className="cs:grid cs:grid-cols-5 cs:gap-6">
-        <PillBox label="Red" color="red" scale="md" />
-        <PillBox label="Red" color="red" scale="sm" />
-      </div>
+    <div className="cs:flex cs:gap-4 cs:items-center">
+      <PillBox label="XS" color="red" scale="xs" />
+      <PillBox label="SM" color="red" scale="sm" />
+      <PillBox label="MD" color="red" scale="md" />
+      <PillBox label="LG" color="red" scale="lg" />
     </div>
   ),
 };

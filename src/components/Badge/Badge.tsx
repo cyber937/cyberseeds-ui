@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
-import { customColorToCSSVars, isPresetColor } from "../Constants/colorUtils";
+import { customColorToCSSVars, isCustomColor, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import type { Color, PresetColor, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
@@ -21,28 +21,28 @@ interface BadgeWrapperProps {
 }
 
 const solidColorMap: Record<PresetColor, string> = {
-  red: "cs:bg-red-600 cs:text-white",
-  orange: "cs:bg-orange-600 cs:text-white",
-  amber: "cs:bg-amber-600 cs:text-white",
-  yellow: "cs:bg-yellow-500 cs:text-white",
-  lime: "cs:bg-lime-600 cs:text-white",
-  green: "cs:bg-green-600 cs:text-white",
-  emerald: "cs:bg-emerald-600 cs:text-white",
-  teal: "cs:bg-teal-600 cs:text-white",
-  cyan: "cs:bg-cyan-600 cs:text-white",
-  sky: "cs:bg-sky-600 cs:text-white",
-  blue: "cs:bg-blue-600 cs:text-white",
-  indigo: "cs:bg-indigo-600 cs:text-white",
-  violet: "cs:bg-violet-600 cs:text-white",
-  purple: "cs:bg-purple-600 cs:text-white",
-  fuchsia: "cs:bg-fuchsia-600 cs:text-white",
-  pink: "cs:bg-pink-600 cs:text-white",
-  rose: "cs:bg-rose-600 cs:text-white",
-  slate: "cs:bg-slate-600 cs:text-white",
-  gray: "cs:bg-gray-600 cs:text-white",
-  zinc: "cs:bg-zinc-600 cs:text-white",
-  neutral: "cs:bg-neutral-600 cs:text-white",
-  stone: "cs:bg-stone-600 cs:text-white",
+  red: "cs:bg-red-600 cs:text-white cs:dark:bg-red-500",
+  orange: "cs:bg-orange-600 cs:text-white cs:dark:bg-orange-500",
+  amber: "cs:bg-amber-600 cs:text-gray-900 cs:dark:bg-amber-500 cs:dark:text-gray-900",
+  yellow: "cs:bg-yellow-500 cs:text-gray-900 cs:dark:bg-yellow-400 cs:dark:text-gray-900",
+  lime: "cs:bg-lime-600 cs:text-gray-900 cs:dark:bg-lime-500 cs:dark:text-gray-900",
+  green: "cs:bg-green-600 cs:text-white cs:dark:bg-green-500",
+  emerald: "cs:bg-emerald-600 cs:text-white cs:dark:bg-emerald-500",
+  teal: "cs:bg-teal-600 cs:text-white cs:dark:bg-teal-500",
+  cyan: "cs:bg-cyan-600 cs:text-white cs:dark:bg-cyan-500",
+  sky: "cs:bg-sky-600 cs:text-white cs:dark:bg-sky-500",
+  blue: "cs:bg-blue-600 cs:text-white cs:dark:bg-blue-500",
+  indigo: "cs:bg-indigo-600 cs:text-white cs:dark:bg-indigo-500",
+  violet: "cs:bg-violet-600 cs:text-white cs:dark:bg-violet-500",
+  purple: "cs:bg-purple-600 cs:text-white cs:dark:bg-purple-500",
+  fuchsia: "cs:bg-fuchsia-600 cs:text-white cs:dark:bg-fuchsia-500",
+  pink: "cs:bg-pink-600 cs:text-white cs:dark:bg-pink-500",
+  rose: "cs:bg-rose-600 cs:text-white cs:dark:bg-rose-500",
+  slate: "cs:bg-slate-600 cs:text-white cs:dark:bg-slate-500",
+  gray: "cs:bg-gray-600 cs:text-white cs:dark:bg-gray-500",
+  zinc: "cs:bg-zinc-600 cs:text-white cs:dark:bg-zinc-500",
+  neutral: "cs:bg-neutral-600 cs:text-white cs:dark:bg-neutral-500",
+  stone: "cs:bg-stone-600 cs:text-white cs:dark:bg-stone-500",
 };
 
 const outlineColorMap: Record<PresetColor, string> = {
@@ -95,6 +95,20 @@ const dotColorMap: Record<PresetColor, string> = {
   stone: "cs:bg-stone-500",
 };
 
+const dotScaleMap: Record<Scale, string> = {
+  xs: "cs:h-1.5 cs:w-1.5",
+  sm: "cs:h-2 cs:w-2",
+  md: "cs:h-2.5 cs:w-2.5",
+  lg: "cs:h-3 cs:w-3",
+};
+
+const badgeScaleMap: Record<Scale, string> = {
+  xs: "cs:px-1 cs:py-0.5 cs:text-[0.5rem] cs:min-w-3.5",
+  sm: "cs:px-1.5 cs:py-0.5 cs:text-[0.6rem] cs:min-w-4",
+  md: "cs:px-2 cs:py-0.5 cs:text-xs cs:min-w-5",
+  lg: "cs:px-2.5 cs:py-1 cs:text-sm cs:min-w-6",
+};
+
 function formatCount(count: ReactNode, max?: number): ReactNode {
   if (typeof count !== "number" || max === undefined) return count;
   return count > max ? `${max}+` : count;
@@ -109,9 +123,9 @@ export function Badge({
   className,
 }: BadgeProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = contextUIColor ?? color;
+  const finalColor = resolveColor(contextUIColor ?? color);
 
-  const customStyle = !isPresetColor(finalColor)
+  const customStyle = isCustomColor(finalColor)
     ? customColorToCSSVars(finalColor)
     : undefined;
 
@@ -121,7 +135,7 @@ export function Badge({
         style={customStyle}
         className={clsx(
           "cs:inline-block cs:rounded-full",
-          scale === "sm" ? "cs:h-2 cs:w-2" : "cs:h-2.5 cs:w-2.5",
+          dotScaleMap[scale],
           isPresetColor(finalColor) ? dotColorMap[finalColor] : "cs-custom-badge-dot",
           className,
         )}
@@ -137,7 +151,7 @@ export function Badge({
       style={customStyle}
       className={clsx(
         "cs:inline-flex cs:items-center cs:justify-center cs:rounded-full cs:font-sans cs:font-medium cs:leading-none",
-        scale === "sm" ? "cs:px-1.5 cs:py-0.5 cs:text-[0.6rem] cs:min-w-4" : "cs:px-2 cs:py-0.5 cs:text-xs cs:min-w-5",
+        badgeScaleMap[scale],
         variant === "solid" && (isPresetColor(finalColor) ? solidColorMap[finalColor] : "cs-custom-badge-solid"),
         variant === "outline" && "cs:border",
         variant === "outline" && (isPresetColor(finalColor) ? outlineColorMap[finalColor] : "cs-custom-badge-outline"),

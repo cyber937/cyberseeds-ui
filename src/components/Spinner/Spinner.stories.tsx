@@ -16,7 +16,7 @@ const meta: Meta<typeof Spinner> = {
     },
     scale: {
       control: { type: "radio" },
-      options: ["sm", "md"],
+      options: ["xs", "sm", "md", "lg"],
     },
   },
 };
@@ -33,12 +33,18 @@ export const Default: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-6">
-      <GroupBox label="Standard (md)">
-        <Spinner scale="md" />
+    <div className="cs:grid cs:grid-cols-4 cs:gap-6">
+      <GroupBox label="Extra Small (xs)">
+        <Spinner scale="xs" />
       </GroupBox>
       <GroupBox label="Small (sm)">
         <Spinner scale="sm" />
+      </GroupBox>
+      <GroupBox label="Standard (md)">
+        <Spinner scale="md" />
+      </GroupBox>
+      <GroupBox label="Large (lg)">
+        <Spinner scale="lg" />
       </GroupBox>
     </div>
   ),

@@ -13,8 +13,10 @@ interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
 }
 
 const scaleMaps: Record<Scale, string> = {
+  xs: "cs:text-[0.625rem]",
   sm: "cs:text-xs",
   md: "cs:text-sm/6",
+  lg: "cs:text-base",
 };
 
 export const Label = memo(function Label({
@@ -28,7 +30,7 @@ export const Label = memo(function Label({
   return (
     <label
       htmlFor={htmlFor}
-      className={`cs:block cs:font-medium cs:font-sans cs:text-gray-900 cs:dark:text-gray-200 cs:text-nowrap ${clsx(
+      className={`cs:block cs:font-medium cs:font-sans cs:text-gray-900 cs:dark:text-gray-400 cs:text-nowrap ${clsx(
         require && "cs:after:content-['*'] cs:after:text-red-500"
       )} ${scaleMaps[scale]} ${className}`}
       {...props}
