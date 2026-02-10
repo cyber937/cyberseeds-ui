@@ -17,9 +17,9 @@ interface TextAreaProps
 }
 
 const scaleMap: Record<Scale, string> = {
-  xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem]",
-  sm: "cs:px-2 cs:py-1 cs:text-xs",
-  md: "cs:px-3 cs:py-1.5 cs:text-sm/6",
+  xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem] cs:max-md:text-base",
+  sm: "cs:px-2 cs:py-1 cs:text-xs cs:max-md:text-base",
+  md: "cs:px-3 cs:py-1.5 cs:text-sm/6 cs:max-md:text-base",
   lg: "cs:px-4 cs:py-2 cs:text-base",
 };
 

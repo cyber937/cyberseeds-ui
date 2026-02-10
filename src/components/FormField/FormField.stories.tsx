@@ -105,7 +105,7 @@ export const WithSelect: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-6">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:gap-4 cs:sm:gap-6">
       <GroupBox label="Extra Small (xs)">
         <FormField scale="xs" isRequired>
           <FormField.Label>メールアドレス</FormField.Label>

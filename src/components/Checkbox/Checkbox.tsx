@@ -58,7 +58,7 @@ export function Checkbox({
     : undefined;
 
   return (
-    <div className={`cs:flex ${gapScaleMap[scale]}`}>
+    <div className={`cs:flex cs:max-md:min-h-11 cs:max-md:items-center ${gapScaleMap[scale]}`}>
       <div className="cs:flex cs:h-6 cs:shrink-0 cs:items-center">
         <div
           className={`cs:group cs:grid cs:grid-cols-1 ${checkBoxScaleMap[scale]}`}

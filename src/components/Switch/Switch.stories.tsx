@@ -76,7 +76,7 @@ export const Scale: Story = {
     const [mdSwitch, setMdSwitch] = useState<boolean>(true);
     const [lgSwitch, setLgSwitch] = useState<boolean>(true);
     return (
-      <div className="cs:grid cs:grid-cols-4 cs:gap-4">
+      <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
         <div>
           <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
           <Switch

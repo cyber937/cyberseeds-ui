@@ -120,6 +120,15 @@
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
+/* Scrollbar hidden utility for horizontal scroll containers */
+.cs-scrollbar-none {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.cs-scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
 /* Progress bar stripe animation */
 @keyframes cs-progress-stripe {
   0% {

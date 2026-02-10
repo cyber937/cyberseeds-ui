@@ -12,9 +12,9 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
 }
 
 const scaleMap: Record<Scale, string> = {
-  xs: "cs:pl-1.5 cs:pr-5 cs:py-0.5 cs:text-[0.625rem] cs:h-5",
-  sm: "cs:pl-2 cs:pr-6 cs:py-1 cs:text-xs cs:h-6",
-  md: "cs:pl-3 cs:pr-10 cs:py-1.5 cs:text-sm/6 cs:h-9",
+  xs: "cs:pl-1.5 cs:pr-5 cs:py-0.5 cs:text-[0.625rem] cs:h-5 cs:max-md:text-base cs:max-md:min-h-11",
+  sm: "cs:pl-2 cs:pr-6 cs:py-1 cs:text-xs cs:h-6 cs:max-md:text-base cs:max-md:min-h-11",
+  md: "cs:pl-3 cs:pr-10 cs:py-1.5 cs:text-sm/6 cs:h-9 cs:max-md:text-base cs:max-md:min-h-11",
   lg: "cs:pl-4 cs:pr-12 cs:py-2 cs:text-base cs:h-11",
 };
 

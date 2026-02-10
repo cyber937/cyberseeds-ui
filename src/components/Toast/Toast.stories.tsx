@@ -53,7 +53,7 @@ export const Variants: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-6">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:gap-4 cs:sm:gap-6">
       <GroupBox label="Extra Small (xs)">
         <div className="cs:flex cs:flex-col cs:gap-3">
           <Toast variant="success" scale="xs" onClose={() => {}}>
@@ -151,7 +151,7 @@ function PositionDemo({ position }: { position: any }) {
 
 export const Positions: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-3 cs:gap-2 cs:max-w-md">
+    <div className="cs:grid cs:grid-cols-2 cs:sm:grid-cols-3 cs:gap-2">
       {(
         [
           "top-left",

@@ -102,7 +102,7 @@ export const Colors: Story = {
 
 export const Scales: Story = {
   render: () => (
-    <div className="cs:grid cs:grid-cols-2 cs:gap-6">
+    <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:gap-4 cs:sm:gap-6">
       <GroupBox label="Extra Small (xs)">
         <Tabs defaultValue="tab1" scale="xs">
           <Tabs.List>
@@ -160,6 +160,34 @@ export const WithDisabled: Story = {
       <Tabs.Content value="tab1">有効なタブのコンテンツ</Tabs.Content>
       <Tabs.Content value="tab2">無効なタブのコンテンツ</Tabs.Content>
       <Tabs.Content value="tab3">3番目のタブのコンテンツ</Tabs.Content>
+    </Tabs>
+  ),
+};
+
+export const MobileScroll: Story = {
+  parameters: {
+    viewport: { defaultViewport: "mobile" },
+  },
+  render: () => (
+    <Tabs defaultValue="tab1">
+      <Tabs.List>
+        <Tabs.Trigger value="tab1">ホーム</Tabs.Trigger>
+        <Tabs.Trigger value="tab2">プロフィール</Tabs.Trigger>
+        <Tabs.Trigger value="tab3">設定</Tabs.Trigger>
+        <Tabs.Trigger value="tab4">通知</Tabs.Trigger>
+        <Tabs.Trigger value="tab5">メッセージ</Tabs.Trigger>
+        <Tabs.Trigger value="tab6">ヘルプ</Tabs.Trigger>
+      </Tabs.List>
+      <Tabs.Content value="tab1">
+        <p className="cs:text-gray-700 cs:dark:text-gray-400">
+          モバイルでは水平スクロールでタブを切り替えられます。
+        </p>
+      </Tabs.Content>
+      <Tabs.Content value="tab2">プロフィール</Tabs.Content>
+      <Tabs.Content value="tab3">設定</Tabs.Content>
+      <Tabs.Content value="tab4">通知</Tabs.Content>
+      <Tabs.Content value="tab5">メッセージ</Tabs.Content>
+      <Tabs.Content value="tab6">ヘルプ</Tabs.Content>
     </Tabs>
   ),
 };
