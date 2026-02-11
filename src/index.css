@@ -1,4 +1,6 @@
-@import "tailwindcss" prefix(cs);
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(cs);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(cs);
 @custom-variant dark (&:where(.dark, .dark *));
 
 /* Color System — CSS variable-based styles for all colors (v1.0.0 unified) */

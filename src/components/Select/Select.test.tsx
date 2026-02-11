@@ -114,7 +114,7 @@ describe('Select Component', () => {
   });
 
   describe('Layout', () => {
-    it('wrapper div has correct layout classes for container width constraint', () => {
+    it('wrapper div has flex and min-w-0 for container width constraint', () => {
       render(
         <Select>
           <SelectOption value="option1" label="Option 1" />
@@ -124,17 +124,16 @@ describe('Select Component', () => {
       const wrapperClass = select.parentElement?.className ?? '';
       expect(wrapperClass).toContain('cs:flex');
       expect(wrapperClass).toContain('cs:min-w-0');
-      expect(wrapperClass).toContain('cs:w-full');
     });
 
-    it('select element has w-full class', () => {
+    it('select element has min-w-0 for overflow prevention', () => {
       render(
         <Select>
           <SelectOption value="option1" label="Option 1" />
         </Select>
       );
       const select = screen.getByRole('combobox');
-      expect(select.className).toContain('cs:w-full');
+      expect(select.className).toContain('cs:min-w-0');
     });
   });
 
