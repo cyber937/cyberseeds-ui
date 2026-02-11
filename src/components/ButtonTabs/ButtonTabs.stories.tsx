@@ -122,6 +122,48 @@ export const WithDisabled: Story = {
   ),
 };
 
+export const FullWidth: Story = {
+  render: () => (
+    <div className="cs:space-y-4">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">fullWidth</p>
+        <ButtonTabs defaultValue="lending">
+          <ButtonTabs.List fullWidth>
+            <ButtonTabs.Trigger value="lending">貸出</ButtonTabs.Trigger>
+            <ButtonTabs.Trigger value="return">返却</ButtonTabs.Trigger>
+          </ButtonTabs.List>
+          <ButtonTabs.Content value="lending">貸出画面の内容</ButtonTabs.Content>
+          <ButtonTabs.Content value="return">返却画面の内容</ButtonTabs.Content>
+        </ButtonTabs>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">fullWidth (3 tabs)</p>
+        <ButtonTabs defaultValue="a">
+          <ButtonTabs.List fullWidth>
+            <ButtonTabs.Trigger value="a">タブ A</ButtonTabs.Trigger>
+            <ButtonTabs.Trigger value="b">タブ B</ButtonTabs.Trigger>
+            <ButtonTabs.Trigger value="c">タブ C</ButtonTabs.Trigger>
+          </ButtonTabs.List>
+          <ButtonTabs.Content value="a">コンテンツ A</ButtonTabs.Content>
+          <ButtonTabs.Content value="b">コンテンツ B</ButtonTabs.Content>
+          <ButtonTabs.Content value="c">コンテンツ C</ButtonTabs.Content>
+        </ButtonTabs>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">default (inline)</p>
+        <ButtonTabs defaultValue="lending">
+          <ButtonTabs.List>
+            <ButtonTabs.Trigger value="lending">貸出</ButtonTabs.Trigger>
+            <ButtonTabs.Trigger value="return">返却</ButtonTabs.Trigger>
+          </ButtonTabs.List>
+          <ButtonTabs.Content value="lending">貸出画面の内容</ButtonTabs.Content>
+          <ButtonTabs.Content value="return">返却画面の内容</ButtonTabs.Content>
+        </ButtonTabs>
+      </div>
+    </div>
+  ),
+};
+
 export const ComparedWithTabs: Story = {
   render: () => (
     <div className="cs:space-y-6">

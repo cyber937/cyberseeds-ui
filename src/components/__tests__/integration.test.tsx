@@ -382,7 +382,7 @@ describe('Integration Tests', () => {
       const mediumButton = screen.getByRole('button', { name: /medium button/i });
 
       expect(smallButton).toHaveClass('cs:px-2', 'cs:py-1', 'cs:text-xs');
-      expect(mediumButton).toHaveClass('cs:px-3', 'cs:py-1.5', 'cs:text-sm');
+      expect(mediumButton).toHaveClass('cs:px-3', 'cs:py-1.5', 'cs:text-sm/6');
     });
   });
 });

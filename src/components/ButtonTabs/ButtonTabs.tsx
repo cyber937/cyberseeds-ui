@@ -26,6 +26,7 @@ interface ButtonTabsProps {
 
 interface ButtonTabsListProps {
   children: ReactNode;
+  fullWidth?: boolean;
   className?: string;
 }
 
@@ -88,7 +89,7 @@ export function ButtonTabs({
   );
 }
 
-function ButtonTabsList({ children, className }: ButtonTabsListProps) {
+function ButtonTabsList({ children, fullWidth = false, className }: ButtonTabsListProps) {
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
     const tabs = Array.from(
       e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])'),
@@ -125,7 +126,8 @@ function ButtonTabsList({ children, className }: ButtonTabsListProps) {
       role="tablist"
       onKeyDown={handleKeyDown}
       className={clsx(
-        "cs:inline-flex cs:rounded-lg cs:bg-gray-100 cs:dark:bg-gray-800 cs:p-1 cs:gap-1",
+        "cs:rounded-lg cs:bg-gray-200 cs:dark:bg-gray-800 cs:p-1 cs:gap-1",
+        fullWidth ? "cs-full-width" : "cs:inline-flex",
         className,
       )}
     >
@@ -158,7 +160,7 @@ function ButtonTabsTrigger({ children, value, disabled = false, className }: But
       onClick={() => !disabled && onChange(value)}
       style={isActive ? colorStyle : undefined}
       className={clsx(
-        "cs:font-medium cs:cursor-pointer cs:whitespace-nowrap cs:rounded-md",
+        "cs:border-0 cs:shadow-none cs:font-medium cs:cursor-pointer cs:whitespace-nowrap cs:rounded-md",
         scaleMap[scale],
         TRANSITION_FAST,
         FOCUS_RING,

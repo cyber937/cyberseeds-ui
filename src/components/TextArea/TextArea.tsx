@@ -48,22 +48,28 @@ export function TextArea({
 
   const colorStyle = colorToCSSVars(finalUIColor);
 
+  const textareaElement = (
+    <textarea
+      id={id}
+      aria-invalid={mergedInvalid || undefined}
+      aria-describedby={describedBy}
+      disabled={mergedDisabled || undefined}
+      style={colorStyle}
+      className={`cs:border-0 cs:shadow-none cs:block cs:w-full cs:dark:bg-gray-800 cs:dark:text-gray-400 cs:rounded-md cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500 cs:outline-1 cs:-outline-offset-1 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} ${TRANSITION_NORMAL} ${
+        mergedInvalid
+          ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
+          : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300 cs:dark:outline-gray-600"
+      } ${scaleMap[mergedScale]} cs-focus-visible ${className}`}
+      {...props}
+    />
+  );
+
+  if (!label) return textareaElement;
+
   return (
     <div>
-      {label && <Label htmlFor={id} text={label} scale={mergedScale} require={require} className="cs:ml-2" />}
-      <textarea
-        id={id}
-        aria-invalid={mergedInvalid || undefined}
-        aria-describedby={describedBy}
-        disabled={mergedDisabled || undefined}
-        style={colorStyle}
-        className={`cs:block cs:w-full cs:dark:bg-gray-800 cs:dark:text-gray-400 cs:rounded-md cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:outline-1 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} ${TRANSITION_NORMAL} ${
-          mergedInvalid
-            ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
-            : "cs:text-gray-900 cs:bg-white cs:outline-gray-300"
-        } ${scaleMap[mergedScale]} cs-focus-visible ${className}`}
-        {...props}
-      />
+      <Label htmlFor={id} text={label} scale={mergedScale} require={require} className="cs:ml-2" />
+      {textareaElement}
     </div>
   );
 }

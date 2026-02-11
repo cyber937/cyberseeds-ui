@@ -225,7 +225,7 @@ export function Toast({
           onClick={handleClose}
           aria-label="Close"
           className={clsx(
-            `cs:shrink-0 cs:rounded-md cs:p-0.5 cs:transition-opacity cs:hover:opacity-70 ${FOCUS_RING}`,
+            `cs:border-0 cs:shadow-none cs:shrink-0 cs:rounded-md cs:p-0.5 cs:transition-opacity cs:hover:opacity-70 ${FOCUS_RING}`,
             styles.text,
           )}
         >

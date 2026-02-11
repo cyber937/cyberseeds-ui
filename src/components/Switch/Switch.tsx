@@ -72,7 +72,7 @@ export function Switch({
         disabled={disabled}
         style={checked ? colorStyle : undefined}
         className={clsx(
-          `cs:flex cs:items-center cs:rounded-full cs:transition-colors cs:duration-300 cs:motion-reduce:transition-none ${scaleMap[scale]}`,
+          `cs:border-0 cs:shadow-none cs:flex cs:items-center cs:rounded-full cs:transition-colors cs:duration-300 cs:motion-reduce:transition-none ${scaleMap[scale]}`,
           `${FOCUS_RING}`,
           "cs-focus-visible",
           checked

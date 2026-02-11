@@ -256,6 +256,34 @@ cyberseeds-ui の改善計画とロードマップ。
 - [x] カラーシステム統合テスト追加 (Stepper, ButtonGroup, ButtonTabs)
 - [x] テスト: 811テスト, 28コンポーネント
 
+## v1.2.0 — スタイル統一 & レイアウト改善 ✅
+
+### CSS Preflight & スタイルリセット
+
+- [x] CSS Preflight (`tailwindcss/preflight.css`) を `@layer base` に導入
+- [x] ボタン系要素に `cs:border-0 cs:shadow-none` を追加 (Button, Switch, Accordion, Tabs, Toast, ButtonGroup, ButtonTabs, Select)
+- [x] `cs-btn-primary:disabled` の border 削除
+
+### 固定高さ追加
+
+- [x] Button scaleMap に明示的な高さ追加 (`h-5` / `h-6` / `h-9` / `h-11`)
+- [x] Input, PhoneInput scaleMap に同様の高さ追加
+- [x] TextArea, Select も outline ベースに統一
+
+### レイアウト改善
+
+- [x] Input: label なし時に余分な `<div>` ラッパーを削除し、直接 `<input>` を返す
+- [x] PhoneInput: 同様に label なし時のラッパー削除
+- [x] TextArea: 同様に label なし時のラッパー削除
+- [x] ButtonGroup: `fullWidth` prop 追加 (`cs-full-width` CSS クラス)
+- [x] ButtonTabs.List: `fullWidth` prop 追加
+
+### Dark mode & disabled 改善
+
+- [x] Input, PhoneInput, TextArea: `dark:disabled:bg-gray-700 dark:disabled:text-gray-500` 追加
+- [x] Select: `dark:disabled:bg-gray-700 dark:disabled:text-gray-500` + `dark:outline-gray-600` 追加
+- [x] ButtonTabs: 背景を `bg-gray-100` → `bg-gray-200` に変更
+
 ## 関連ドキュメント
 
 - [Design System Overview](./design-system.md) — デザイントークンとカラーシステムの現状

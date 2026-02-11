@@ -159,7 +159,7 @@ function TabsList({ children, className }: TabsListProps) {
           aria-hidden="true"
           disabled={!canScrollLeft}
           onClick={() => scroll("left")}
-          className="cs:flex cs:shrink-0 cs:items-center cs:justify-center cs:size-8 cs:rounded-full cs:text-gray-400 cs:dark:text-gray-500 cs:disabled:opacity-0 cs:hover:not-disabled:text-gray-600 cs:dark:hover:not-disabled:text-gray-300 cs:hover:not-disabled:bg-gray-100 cs:dark:hover:not-disabled:bg-gray-800 cs:transition-opacity cs:duration-150"
+          className="cs:border-0 cs:shadow-none cs:flex cs:shrink-0 cs:items-center cs:justify-center cs:size-8 cs:rounded-full cs:text-gray-400 cs:dark:text-gray-500 cs:disabled:opacity-0 cs:hover:not-disabled:text-gray-600 cs:dark:hover:not-disabled:text-gray-300 cs:hover:not-disabled:bg-gray-100 cs:dark:hover:not-disabled:bg-gray-800 cs:transition-opacity cs:duration-150"
         >
           <svg viewBox="0 0 20 20" fill="currentColor" className="cs:size-5" aria-hidden="true">
             <path fillRule="evenodd" d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clipRule="evenodd" />
@@ -185,7 +185,7 @@ function TabsList({ children, className }: TabsListProps) {
           aria-hidden="true"
           disabled={!canScrollRight}
           onClick={() => scroll("right")}
-          className="cs:flex cs:shrink-0 cs:items-center cs:justify-center cs:size-8 cs:rounded-full cs:text-gray-400 cs:dark:text-gray-500 cs:disabled:opacity-0 cs:hover:not-disabled:text-gray-600 cs:dark:hover:not-disabled:text-gray-300 cs:hover:not-disabled:bg-gray-100 cs:dark:hover:not-disabled:bg-gray-800 cs:transition-opacity cs:duration-150"
+          className="cs:border-0 cs:shadow-none cs:flex cs:shrink-0 cs:items-center cs:justify-center cs:size-8 cs:rounded-full cs:text-gray-400 cs:dark:text-gray-500 cs:disabled:opacity-0 cs:hover:not-disabled:text-gray-600 cs:dark:hover:not-disabled:text-gray-300 cs:hover:not-disabled:bg-gray-100 cs:dark:hover:not-disabled:bg-gray-800 cs:transition-opacity cs:duration-150"
         >
           <svg viewBox="0 0 20 20" fill="currentColor" className="cs:size-5" aria-hidden="true">
             <path fillRule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
@@ -228,7 +228,7 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
       style={isActive ? colorStyle : undefined}
       onClick={() => ctx.onChange(value)}
       className={clsx(
-        `cs:font-medium cs:whitespace-nowrap ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
+        `cs:border-0 cs:shadow-none cs:font-medium cs:whitespace-nowrap ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
         scaleMap[ctx.scale ?? "md"],
         activeClasses,
         className,

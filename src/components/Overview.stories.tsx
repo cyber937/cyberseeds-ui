@@ -2,8 +2,12 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 
 import { useEffect, useState } from "react";
 import { Accordion, AccordionItem } from "./Accordion/Accordion";
+import { Alert } from "./Alert/Alert";
 import { Badge } from "./Badge/Badge";
 import { Button } from "./Button/Button";
+import { ButtonGroup } from "./ButtonGroup/ButtonGroup";
+import { ButtonTabs } from "./ButtonTabs/ButtonTabs";
+import { Card } from "./Card/Card";
 import { Checkbox } from "./Checkbox/Checkbox";
 import type { Color } from "./DesignSystemUtils";
 import { FormField } from "./FormField/FormField";
@@ -17,6 +21,7 @@ import { Progress } from "./Progress/Progress";
 import { RadioGroup } from "./RadioGroup/RadioGroup";
 import { Select, SelectOption } from "./Select/Select";
 import { Spinner } from "./Spinner/Spinner";
+import { Stepper } from "./Stepper/Stepper";
 import { Switch } from "./Switch/Switch";
 import { Tabs } from "./Tabs/Tabs";
 import { TextArea } from "./TextArea/TextArea";
@@ -34,6 +39,7 @@ const Overview = ({ initialColor }: OverviewProps) => {
   const [language, setLanguage] = useState<string>("");
   const [switchValue, setSwitchValue] = useState<boolean>(true);
   const [tabValue, setTabValue] = useState<string>("tab1");
+  const [buttonTabValue, setButtonTabValue] = useState<string>("btab1");
   const [showToast, setShowToast] = useState<boolean>(false);
 
   const [color, setColor] = useState<Color>(initialColor);
@@ -57,6 +63,14 @@ const Overview = ({ initialColor }: OverviewProps) => {
             </AccordionItem>
           </Accordion>
 
+          {/* Alert */}
+          <div className="cs:space-y-2">
+            <Alert variant="info">Info alert message</Alert>
+            <Alert variant="success">Success alert message</Alert>
+            <Alert variant="warning">Warning alert message</Alert>
+            <Alert variant="error">Error alert message</Alert>
+          </div>
+
           {/* Badge */}
           <div className="cs:flex cs:flex-wrap cs:items-center cs:gap-2">
             <Label text="Badge" />
@@ -74,6 +88,32 @@ const Overview = ({ initialColor }: OverviewProps) => {
             <Button onClick={() => setIsModalOpen(true)}>Open Modal</Button>
             <Button variant="secondary">Secondary</Button>
           </div>
+
+          {/* ButtonGroup */}
+          <ButtonGroup defaultValue="a">
+            <ButtonGroup.Item value="a">Option A</ButtonGroup.Item>
+            <ButtonGroup.Item value="b">Option B</ButtonGroup.Item>
+            <ButtonGroup.Item value="c">Option C</ButtonGroup.Item>
+          </ButtonGroup>
+
+          {/* ButtonTabs */}
+          <ButtonTabs value={buttonTabValue} onChange={setButtonTabValue}>
+            <ButtonTabs.List>
+              <ButtonTabs.Trigger value="btab1">Tab 1</ButtonTabs.Trigger>
+              <ButtonTabs.Trigger value="btab2">Tab 2</ButtonTabs.Trigger>
+              <ButtonTabs.Trigger value="btab3">Tab 3</ButtonTabs.Trigger>
+            </ButtonTabs.List>
+            <ButtonTabs.Content value="btab1">ButtonTabs Content 1</ButtonTabs.Content>
+            <ButtonTabs.Content value="btab2">ButtonTabs Content 2</ButtonTabs.Content>
+            <ButtonTabs.Content value="btab3">ButtonTabs Content 3</ButtonTabs.Content>
+          </ButtonTabs>
+
+          {/* Card */}
+          <Card>
+            <Card.Header>Card Header</Card.Header>
+            <Card.Body>Card body content goes here.</Card.Body>
+            <Card.Footer>Card Footer</Card.Footer>
+          </Card>
 
           {/* Checkbox */}
           <Checkbox label="Checkbox" />
@@ -131,6 +171,16 @@ const Overview = ({ initialColor }: OverviewProps) => {
             <Spinner scale="sm" />
             <Spinner scale="md" />
           </div>
+
+          {/* Stepper */}
+          <Stepper
+            steps={[
+              { label: "Step 1", description: "First" },
+              { label: "Step 2", description: "Second" },
+              { label: "Step 3", description: "Third" },
+            ]}
+            currentStep={1}
+          />
 
           {/* Switch */}
           <Switch
@@ -245,6 +295,35 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
+  args: {
+    initialColor: "blue",
+  },
+};
+
+export const HeightAlignment: Story = {
+  render: () => (
+    <div className="cs:space-y-6">
+      <h2 className="cs:text-lg cs:font-semibold cs:text-gray-700 cs:dark:text-gray-300">
+        Button / Input / Select — Height Alignment
+      </h2>
+      {(["xs", "sm", "md", "lg"] as const).map((scale) => (
+        <div key={scale}>
+          <p className="cs:text-xs cs:text-gray-500 cs:mb-1">scale: {scale}</p>
+          <div className="cs:flex cs:items-center cs:gap-2">
+            <Button scale={scale}>Button</Button>
+            <Button scale={scale} variant="secondary">Secondary</Button>
+            <Button scale={scale} disabled>Disabled</Button>
+            <Input scale={scale} placeholder="Input" className="cs:w-40" />
+            <PhoneInput scale={scale} placeholder="Phone" className="cs:w-40" />
+            <Select scale={scale}>
+              <SelectOption label="Select" value="" />
+              <SelectOption label="Apple" value="1" />
+            </Select>
+          </div>
+        </div>
+      ))}
+    </div>
+  ),
   args: {
     initialColor: "blue",
   },
