@@ -1,5 +1,6 @@
 // stories/Select.stories.tsx
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Input } from "../Input/Input";
 import { Select, SelectOption } from "./Select";
 
 const meta: Meta<typeof Select> = {
@@ -92,6 +93,24 @@ export const Scale: Story = {
           <SelectOption key="1" label="テスト" value="1" />
           <SelectOption key="2" label="テスト2" value="2" />
         </Select>
+      </div>
+    </div>
+  ),
+};
+
+export const WithInput: Story = {
+  render: () => (
+    <div className="cs:flex cs:gap-2 cs:max-w-md">
+      <div className="cs:w-32 cs:shrink-0">
+        <Select scale="md" aria-label="学年">
+          <SelectOption value="" label="全学年" />
+          <SelectOption value="1" label="小1" />
+          <SelectOption value="2" label="小2" />
+          <SelectOption value="3" label="小3" />
+        </Select>
+      </div>
+      <div className="cs:flex-1 cs:min-w-0">
+        <Input scale="md" placeholder="名前で検索…" aria-label="名前検索" />
       </div>
     </div>
   ),

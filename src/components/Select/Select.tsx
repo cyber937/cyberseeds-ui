@@ -38,13 +38,13 @@ export function Select({ scale = "md", isInvalid = false, children, id: external
     : undefined;
 
   return (
-    <div className="cs:flex">
+    <div className="cs:flex cs:min-w-0 cs:w-full">
       <select
         id={id}
         aria-invalid={mergedInvalid || undefined}
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
-        className={`cs:appearance-none cs:rounded-md cs:border-gray-300 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:border-1 cs:disabled:bg-gray-300
+        className={`cs:w-full cs:min-w-0 cs:appearance-none cs:rounded-md cs:border-gray-300 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:border-1 cs:disabled:bg-gray-300
           ${mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
             : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"

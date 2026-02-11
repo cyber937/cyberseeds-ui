@@ -23,6 +23,11 @@ import * as SpinnerStories from '../Spinner/Spinner.stories';
 import * as TabsStories from '../Tabs/Tabs.stories';
 import * as ToastStories from '../Toast/Toast.stories';
 import * as TooltipStories from '../Tooltip/Tooltip.stories';
+import * as AlertStories from '../Alert/Alert.stories';
+import * as CardStories from '../Card/Card.stories';
+import * as StepperStories from '../Stepper/Stepper.stories';
+import * as ButtonGroupStories from '../ButtonGroup/ButtonGroup.stories';
+import * as ButtonTabsStories from '../ButtonTabs/ButtonTabs.stories';
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
@@ -47,6 +52,11 @@ const SpinnerComposed = composeStories(SpinnerStories);
 const TabsComposed = composeStories(TabsStories);
 const ToastComposed = composeStories(ToastStories);
 const TooltipComposed = composeStories(TooltipStories);
+const AlertComposed = composeStories(AlertStories);
+const CardComposed = composeStories(CardStories);
+const StepperComposed = composeStories(StepperStories);
+const ButtonGroupComposed = composeStories(ButtonGroupStories);
+const ButtonTabsComposed = composeStories(ButtonTabsStories);
 
 describe('Accessibility Tests', () => {
   describe('Button Component A11y', () => {
@@ -231,6 +241,56 @@ describe('Accessibility Tests', () => {
 
   describe('Tooltip Component A11y', () => {
     Object.entries(TooltipComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Alert Component A11y', () => {
+    Object.entries(AlertComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Card Component A11y', () => {
+    Object.entries(CardComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Stepper Component A11y', () => {
+    Object.entries(StepperComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('ButtonGroup Component A11y', () => {
+    Object.entries(ButtonGroupComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('ButtonTabs Component A11y', () => {
+    Object.entries(ButtonTabsComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);

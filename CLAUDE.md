@@ -3,9 +3,9 @@
 ## Package Overview
 
 Core UI component library for the Cyberseeds ecosystem.
-23 components, CSS variable-based color system, Tailwind CSS v4 with `cs:` namespace.
+28 components, CSS variable-based color system, Tailwind CSS v4 with `cs:` namespace.
 
-- **Version**: 1.0.0
+- **Version**: 1.1.0
 - **Entry point**: `src/components/index.tsx`
 - **Exports**: Named exports only (no default exports)
 
@@ -65,7 +65,9 @@ Components use semantic CSS classes defined in `src/index.css`:
 ```
 cs-btn-primary, cs-bg, cs-focus, cs-focus-visible, cs-checked,
 cs-pill, cs-badge-solid, cs-badge-outline, cs-badge-dot,
-cs-spinner, cs-progress, cs-tab-active
+cs-spinner, cs-progress, cs-tab-active,
+cs-stepper-active, cs-stepper-completed, cs-stepper-line-completed,
+cs-btn-tab-active
 ```
 
 ### LIGHT_BG_COLORS

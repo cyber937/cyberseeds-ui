@@ -160,3 +160,45 @@
     animation: none;
   }
 }
+
+/* Stepper active step */
+.cs-stepper-active {
+  background-color: var(--cs-ui-base);
+  border-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-stepper-active {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+  border-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+
+/* Stepper completed step */
+.cs-stepper-completed {
+  background-color: var(--cs-ui-base);
+  border-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-stepper-completed {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+  border-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Stepper completed connector line */
+.cs-stepper-line-completed {
+  background-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-stepper-line-completed {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* ButtonTabs active trigger */
+.cs-btn-tab-active {
+  background-color: var(--cs-ui-base);
+}
+.cs-btn-tab-active:hover {
+  background-color: var(--cs-ui-hover);
+}
+:is(.dark, .dark *) .cs-btn-tab-active {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-btn-tab-active:hover {
+  background-color: color-mix(in oklch, var(--cs-ui-hover) 85%, white 15%);
+}
