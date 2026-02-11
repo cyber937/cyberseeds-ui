@@ -231,8 +231,30 @@ cyberseeds-ui の改善計画とロードマップ。
 - [x] コントラスト比テスト（LIGHT_BG_COLORS のダークテキスト切替検証）
 - [x] カバレッジ: 93%+ statements, 88%+ branches
 - [x] cyberseeds-ui-rhf ビルド修正 (`moduleResolution: "bundler"`)
-- [ ] Visual Regression Testing (Chromatic) の導入（v1.1.0 で対応予定）
-- [ ] E2E テスト (Playwright) でのキーボードナビゲーション検証（v1.1.0 で対応予定）
+- [ ] Visual Regression Testing (Chromatic) の導入（v1.2.0 で対応予定）
+- [ ] E2E テスト (Playwright) でのキーボードナビゲーション検証（v1.2.0 で対応予定）
+
+## v1.1.0 — 新規コンポーネント5種追加 ✅
+
+### 新規コンポーネント
+
+| コンポーネント | 説明 | カラーシステム |
+| -------------- | ---- | -------------- |
+| **Alert** | 静的フィードバック通知 (info/success/warning/error) | セマンティック (Toast 方式) |
+| **Card** | 汎用コンテナ (Header/Body/Footer) | なし (中立) |
+| **Stepper** | ステップ進行表示 (番号付き円 + 接続線) | CSS変数 |
+| **ButtonGroup** | セグメントコントロール (単一/複数選択) | CSS変数 |
+| **ButtonTabs** | ボタン形式タブ (Tabs の発展版) | CSS変数 |
+
+- [x] Alert: `role="alert"` / `role="status"`, closable, title, icon, 4バリアント
+- [x] Card: Compound pattern (Header/Body/Footer), shadow/bordered オプション
+- [x] Stepper: 3ステップ状態 (completed/active/pending), チェックマーク SVG
+- [x] ButtonGroup: `role="radiogroup"` (single) / `role="group"` (multiple), keyboard navigation
+- [x] ButtonTabs: WAI-ARIA Tabs パターン準拠, ArrowLeft/Right/Home/End キーボード操作
+- [x] Select コンポーネントの overflow 修正 (`min-w-0` + `w-full`)
+- [x] 全コンポーネントの jest-axe アクセシビリティテスト追加
+- [x] カラーシステム統合テスト追加 (Stepper, ButtonGroup, ButtonTabs)
+- [x] テスト: 811テスト, 28コンポーネント
 
 ## 関連ドキュメント
 

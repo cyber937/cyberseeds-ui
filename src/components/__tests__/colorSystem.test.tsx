@@ -12,6 +12,9 @@ import { PillBox } from "../PillBox/PillBox";
 import { Spinner } from "../Spinner/Spinner";
 import { Progress } from "../Progress/Progress";
 import { Switch } from "../Switch/Switch";
+import { Stepper } from "../Stepper/Stepper";
+import { ButtonGroup } from "../ButtonGroup/ButtonGroup";
+import { ButtonTabs } from "../ButtonTabs/ButtonTabs";
 
 const ALL_PRESET_COLORS: PresetColor[] = [
   "red", "orange", "amber", "yellow",
@@ -144,6 +147,43 @@ describe("Unified Color System (v1.0.0)", () => {
       render(<PillBox color="amber" label="Tag" />);
       const pill = screen.getByText("Tag") as HTMLElement;
       expect(pill.style.getPropertyValue("--cs-ui-light")).toBeTruthy();
+    });
+
+    it("Stepper applies CSS vars to root element", () => {
+      render(<Stepper steps={[{ label: "A" }, { label: "B" }]} currentStep={0} color="red" />);
+      const container = screen.getByRole("group") as HTMLElement;
+      expect(container.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
+    });
+
+    it("ButtonGroup active item applies CSS vars", () => {
+      render(
+        <ButtonGroup defaultValue="a" color="green">
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      const btn = screen.getByText("A") as HTMLElement;
+      expect(btn.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
+    });
+
+    it("ButtonTabs active trigger applies CSS vars", () => {
+      render(
+        <ButtonTabs defaultValue="a" color="purple">
+          <ButtonTabs.List>
+            <ButtonTabs.Trigger value="a">A</ButtonTabs.Trigger>
+          </ButtonTabs.List>
+        </ButtonTabs>
+      );
+      const trigger = screen.getByText("A") as HTMLElement;
+      expect(trigger.style.getPropertyValue("--cs-ui-base")).toBeTruthy();
+    });
+  });
+
+  describe("New components render with all 22 preset colors", () => {
+    ALL_PRESET_COLORS.forEach((color) => {
+      it(`renders Stepper with "${color}"`, () => {
+        render(<Stepper steps={[{ label: "A" }, { label: "B" }]} currentStep={0} color={color} />);
+        expect(screen.getByRole("group")).toBeInTheDocument();
+      });
     });
   });
 });

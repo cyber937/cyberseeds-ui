@@ -113,6 +113,31 @@ describe('Select Component', () => {
     });
   });
 
+  describe('Layout', () => {
+    it('wrapper div has correct layout classes for container width constraint', () => {
+      render(
+        <Select>
+          <SelectOption value="option1" label="Option 1" />
+        </Select>
+      );
+      const select = screen.getByRole('combobox');
+      const wrapperClass = select.parentElement?.className ?? '';
+      expect(wrapperClass).toContain('cs:flex');
+      expect(wrapperClass).toContain('cs:min-w-0');
+      expect(wrapperClass).toContain('cs:w-full');
+    });
+
+    it('select element has w-full class', () => {
+      render(
+        <Select>
+          <SelectOption value="option1" label="Option 1" />
+        </Select>
+      );
+      const select = screen.getByRole('combobox');
+      expect(select.className).toContain('cs:w-full');
+    });
+  });
+
   describe('Accessibility', () => {
     it('has proper select attributes', () => {
       render(
