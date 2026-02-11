@@ -150,7 +150,7 @@ export function Alert({
           onClick={onClose}
           aria-label="Close"
           className={clsx(
-            `cs:shrink-0 cs:rounded-md cs:p-0.5 cs:hover:opacity-70 ${FOCUS_RING}`,
+            `cs:border-0 cs:shadow-none cs:shrink-0 cs:rounded-md cs:p-0.5 cs:hover:opacity-70 ${FOCUS_RING}`,
             styles.text,
           )}
         >

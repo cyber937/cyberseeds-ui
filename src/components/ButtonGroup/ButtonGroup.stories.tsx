@@ -108,6 +108,38 @@ export const Scales: Story = {
   ),
 };
 
+export const FullWidth: Story = {
+  render: () => (
+    <div className="cs:space-y-4">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">fullWidth</p>
+        <ButtonGroup defaultValue="all" fullWidth>
+          <ButtonGroup.Item value="all">全員</ButtonGroup.Item>
+          <ButtonGroup.Item value="student">生徒</ButtonGroup.Item>
+          <ButtonGroup.Item value="parent">保護者</ButtonGroup.Item>
+          <ButtonGroup.Item value="staff">教務</ButtonGroup.Item>
+        </ButtonGroup>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">fullWidth (2 items)</p>
+        <ButtonGroup defaultValue="lending" fullWidth>
+          <ButtonGroup.Item value="lending">貸出</ButtonGroup.Item>
+          <ButtonGroup.Item value="return">返却</ButtonGroup.Item>
+        </ButtonGroup>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">default (inline)</p>
+        <ButtonGroup defaultValue="all">
+          <ButtonGroup.Item value="all">全員</ButtonGroup.Item>
+          <ButtonGroup.Item value="student">生徒</ButtonGroup.Item>
+          <ButtonGroup.Item value="parent">保護者</ButtonGroup.Item>
+          <ButtonGroup.Item value="staff">教務</ButtonGroup.Item>
+        </ButtonGroup>
+      </div>
+    </div>
+  ),
+};
+
 export const WithDisabled: Story = {
   render: () => (
     <ButtonGroup defaultValue="a">

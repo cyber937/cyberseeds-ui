@@ -22,10 +22,10 @@ interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const scaleMap: Record<Scale, string> = {
-  xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem] cs:max-md:min-h-11",
-  sm: "cs:px-2 cs:py-1 cs:text-xs cs:max-md:min-h-11",
-  md: "cs:px-3 cs:py-1.5 cs:text-sm cs:max-md:min-h-11",
-  lg: "cs:px-4 cs:py-2 cs:text-base",
+  xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem] cs:h-5 cs:max-md:min-h-11",
+  sm: "cs:px-2 cs:py-1 cs:text-xs cs:h-6 cs:max-md:min-h-11",
+  md: "cs:px-3 cs:py-1.5 cs:text-sm/6 cs:h-9 cs:max-md:min-h-11",
+  lg: "cs:px-4 cs:py-2 cs:text-base cs:h-11",
 };
 
 export function Button({
@@ -60,7 +60,7 @@ export function Button({
     <ButtonContext.Provider value={buttonContextValue}>
       <button
         style={colorStyle}
-        className={`cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantClasses[variant]} cs-focus-visible ${className}`}
+        className={`cs:border-0 cs:shadow-none cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantClasses[variant]} cs-focus-visible ${className}`}
         {...props}
       >
         {children}

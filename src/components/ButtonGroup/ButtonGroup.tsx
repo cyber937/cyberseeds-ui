@@ -19,6 +19,7 @@ interface ButtonGroupProps {
   defaultValue?: string | string[];
   onChange?: (value: string | string[]) => void;
   multiple?: boolean;
+  fullWidth?: boolean;
   color?: Color;
   scale?: Scale;
   className?: string;
@@ -49,6 +50,7 @@ export function ButtonGroup({
   defaultValue,
   onChange,
   multiple = false,
+  fullWidth = false,
   color = "blue",
   scale = "md",
   className,
@@ -123,7 +125,11 @@ export function ButtonGroup({
       <div
         role={multiple ? "group" : "radiogroup"}
         onKeyDown={handleKeyDown}
-        className={clsx("cs:inline-flex cs:font-sans", className)}
+        className={clsx(
+          "cs:font-sans",
+          fullWidth ? "cs-full-width" : "cs:inline-flex",
+          className,
+        )}
       >
         {children}
       </div>
@@ -153,7 +159,7 @@ function ButtonGroupItem({ children, value, disabled = false, className }: Butto
       onClick={() => !disabled && ctx.onSelect(value)}
       style={isSelected ? colorStyle : undefined}
       className={clsx(
-        "cs:font-medium cs:cursor-pointer cs:whitespace-nowrap",
+        "cs:border-0 cs:shadow-none cs:font-medium cs:cursor-pointer cs:whitespace-nowrap",
         "first:cs:rounded-l-md last:cs:rounded-r-md",
         scaleMap[ctx.scale],
         TRANSITION_FAST,

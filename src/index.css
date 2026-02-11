@@ -1,5 +1,6 @@
 @layer theme, base, components, utilities;
 @import "tailwindcss/theme.css" layer(theme) prefix(cs);
+@import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css" layer(utilities) prefix(cs);
 @custom-variant dark (&:where(.dark, .dark *));
 
@@ -15,7 +16,6 @@
 }
 .cs-btn-primary:disabled {
   background-color: var(--cs-color-gray-200);
-  border: 1px solid var(--cs-ui-active);
 }
 .cs-bg {
   background-color: var(--cs-ui-base);
@@ -56,7 +56,6 @@
 }
 :is(.dark, .dark *) .cs-btn-primary:disabled {
   background-color: var(--cs-color-gray-700, #374151);
-  border-color: var(--cs-color-gray-600, #4b5563);
 }
 
 /* Background dark mode */
@@ -189,6 +188,15 @@
 }
 :is(.dark, .dark *) .cs-stepper-line-completed {
   background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Full-width layout for button containers (ButtonGroup, ButtonTabs.List) */
+.cs-full-width {
+  display: flex;
+}
+.cs-full-width > button {
+  flex: 1;
+  text-align: center;
 }
 
 /* ButtonTabs active trigger */

@@ -44,10 +44,10 @@ export function Select({ scale = "md", isInvalid = false, children, id: external
         aria-invalid={mergedInvalid || undefined}
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
-        className={`cs:min-w-0 cs:appearance-none cs:rounded-md cs:border-gray-300 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:border-1 cs:disabled:bg-gray-300
+        className={`cs:shadow-none cs:border-0 cs:min-w-0 cs:appearance-none cs:rounded-md cs:outline-1 cs:-outline-offset-1 cs:outline-gray-300 cs:dark:outline-gray-600 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:disabled:bg-gray-300 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500
           ${mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
-            : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300"
+            : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800"
           } ${scaleMap[mergedScale]}`}
         {...props}
       >

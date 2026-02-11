@@ -20,7 +20,7 @@ export function AccordionItem({ title, children, defaultOpen = false, ...props }
     <div className="cs:border-b cs:border-gray-200 cs:dark:border-gray-500 cs:overflow-hidden" {...props}>
       <button
         id={buttonId}
-        className={`cs:w-full cs:flex cs:justify-between cs:items-center cs:text-sm cs:p-4 cs:text-left cs:font-medium ${FOCUS_RING} cs:focus-visible:outline-blue-600 cs:cursor-pointer cs:dark:text-gray-400 cs:hover:bg-gray-100 cs:hover:dark:bg-gray-500`}
+        className={`cs:border-0 cs:shadow-none cs:bg-transparent cs:w-full cs:flex cs:justify-between cs:items-center cs:text-sm cs:p-4 cs:text-left cs:font-medium ${FOCUS_RING} cs:focus-visible:outline-blue-600 cs:cursor-pointer cs:dark:text-gray-400 cs:hover:bg-gray-100 cs:hover:dark:bg-gray-500`}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls={panelId}
