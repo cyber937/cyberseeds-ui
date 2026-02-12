@@ -1,0 +1,214 @@
+/* Distribution CSS entry — excludes preflight (consumers provide their own) */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(cs);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(cs);
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Color System — CSS variable-based styles for all colors (v1.0.0 unified) */
+.cs-btn-primary {
+  background-color: var(--cs-ui-base);
+}
+.cs-btn-primary:hover {
+  background-color: var(--cs-ui-hover);
+}
+.cs-btn-primary:active {
+  background-color: var(--cs-ui-active);
+}
+.cs-btn-primary:disabled {
+  background-color: var(--cs-color-gray-200);
+}
+.cs-bg {
+  background-color: var(--cs-ui-base);
+}
+.cs-focus:focus {
+  outline-color: var(--cs-ui-focus);
+}
+.cs-focus-visible:focus-visible {
+  outline-color: var(--cs-ui-focus);
+}
+.cs-checked:checked {
+  border-color: var(--cs-ui-base);
+  background-color: var(--cs-ui-base);
+}
+.cs-checked:focus-visible {
+  outline-color: var(--cs-ui-focus);
+}
+.cs-pill {
+  outline-color: var(--cs-ui-border);
+  background-color: var(--cs-ui-light);
+  color: var(--cs-ui-lightText);
+}
+:is(.dark, .dark *) .cs-pill {
+  outline-color: color-mix(in oklch, var(--cs-ui-border) 70%, white 30%);
+  background-color: color-mix(in oklch, var(--cs-ui-base) 20%, transparent);
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+/* Button primary dark mode */
+:is(.dark, .dark *) .cs-btn-primary {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-btn-primary:hover {
+  background-color: color-mix(in oklch, var(--cs-ui-hover) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-btn-primary:active {
+  background-color: color-mix(in oklch, var(--cs-ui-active) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-btn-primary:disabled {
+  background-color: var(--cs-color-gray-700, #374151);
+}
+
+/* Background dark mode */
+:is(.dark, .dark *) .cs-bg {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+
+/* Checked state dark mode */
+:is(.dark, .dark *) .cs-checked:checked {
+  border-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Badge variants */
+.cs-badge-solid {
+  background-color: var(--cs-ui-base);
+  color: white;
+}
+:is(.dark, .dark *) .cs-badge-solid {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+  color: white;
+}
+
+.cs-badge-outline {
+  border-color: var(--cs-ui-border);
+  color: var(--cs-ui-lightText);
+}
+:is(.dark, .dark *) .cs-badge-outline {
+  border-color: color-mix(in oklch, var(--cs-ui-border) 70%, white 30%);
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+.cs-badge-dot {
+  background-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-badge-dot {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 70%, white 30%);
+}
+
+/* Spinner */
+.cs-spinner {
+  color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-spinner {
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+/* Progress bar */
+.cs-progress {
+  background-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-progress {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Tab active state */
+.cs-tab-active {
+  border-color: var(--cs-ui-base);
+  color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-tab-active {
+  border-color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
+/* Scrollbar hidden utility for horizontal scroll containers */
+.cs-scrollbar-none {
+  -ms-overflow-style: none; /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+}
+.cs-scrollbar-none::-webkit-scrollbar {
+  display: none; /* Chrome/Safari/Opera */
+}
+
+/* Progress bar stripe animation */
+@keyframes cs-progress-stripe {
+  0% {
+    background-position: 1rem 0;
+  }
+  100% {
+    background-position: 0 0;
+  }
+}
+
+.cs-progress-animated {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: cs-progress-stripe 1s linear infinite;
+}
+
+/* Reduced motion: disable animations */
+@media (prefers-reduced-motion: reduce) {
+  .cs-progress-animated {
+    animation: none;
+  }
+}
+
+/* Stepper active step */
+.cs-stepper-active {
+  background-color: var(--cs-ui-base);
+  border-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-stepper-active {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+  border-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+
+/* Stepper completed step */
+.cs-stepper-completed {
+  background-color: var(--cs-ui-base);
+  border-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-stepper-completed {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+  border-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Stepper completed connector line */
+.cs-stepper-line-completed {
+  background-color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-stepper-line-completed {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
+}
+
+/* Full-width layout for button containers (ButtonGroup, ButtonTabs.List) */
+.cs-full-width {
+  display: flex;
+}
+.cs-full-width > button {
+  flex: 1;
+  text-align: center;
+}
+
+/* ButtonTabs active trigger */
+.cs-btn-tab-active {
+  background-color: var(--cs-ui-base);
+}
+.cs-btn-tab-active:hover {
+  background-color: var(--cs-ui-hover);
+}
+:is(.dark, .dark *) .cs-btn-tab-active {
+  background-color: color-mix(in oklch, var(--cs-ui-base) 85%, white 15%);
+}
+:is(.dark, .dark *) .cs-btn-tab-active:hover {
+  background-color: color-mix(in oklch, var(--cs-ui-hover) 85%, white 15%);
+}

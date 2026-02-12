@@ -1,6 +1,6 @@
 {
   "name": "cyberseeds-ui",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "license": "MIT",
   "keywords": [
     "react-components"
@@ -28,7 +28,7 @@
   "scripts": {
     "dev": "vite",
     "build:css:preview": "tailwindcss -i ./src/index.css -o ./src/style.css --minify",
-    "build:css": "tailwindcss -i ./src/index.css -o ./dist/style.css --minify",
+    "build:css": "tailwindcss -i ./src/index-dist.css -o ./dist/style.css --minify",
     "build": "npm run build:css:preview && tsc -b && vite build && npm run build:css",
     "lint": "eslint .",
     "test": "vitest",
