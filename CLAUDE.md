@@ -5,7 +5,7 @@
 Core UI component library for the Cyberseeds ecosystem.
 28 components, CSS variable-based color system, Tailwind CSS v4 with `cs:` namespace.
 
-- **Version**: 1.2.0
+- **Version**: 1.2.1
 - **Entry point**: `src/components/index.tsx`
 - **Exports**: Named exports only (no default exports)
 
