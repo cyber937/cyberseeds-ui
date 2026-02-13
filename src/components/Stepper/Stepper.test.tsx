@@ -17,17 +17,17 @@ describe('Stepper Component', () => {
   describe('Storybook Stories', () => {
     it('renders Default story', () => {
       render(<Default />);
-      expect(screen.getByText('借り手選択')).toBeInTheDocument();
+      expect(screen.getByText('Select Borrower')).toBeInTheDocument();
     });
 
     it('renders AllCompleted story', () => {
       render(<AllCompleted />);
-      expect(screen.getByText('完了')).toBeInTheDocument();
+      expect(screen.getByText('Complete')).toBeInTheDocument();
     });
 
     it('renders ThreeSteps story', () => {
       render(<ThreeSteps />);
-      expect(screen.getByText('入力')).toBeInTheDocument();
+      expect(screen.getByText('Input')).toBeInTheDocument();
     });
   });
 
@@ -133,7 +133,7 @@ describe('Stepper Component', () => {
     it('has descriptive aria-label', () => {
       render(<Stepper steps={sampleSteps} currentStep={1} />);
       const container = screen.getByRole('group');
-      expect(container).toHaveAttribute('aria-label', 'ステップ 2 / 3');
+      expect(container).toHaveAttribute('aria-label', 'Step 2 / 3');
     });
 
     it('active step has aria-current="step"', () => {

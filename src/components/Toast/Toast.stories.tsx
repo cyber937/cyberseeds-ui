@@ -27,7 +27,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     variant: "info",
-    children: "これはお知らせです。",
+    children: "This is a notification.",
     onClose: () => {},
   },
 };
@@ -36,16 +36,16 @@ export const Variants: Story = {
   render: () => (
     <div className="cs:flex cs:flex-col cs:gap-3 cs:max-w-sm">
       <Toast variant="success" onClose={() => {}}>
-        保存しました
+        Saved successfully
       </Toast>
       <Toast variant="error" onClose={() => {}}>
-        エラーが発生しました
+        An error occurred
       </Toast>
       <Toast variant="warning" onClose={() => {}}>
-        注意が必要です
+        Attention required
       </Toast>
       <Toast variant="info" onClose={() => {}}>
-        お知らせがあります
+        You have a notification
       </Toast>
     </div>
   ),
@@ -57,40 +57,40 @@ export const Scales: Story = {
       <GroupBox label="Extra Small (xs)">
         <div className="cs:flex cs:flex-col cs:gap-3">
           <Toast variant="success" scale="xs" onClose={() => {}}>
-            Extra Small サイズ
+            Extra Small size
           </Toast>
           <Toast variant="error" scale="xs" onClose={() => {}}>
-            Extra Small サイズ
+            Extra Small size
           </Toast>
         </div>
       </GroupBox>
       <GroupBox label="Small (sm)">
         <div className="cs:flex cs:flex-col cs:gap-3">
           <Toast variant="success" scale="sm" onClose={() => {}}>
-            Small サイズ
+            Small size
           </Toast>
           <Toast variant="error" scale="sm" onClose={() => {}}>
-            Small サイズ
+            Small size
           </Toast>
         </div>
       </GroupBox>
       <GroupBox label="Standard (md)">
         <div className="cs:flex cs:flex-col cs:gap-3">
           <Toast variant="success" scale="md" onClose={() => {}}>
-            Standard サイズ
+            Standard size
           </Toast>
           <Toast variant="error" scale="md" onClose={() => {}}>
-            Standard サイズ
+            Standard size
           </Toast>
         </div>
       </GroupBox>
       <GroupBox label="Large (lg)">
         <div className="cs:flex cs:flex-col cs:gap-3">
           <Toast variant="success" scale="lg" onClose={() => {}}>
-            Large サイズ
+            Large size
           </Toast>
           <Toast variant="error" scale="lg" onClose={() => {}}>
-            Large サイズ
+            Large size
           </Toast>
         </div>
       </GroupBox>
@@ -101,8 +101,8 @@ export const Scales: Story = {
 export const WithoutCloseButton: Story = {
   render: () => (
     <div className="cs:flex cs:flex-col cs:gap-3 cs:max-w-sm">
-      <Toast variant="success">閉じるボタンなし</Toast>
-      <Toast variant="info">自動消去のみ</Toast>
+      <Toast variant="success">No close button</Toast>
+      <Toast variant="info">Auto-dismiss only</Toast>
     </div>
   ),
 };
@@ -112,16 +112,16 @@ function ToastDemo() {
 
   return (
     <div className="cs:flex cs:gap-2 cs:flex-wrap">
-      <Button onClick={() => toast.success("保存しました！")} color="green">
+      <Button onClick={() => toast.success("Saved successfully!")} color="green">
         Success
       </Button>
-      <Button onClick={() => toast.error("エラーが発生しました。")} color="red">
+      <Button onClick={() => toast.error("An error occurred.")} color="red">
         Error
       </Button>
-      <Button onClick={() => toast.warning("注意が必要です。")} color="amber">
+      <Button onClick={() => toast.warning("Attention required.")} color="amber">
         Warning
       </Button>
-      <Button onClick={() => toast.info("お知らせがあります。")} color="blue">
+      <Button onClick={() => toast.info("You have a notification.")} color="blue">
         Info
       </Button>
     </div>

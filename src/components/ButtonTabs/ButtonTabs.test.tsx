@@ -26,12 +26,12 @@ describe('ButtonTabs Component', () => {
   describe('Storybook Stories', () => {
     it('renders Default story', () => {
       render(<Default />);
-      expect(screen.getByText('貸出')).toBeInTheDocument();
+      expect(screen.getByText('Lending')).toBeInTheDocument();
     });
 
     it('renders Scales story', () => {
       render(<Scales />);
-      expect(screen.getAllByText('タブ A').length).toBe(4);
+      expect(screen.getAllByText('Tab A').length).toBe(4);
     });
   });
 

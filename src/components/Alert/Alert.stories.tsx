@@ -24,17 +24,17 @@ export const Default: Story = {
   args: {
     variant: "info",
     scale: "md",
-    children: "これはお知らせです。",
+    children: "This is a notification.",
   },
 };
 
 export const Variants: Story = {
   render: () => (
     <div className="cs:space-y-3">
-      <Alert variant="info">情報: システムメンテナンスのお知らせです。</Alert>
-      <Alert variant="success">成功: データが正常に保存されました。</Alert>
-      <Alert variant="warning">警告: ストレージ容量が残りわずかです。</Alert>
-      <Alert variant="error">エラー: ネットワーク接続に失敗しました。</Alert>
+      <Alert variant="info">Info: System maintenance is scheduled.</Alert>
+      <Alert variant="success">Success: Data has been saved successfully.</Alert>
+      <Alert variant="warning">Warning: Storage capacity is running low.</Alert>
+      <Alert variant="error">Error: Network connection failed.</Alert>
     </div>
   ),
 };
@@ -42,17 +42,17 @@ export const Variants: Story = {
 export const WithTitle: Story = {
   render: () => (
     <div className="cs:space-y-3">
-      <Alert variant="info" title="お知らせ">
-        システムメンテナンスを予定しています。
+      <Alert variant="info" title="Notice">
+        System maintenance is scheduled.
       </Alert>
-      <Alert variant="success" title="完了">
-        データが正常に保存されました。
+      <Alert variant="success" title="Complete">
+        Data has been saved successfully.
       </Alert>
-      <Alert variant="warning" title="注意">
-        ストレージ容量が残りわずかです。
+      <Alert variant="warning" title="Caution">
+        Storage capacity is running low.
       </Alert>
-      <Alert variant="error" title="エラー">
-        ネットワーク接続に失敗しました。再度お試しください。
+      <Alert variant="error" title="Error">
+        Network connection failed. Please try again.
       </Alert>
     </div>
   ),
@@ -61,11 +61,11 @@ export const WithTitle: Story = {
 export const Closable: Story = {
   render: () => (
     <div className="cs:space-y-3">
-      <Alert variant="info" closable onClose={() => alert("閉じました")}>
-        閉じるボタン付きのアラートです。
+      <Alert variant="info" closable onClose={() => alert("Closed")}>
+        This is a closable alert.
       </Alert>
-      <Alert variant="error" title="エラー" closable onClose={() => alert("閉じました")}>
-        タイトル付きの閉じるボタンアラートです。
+      <Alert variant="error" title="Error" closable onClose={() => alert("Closed")}>
+        This is a closable alert with a title.
       </Alert>
     </div>
   ),
@@ -85,9 +85,9 @@ export const Scales: Story = {
 export const WithoutIcon: Story = {
   render: () => (
     <div className="cs:space-y-3">
-      <Alert variant="info" icon={false}>アイコンなしのアラートです。</Alert>
-      <Alert variant="error" icon={false} title="エラー">
-        アイコンなし + タイトル付きです。
+      <Alert variant="info" icon={false}>Alert without an icon.</Alert>
+      <Alert variant="error" icon={false} title="Error">
+        No icon + with title.
       </Alert>
     </div>
   ),

@@ -11,7 +11,7 @@ describe('ButtonGroup Component', () => {
   describe('Storybook Stories', () => {
     it('renders Default story', () => {
       render(<Default />);
-      expect(screen.getByText('全員')).toBeInTheDocument();
+      expect(screen.getByText('All')).toBeInTheDocument();
     });
 
     it('renders Scales story', () => {

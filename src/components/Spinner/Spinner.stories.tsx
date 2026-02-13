@@ -68,7 +68,7 @@ export const WithLabel: Story = {
     <div className="cs:flex cs:items-center cs:gap-3">
       <Spinner color="blue" />
       <span className="cs:text-sm cs:text-gray-600 cs:dark:text-gray-400">
-        読み込み中...
+        Loading...
       </span>
     </div>
   ),

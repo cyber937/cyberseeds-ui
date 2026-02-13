@@ -46,14 +46,14 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     scale: "md",
-    "aria-label": "選択",
+    "aria-label": "Select",
   },
   render: (args) => (
     <div className="flex">
       <Select {...args}>
-        <SelectOption key="0" label="選んでください" value="0" />
-        <SelectOption key="1" label="テスト" value="1" />
-        <SelectOption key="2" label="テスト2" value="2" />
+        <SelectOption key="0" label="Please select" value="0" />
+        <SelectOption key="1" label="Option 1" value="1" />
+        <SelectOption key="2" label="Option 2" value="2" />
       </Select>
     </div>
   ),
@@ -64,34 +64,34 @@ export const Scale: Story = {
     <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
-        <Select scale="xs" aria-label="極小サイズ">
-          <SelectOption key="0" label="選んでください" value="0" />
-          <SelectOption key="1" label="テスト" value="1" />
-          <SelectOption key="2" label="テスト2" value="2" />
+        <Select scale="xs" aria-label="Extra small size">
+          <SelectOption key="0" label="Please select" value="0" />
+          <SelectOption key="1" label="Option 1" value="1" />
+          <SelectOption key="2" label="Option 2" value="2" />
         </Select>
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
-        <Select scale="sm" aria-label="小サイズ">
-          <SelectOption key="0" label="選んでください" value="0" />
-          <SelectOption key="1" label="テスト" value="1" />
-          <SelectOption key="2" label="テスト2" value="2" />
+        <Select scale="sm" aria-label="Small size">
+          <SelectOption key="0" label="Please select" value="0" />
+          <SelectOption key="1" label="Option 1" value="1" />
+          <SelectOption key="2" label="Option 2" value="2" />
         </Select>
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
-        <Select scale="md" aria-label="標準サイズ">
-          <SelectOption key="0" label="選んでください" value="0" />
-          <SelectOption key="1" label="テスト" value="1" />
-          <SelectOption key="2" label="テスト2" value="2" />
+        <Select scale="md" aria-label="Standard size">
+          <SelectOption key="0" label="Please select" value="0" />
+          <SelectOption key="1" label="Option 1" value="1" />
+          <SelectOption key="2" label="Option 2" value="2" />
         </Select>
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
-        <Select scale="lg" aria-label="大サイズ">
-          <SelectOption key="0" label="選んでください" value="0" />
-          <SelectOption key="1" label="テスト" value="1" />
-          <SelectOption key="2" label="テスト2" value="2" />
+        <Select scale="lg" aria-label="Large size">
+          <SelectOption key="0" label="Please select" value="0" />
+          <SelectOption key="1" label="Option 1" value="1" />
+          <SelectOption key="2" label="Option 2" value="2" />
         </Select>
       </div>
     </div>
@@ -102,15 +102,15 @@ export const WithInput: Story = {
   render: () => (
     <div className="cs:flex cs:gap-2 cs:max-w-md">
       <div className="cs:w-32 cs:shrink-0">
-        <Select scale="md" aria-label="学年">
-          <SelectOption value="" label="全学年" />
-          <SelectOption value="1" label="小1" />
-          <SelectOption value="2" label="小2" />
-          <SelectOption value="3" label="小3" />
+        <Select scale="md" aria-label="Grade">
+          <SelectOption value="" label="All Grades" />
+          <SelectOption value="1" label="Grade 1" />
+          <SelectOption value="2" label="Grade 2" />
+          <SelectOption value="3" label="Grade 3" />
         </Select>
       </div>
       <div className="cs:flex-1 cs:min-w-0">
-        <Input scale="md" placeholder="名前で検索…" aria-label="名前検索" />
+        <Input scale="md" placeholder="Search by name..." aria-label="Name search" />
       </div>
     </div>
   ),
@@ -120,13 +120,13 @@ export const Invalid: Story = {
   args: {
     scale: "md",
     isInvalid: true,
-    "aria-label": "選択",
+    "aria-label": "Select",
   },
   render: (args) => (
     <Select {...args}>
-      <SelectOption key="0" label="選んでください" value="0" />
-      <SelectOption key="1" label="テスト" value="1" />
-      <SelectOption key="2" label="テスト2" value="2" />
+      <SelectOption key="0" label="Please select" value="0" />
+      <SelectOption key="1" label="Option 1" value="1" />
+      <SelectOption key="2" label="Option 2" value="2" />
     </Select>
   ),
 };

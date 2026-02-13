@@ -77,7 +77,7 @@ describe('Select Component', () => {
       expect(select).toBeDisabled();
     });
 
-    it('shows dropdown icon', () => {
+    it('shows dropdown icon with absolute positioning', () => {
       render(
         <Select>
           <SelectOption value="option1" label="Option 1" />
@@ -85,6 +85,7 @@ describe('Select Component', () => {
       );
       const icon = screen.getByRole('combobox').parentElement?.querySelector('svg');
       expect(icon).toBeInTheDocument();
+      expect(icon?.getAttribute('class')).toContain('cs:absolute');
     });
   });
 
@@ -114,7 +115,7 @@ describe('Select Component', () => {
   });
 
   describe('Layout', () => {
-    it('wrapper div has flex and min-w-0 for container width constraint', () => {
+    it('wrapper div has relative, inline-flex and min-w-0 for container width constraint', () => {
       render(
         <Select>
           <SelectOption value="option1" label="Option 1" />
@@ -122,7 +123,8 @@ describe('Select Component', () => {
       );
       const select = screen.getByRole('combobox');
       const wrapperClass = select.parentElement?.className ?? '';
-      expect(wrapperClass).toContain('cs:flex');
+      expect(wrapperClass).toContain('cs:relative');
+      expect(wrapperClass).toContain('cs:inline-flex');
       expect(wrapperClass).toContain('cs:min-w-0');
     });
 

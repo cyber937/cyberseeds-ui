@@ -11,12 +11,12 @@ describe('Card Component', () => {
   describe('Storybook Stories', () => {
     it('renders Default story', () => {
       render(<Default />);
-      expect(screen.getByText('シンプルなカードコンテンツです。')).toBeInTheDocument();
+      expect(screen.getByText('Simple card content.')).toBeInTheDocument();
     });
 
     it('renders WithHeaderAndFooter story', () => {
       render(<WithHeaderAndFooter />);
-      expect(screen.getByText('カードタイトル')).toBeInTheDocument();
+      expect(screen.getByText('Card Title')).toBeInTheDocument();
     });
 
     it('renders Scales story', () => {

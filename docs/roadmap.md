@@ -238,13 +238,13 @@ cyberseeds-ui の改善計画とロードマップ。
 
 ### 新規コンポーネント
 
-| コンポーネント | 説明 | カラーシステム |
-| -------------- | ---- | -------------- |
-| **Alert** | 静的フィードバック通知 (info/success/warning/error) | セマンティック (Toast 方式) |
-| **Card** | 汎用コンテナ (Header/Body/Footer) | なし (中立) |
-| **Stepper** | ステップ進行表示 (番号付き円 + 接続線) | CSS変数 |
-| **ButtonGroup** | セグメントコントロール (単一/複数選択) | CSS変数 |
-| **ButtonTabs** | ボタン形式タブ (Tabs の発展版) | CSS変数 |
+| コンポーネント  | 説明                                                | カラーシステム              |
+| --------------- | --------------------------------------------------- | --------------------------- |
+| **Alert**       | 静的フィードバック通知 (info/success/warning/error) | セマンティック (Toast 方式) |
+| **Card**        | 汎用コンテナ (Header/Body/Footer)                   | なし (中立)                 |
+| **Stepper**     | ステップ進行表示 (番号付き円 + 接続線)              | CSS変数                     |
+| **ButtonGroup** | セグメントコントロール (単一/複数選択)              | CSS変数                     |
+| **ButtonTabs**  | ボタン形式タブ (Tabs の発展版)                      | CSS変数                     |
 
 - [x] Alert: `role="alert"` / `role="status"`, closable, title, icon, 4バリアント
 - [x] Card: Compound pattern (Header/Body/Footer), shadow/bordered オプション
@@ -283,6 +283,25 @@ cyberseeds-ui の改善計画とロードマップ。
 - [x] Input, PhoneInput, TextArea: `dark:disabled:bg-gray-700 dark:disabled:text-gray-500` 追加
 - [x] Select: `dark:disabled:bg-gray-700 dark:disabled:text-gray-500` + `dark:outline-gray-600` 追加
 - [x] ButtonTabs: 背景を `bg-gray-100` → `bg-gray-200` に変更
+
+## v1.2.1 — dist CSS から Preflight 除外 ✅
+
+- [x] `src/index-dist.css` から `@import "tailwindcss/preflight.css"` を除外（消費者アプリのスタイル汚染防止）
+- [x] `src/index.css` (Storybook/dev 用) には Preflight を維持
+- [x] Select コンポーネントの `width: 100%` 修正
+
+## v1.2.2 — Preflight 非依存修正 & Storybook 英語化 ✅
+
+### バグ修正
+
+- [x] dist CSS に最小限の `box-sizing: border-box` リセットを追加（Preflight 除外による Button/Input 高さ不具合の修正）
+- [x] Select コンポーネントの SVG アイコンを margin ベースから absolute positioning に変更（Preflight 非依存化）
+
+### Storybook 英語化
+
+- [x] 全19ストーリーファイルの日本語テキストを英語に変更
+- [x] Stepper コンポーネントの `aria-label` を英語に変更（`ステップ` → `Step`）
+- [x] 関連テストファイルのアサーションを英語に更新
 
 ## 関連ドキュメント
 

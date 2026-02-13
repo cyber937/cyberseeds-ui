@@ -39,9 +39,9 @@ export const Default: Story = {
 export const WithLabel: Story = {
   render: () => (
     <div className="cs:space-y-4 cs:max-w-md">
-      <Progress value={30} label="アップロード中" showValue color="blue" />
-      <Progress value={75} label="処理中" showValue color="green" />
-      <Progress value={100} label="完了" showValue color="emerald" />
+      <Progress value={30} label="Uploading" showValue color="blue" />
+      <Progress value={75} label="Processing" showValue color="green" />
+      <Progress value={100} label="Complete" showValue color="emerald" />
     </div>
   ),
 };
@@ -93,10 +93,10 @@ export const Values: Story = {
 export const Animated: Story = {
   render: () => (
     <div className="cs:space-y-4 cs:max-w-md">
-      <Progress value={45} label="アップロード中..." showValue animated color="blue" />
-      <Progress value={70} label="処理中..." showValue animated color="green" />
-      <Progress value={30} label="ダウンロード中..." showValue animated color="violet" />
-      <Progress value={90} label="ほぼ完了" showValue animated color="emerald" />
+      <Progress value={45} label="Uploading..." showValue animated color="blue" />
+      <Progress value={70} label="Processing..." showValue animated color="green" />
+      <Progress value={30} label="Downloading..." showValue animated color="violet" />
+      <Progress value={90} label="Almost done" showValue animated color="emerald" />
     </div>
   ),
 };

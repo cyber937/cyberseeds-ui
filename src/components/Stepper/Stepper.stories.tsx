@@ -25,11 +25,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const librarySteps = [
-  { label: "借り手選択" },
-  { label: "借り手確認" },
-  { label: "図書スキャン" },
-  { label: "確認" },
-  { label: "完了" },
+  { label: "Select Borrower" },
+  { label: "Confirm Borrower" },
+  { label: "Scan Book" },
+  { label: "Confirm" },
+  { label: "Complete" },
 ];
 
 export const Default: Story = {
@@ -83,9 +83,9 @@ export const Scales: Story = {
 export const ThreeSteps: Story = {
   args: {
     steps: [
-      { label: "入力" },
-      { label: "確認" },
-      { label: "完了" },
+      { label: "Input" },
+      { label: "Confirm" },
+      { label: "Complete" },
     ],
     currentStep: 1,
   },

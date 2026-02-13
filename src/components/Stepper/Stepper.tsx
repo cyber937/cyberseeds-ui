@@ -72,7 +72,7 @@ export function Stepper({
     <div
       style={colorStyle}
       className={clsx("cs:flex cs:items-start cs:w-full cs:font-sans", className)}
-      aria-label={`ステップ ${currentStep + 1} / ${steps.length}`}
+      aria-label={`Step ${currentStep + 1} / ${steps.length}`}
       role="group"
     >
       {steps.map((step, index) => {

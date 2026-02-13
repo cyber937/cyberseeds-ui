@@ -13,7 +13,7 @@ describe('Input Component', () => {
       render(<Default />);
       const input = screen.getByRole('textbox');
       expect(input).toBeInTheDocument();
-      expect(input).toHaveAttribute('placeholder', 'メールアドレス');
+      expect(input).toHaveAttribute('placeholder', 'Email Address');
     });
 
     it('renders Require story with required label', () => {

@@ -100,19 +100,19 @@ export const Scales: Story = {
     <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
-        <TextArea label="コメント" scale="xs" placeholder="入力してください" rows={3} />
+        <TextArea label="Comment" scale="xs" placeholder="Enter text" rows={3} />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
-        <TextArea label="コメント" scale="sm" placeholder="入力してください" rows={3} />
+        <TextArea label="Comment" scale="sm" placeholder="Enter text" rows={3} />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
-        <TextArea label="コメント" scale="md" placeholder="入力してください" rows={3} />
+        <TextArea label="Comment" scale="md" placeholder="Enter text" rows={3} />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
-        <TextArea label="コメント" scale="lg" placeholder="入力してください" rows={3} />
+        <TextArea label="Comment" scale="lg" placeholder="Enter text" rows={3} />
       </div>
     </div>
   ),
