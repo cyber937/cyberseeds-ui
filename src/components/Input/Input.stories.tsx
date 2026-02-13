@@ -55,10 +55,10 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     id: "emailaddress",
-    label: "メールアドレス",
+    label: "Email Address",
     scale: "md",
     color: "blue",
-    placeholder: "メールアドレス",
+    placeholder: "Email Address",
     require: false,
     isInvalid: false,
     disabled: false,
@@ -75,7 +75,7 @@ export const Require: Story = {
   args: {
     scale: "md",
     color: "blue",
-    placeholder: "メールアドレス",
+    placeholder: "Email Address",
     require: true,
     isInvalid: false,
     disabled: false,
@@ -84,10 +84,10 @@ export const Require: Story = {
 
 export const Invalid: Story = {
   args: {
-    label: "メールアドレス",
+    label: "Email Address",
     scale: "md",
     color: "blue",
-    placeholder: "メールアドレス",
+    placeholder: "Email Address",
     require: false,
     isInvalid: true,
     disabled: false,
@@ -96,10 +96,10 @@ export const Invalid: Story = {
 
 export const Disabled: Story = {
   args: {
-    label: "メールアドレス",
+    label: "Email Address",
     scale: "md",
     color: "blue",
-    placeholder: "メールアドレス",
+    placeholder: "Email Address",
     require: false,
     isInvalid: false,
     disabled: true,
@@ -111,19 +111,19 @@ export const Scales: Story = {
     <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
-        <Input label="メール" scale="xs" placeholder="example@email.com" />
+        <Input label="Email" scale="xs" placeholder="example@email.com" />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
-        <Input label="メール" scale="sm" placeholder="example@email.com" />
+        <Input label="Email" scale="sm" placeholder="example@email.com" />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
-        <Input label="メール" scale="md" placeholder="example@email.com" />
+        <Input label="Email" scale="md" placeholder="example@email.com" />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
-        <Input label="メール" scale="lg" placeholder="example@email.com" />
+        <Input label="Email" scale="lg" placeholder="example@email.com" />
       </div>
     </div>
   ),
@@ -136,12 +136,12 @@ export const MobileTouch: Story = {
   render: () => (
     <div className="cs:space-y-4">
       <p className="cs:text-xs cs:text-gray-500">
-        モバイルではタッチターゲット44px以上・フォントサイズ16px（iOSズーム防止）が適用されます。
+        On mobile, touch targets of 44px+ and font size 16px (to prevent iOS zoom) are applied.
       </p>
-      <Input label="メール" scale="xs" placeholder="extra small" />
-      <Input label="メール" scale="sm" placeholder="small" />
-      <Input label="メール" scale="md" placeholder="standard" />
-      <Input label="メール" scale="lg" placeholder="large" />
+      <Input label="Email" scale="xs" placeholder="extra small" />
+      <Input label="Email" scale="sm" placeholder="small" />
+      <Input label="Email" scale="md" placeholder="standard" />
+      <Input label="Email" scale="lg" placeholder="large" />
     </div>
   ),
 };

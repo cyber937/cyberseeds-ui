@@ -36,7 +36,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Basic: Story = {
   args: {
-    label: "電話番号",
+    label: "Phone Number",
     scale: "md",
     color: "blue",
     isInvalid: false,
@@ -60,19 +60,19 @@ export const Scales: Story = {
       <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
         <div>
           <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
-          <PhoneInput label="電話番号" scale="xs" value={xs} onChange={setXs} />
+          <PhoneInput label="Phone Number" scale="xs" value={xs} onChange={setXs} />
         </div>
         <div>
           <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
-          <PhoneInput label="電話番号" scale="sm" value={sm} onChange={setSm} />
+          <PhoneInput label="Phone Number" scale="sm" value={sm} onChange={setSm} />
         </div>
         <div>
           <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
-          <PhoneInput label="電話番号" scale="md" value={md} onChange={setMd} />
+          <PhoneInput label="Phone Number" scale="md" value={md} onChange={setMd} />
         </div>
         <div>
           <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
-          <PhoneInput label="電話番号" scale="lg" value={lg} onChange={setLg} />
+          <PhoneInput label="Phone Number" scale="lg" value={lg} onChange={setLg} />
         </div>
       </div>
     );

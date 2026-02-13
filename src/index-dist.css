@@ -4,6 +4,15 @@
 @import "tailwindcss/utilities.css" layer(utilities) prefix(cs);
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Minimal reset — only box-sizing (required for components with fixed height + padding) */
+@layer base {
+  *,
+  ::after,
+  ::before {
+    box-sizing: border-box;
+  }
+}
+
 /* Color System — CSS variable-based styles for all colors (v1.0.0 unified) */
 .cs-btn-primary {
   background-color: var(--cs-ui-base);

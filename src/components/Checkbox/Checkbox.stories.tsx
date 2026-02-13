@@ -98,19 +98,19 @@ export const Scales: Story = {
     <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:md:grid-cols-4 cs:gap-4 cs:md:gap-6">
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Extra Small (xs)</p>
-        <Checkbox label="利用規約に同意" scale="xs" color="blue" />
+        <Checkbox label="Agree to terms" scale="xs" color="blue" />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Small (sm)</p>
-        <Checkbox label="利用規約に同意" scale="sm" color="blue" />
+        <Checkbox label="Agree to terms" scale="sm" color="blue" />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Standard (md)</p>
-        <Checkbox label="利用規約に同意" scale="md" color="blue" />
+        <Checkbox label="Agree to terms" scale="md" color="blue" />
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
-        <Checkbox label="利用規約に同意" scale="lg" color="blue" />
+        <Checkbox label="Agree to terms" scale="lg" color="blue" />
       </div>
     </div>
   ),

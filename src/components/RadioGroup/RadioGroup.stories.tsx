@@ -52,9 +52,9 @@ export const Default: Story = {
     const [gender, setGender] = useState<string>("male");
     return (
       <RadioGroup {...args} value={gender} onChange={setGender}>
-        <RadioGroup.Option label="男性" value="male" />
-        <RadioGroup.Option label="女性" value="female" />
-        <RadioGroup.Option label="その他" value="other" />
+        <RadioGroup.Option label="Male" value="male" />
+        <RadioGroup.Option label="Female" value="female" />
+        <RadioGroup.Option label="Other" value="other" />
       </RadioGroup>
     );
   },
@@ -75,9 +75,9 @@ export const Scale: Story = {
             value={xsVal}
             onChange={setXsVal}
           >
-            <RadioGroup.Option label="男性" value="male" />
-            <RadioGroup.Option label="女性" value="female" />
-            <RadioGroup.Option label="その他" value="other" />
+            <RadioGroup.Option label="Male" value="male" />
+            <RadioGroup.Option label="Female" value="female" />
+            <RadioGroup.Option label="Other" value="other" />
           </RadioGroup>
         </GroupBox>
         <GroupBox label="Small (sm)">
@@ -87,9 +87,9 @@ export const Scale: Story = {
             value={smVal}
             onChange={setSmVal}
           >
-            <RadioGroup.Option label="男性" value="male" />
-            <RadioGroup.Option label="女性" value="female" />
-            <RadioGroup.Option label="その他" value="other" />
+            <RadioGroup.Option label="Male" value="male" />
+            <RadioGroup.Option label="Female" value="female" />
+            <RadioGroup.Option label="Other" value="other" />
           </RadioGroup>
         </GroupBox>
         <GroupBox label="Standard (md)">
@@ -99,9 +99,9 @@ export const Scale: Story = {
             value={mdVal}
             onChange={setMdVal}
           >
-            <RadioGroup.Option label="男性" value="male" />
-            <RadioGroup.Option label="女性" value="female" />
-            <RadioGroup.Option label="その他" value="other" />
+            <RadioGroup.Option label="Male" value="male" />
+            <RadioGroup.Option label="Female" value="female" />
+            <RadioGroup.Option label="Other" value="other" />
           </RadioGroup>
         </GroupBox>
         <GroupBox label="Large (lg)">
@@ -111,9 +111,9 @@ export const Scale: Story = {
             value={lgVal}
             onChange={setLgVal}
           >
-            <RadioGroup.Option label="男性" value="male" />
-            <RadioGroup.Option label="女性" value="female" />
-            <RadioGroup.Option label="その他" value="other" />
+            <RadioGroup.Option label="Male" value="male" />
+            <RadioGroup.Option label="Female" value="female" />
+            <RadioGroup.Option label="Other" value="other" />
           </RadioGroup>
         </GroupBox>
       </div>

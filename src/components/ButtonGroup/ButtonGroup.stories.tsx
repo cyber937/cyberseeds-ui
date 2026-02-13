@@ -32,10 +32,10 @@ export const Default: Story = {
   },
   render: (args) => (
     <ButtonGroup {...args}>
-      <ButtonGroup.Item value="all">全員</ButtonGroup.Item>
-      <ButtonGroup.Item value="student">生徒</ButtonGroup.Item>
-      <ButtonGroup.Item value="parent">保護者</ButtonGroup.Item>
-      <ButtonGroup.Item value="staff">教務</ButtonGroup.Item>
+      <ButtonGroup.Item value="all">All</ButtonGroup.Item>
+      <ButtonGroup.Item value="student">Students</ButtonGroup.Item>
+      <ButtonGroup.Item value="parent">Parents</ButtonGroup.Item>
+      <ButtonGroup.Item value="staff">Staff</ButtonGroup.Item>
     </ButtonGroup>
   ),
 };
@@ -46,12 +46,12 @@ export const Controlled: Story = {
     return (
       <div className="cs:space-y-4">
         <ButtonGroup value={value} onChange={setValue}>
-          <ButtonGroup.Item value="all">全員</ButtonGroup.Item>
-          <ButtonGroup.Item value="student">生徒</ButtonGroup.Item>
-          <ButtonGroup.Item value="parent">保護者</ButtonGroup.Item>
-          <ButtonGroup.Item value="staff">教務</ButtonGroup.Item>
+          <ButtonGroup.Item value="all">All</ButtonGroup.Item>
+          <ButtonGroup.Item value="student">Students</ButtonGroup.Item>
+          <ButtonGroup.Item value="parent">Parents</ButtonGroup.Item>
+          <ButtonGroup.Item value="staff">Staff</ButtonGroup.Item>
         </ButtonGroup>
-        <p className="cs:text-sm cs:text-gray-500">選択中: {String(value)}</p>
+        <p className="cs:text-sm cs:text-gray-500">Selected: {String(value)}</p>
       </div>
     );
   },
@@ -63,12 +63,12 @@ export const MultiSelect: Story = {
     return (
       <div className="cs:space-y-4">
         <ButtonGroup multiple value={value} onChange={setValue}>
-          <ButtonGroup.Item value="read">読み取り</ButtonGroup.Item>
-          <ButtonGroup.Item value="write">書き込み</ButtonGroup.Item>
-          <ButtonGroup.Item value="delete">削除</ButtonGroup.Item>
-          <ButtonGroup.Item value="admin">管理</ButtonGroup.Item>
+          <ButtonGroup.Item value="read">Read</ButtonGroup.Item>
+          <ButtonGroup.Item value="write">Write</ButtonGroup.Item>
+          <ButtonGroup.Item value="delete">Delete</ButtonGroup.Item>
+          <ButtonGroup.Item value="admin">Admin</ButtonGroup.Item>
         </ButtonGroup>
-        <p className="cs:text-sm cs:text-gray-500">選択中: {Array.isArray(value) ? value.join(", ") : value}</p>
+        <p className="cs:text-sm cs:text-gray-500">Selected: {Array.isArray(value) ? value.join(", ") : value}</p>
       </div>
     );
   },
@@ -114,26 +114,26 @@ export const FullWidth: Story = {
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-1">fullWidth</p>
         <ButtonGroup defaultValue="all" fullWidth>
-          <ButtonGroup.Item value="all">全員</ButtonGroup.Item>
-          <ButtonGroup.Item value="student">生徒</ButtonGroup.Item>
-          <ButtonGroup.Item value="parent">保護者</ButtonGroup.Item>
-          <ButtonGroup.Item value="staff">教務</ButtonGroup.Item>
+          <ButtonGroup.Item value="all">All</ButtonGroup.Item>
+          <ButtonGroup.Item value="student">Students</ButtonGroup.Item>
+          <ButtonGroup.Item value="parent">Parents</ButtonGroup.Item>
+          <ButtonGroup.Item value="staff">Staff</ButtonGroup.Item>
         </ButtonGroup>
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-1">fullWidth (2 items)</p>
         <ButtonGroup defaultValue="lending" fullWidth>
-          <ButtonGroup.Item value="lending">貸出</ButtonGroup.Item>
-          <ButtonGroup.Item value="return">返却</ButtonGroup.Item>
+          <ButtonGroup.Item value="lending">Lending</ButtonGroup.Item>
+          <ButtonGroup.Item value="return">Return</ButtonGroup.Item>
         </ButtonGroup>
       </div>
       <div>
         <p className="cs:text-xs cs:text-gray-500 cs:mb-1">default (inline)</p>
         <ButtonGroup defaultValue="all">
-          <ButtonGroup.Item value="all">全員</ButtonGroup.Item>
-          <ButtonGroup.Item value="student">生徒</ButtonGroup.Item>
-          <ButtonGroup.Item value="parent">保護者</ButtonGroup.Item>
-          <ButtonGroup.Item value="staff">教務</ButtonGroup.Item>
+          <ButtonGroup.Item value="all">All</ButtonGroup.Item>
+          <ButtonGroup.Item value="student">Students</ButtonGroup.Item>
+          <ButtonGroup.Item value="parent">Parents</ButtonGroup.Item>
+          <ButtonGroup.Item value="staff">Staff</ButtonGroup.Item>
         </ButtonGroup>
       </div>
     </div>
@@ -143,9 +143,9 @@ export const FullWidth: Story = {
 export const WithDisabled: Story = {
   render: () => (
     <ButtonGroup defaultValue="a">
-      <ButtonGroup.Item value="a">有効</ButtonGroup.Item>
-      <ButtonGroup.Item value="b" disabled>無効</ButtonGroup.Item>
-      <ButtonGroup.Item value="c">有効</ButtonGroup.Item>
+      <ButtonGroup.Item value="a">Enabled</ButtonGroup.Item>
+      <ButtonGroup.Item value="b" disabled>Disabled</ButtonGroup.Item>
+      <ButtonGroup.Item value="c">Enabled</ButtonGroup.Item>
     </ButtonGroup>
   ),
 };

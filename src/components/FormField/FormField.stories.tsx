@@ -29,9 +29,9 @@ export const Default: Story = {
   },
   render: (args) => (
     <FormField {...args}>
-      <FormField.Label>メールアドレス</FormField.Label>
+      <FormField.Label>Email Address</FormField.Label>
       <Input type="email" placeholder="example@email.com" />
-      <FormField.Help>有効なメールアドレスを入力してください</FormField.Help>
+      <FormField.Help>Please enter a valid email address</FormField.Help>
     </FormField>
   ),
 };
@@ -43,9 +43,9 @@ export const WithError: Story = {
   },
   render: (args) => (
     <FormField {...args}>
-      <FormField.Label>ユーザー名</FormField.Label>
-      <Input placeholder="ユーザー名を入力" />
-      <FormField.Error>ユーザー名は必須です</FormField.Error>
+      <FormField.Label>Username</FormField.Label>
+      <Input placeholder="Enter username" />
+      <FormField.Error>Username is required</FormField.Error>
     </FormField>
   ),
 };
@@ -53,9 +53,9 @@ export const WithError: Story = {
 export const WithHelp: Story = {
   render: () => (
     <FormField>
-      <FormField.Label>パスワード</FormField.Label>
-      <Input type="password" placeholder="パスワードを入力" />
-      <FormField.Help>8文字以上で、英数字を含めてください</FormField.Help>
+      <FormField.Label>Password</FormField.Label>
+      <Input type="password" placeholder="Enter password" />
+      <FormField.Help>Must be at least 8 characters with alphanumeric characters</FormField.Help>
     </FormField>
   ),
 };
@@ -63,8 +63,8 @@ export const WithHelp: Story = {
 export const Required: Story = {
   render: () => (
     <FormField isRequired>
-      <FormField.Label>名前</FormField.Label>
-      <Input placeholder="名前を入力" />
+      <FormField.Label>Name</FormField.Label>
+      <Input placeholder="Enter name" />
     </FormField>
   ),
 };
@@ -72,9 +72,9 @@ export const Required: Story = {
 export const Disabled: Story = {
   render: () => (
     <FormField isDisabled>
-      <FormField.Label>メールアドレス</FormField.Label>
-      <Input placeholder="変更できません" />
-      <FormField.Help>このフィールドは無効です</FormField.Help>
+      <FormField.Label>Email Address</FormField.Label>
+      <Input placeholder="Cannot be changed" />
+      <FormField.Help>This field is disabled</FormField.Help>
     </FormField>
   ),
 };
@@ -82,9 +82,9 @@ export const Disabled: Story = {
 export const WithTextArea: Story = {
   render: () => (
     <FormField isRequired>
-      <FormField.Label>コメント</FormField.Label>
-      <TextArea placeholder="コメントを入力してください" rows={4} />
-      <FormField.Help>最大500文字まで入力できます</FormField.Help>
+      <FormField.Label>Comment</FormField.Label>
+      <TextArea placeholder="Enter your comment" rows={4} />
+      <FormField.Help>Up to 500 characters</FormField.Help>
     </FormField>
   ),
 };
@@ -92,12 +92,12 @@ export const WithTextArea: Story = {
 export const WithSelect: Story = {
   render: () => (
     <FormField isRequired>
-      <FormField.Label>カテゴリ</FormField.Label>
+      <FormField.Label>Category</FormField.Label>
       <Select>
-        <SelectOption label="選択してください" value="" />
-        <SelectOption label="技術" value="tech" />
-        <SelectOption label="デザイン" value="design" />
-        <SelectOption label="マーケティング" value="marketing" />
+        <SelectOption label="Please select" value="" />
+        <SelectOption label="Technology" value="tech" />
+        <SelectOption label="Design" value="design" />
+        <SelectOption label="Marketing" value="marketing" />
       </Select>
     </FormField>
   ),
@@ -108,30 +108,30 @@ export const Scales: Story = {
     <div className="cs:grid cs:grid-cols-1 cs:sm:grid-cols-2 cs:gap-4 cs:sm:gap-6">
       <GroupBox label="Extra Small (xs)">
         <FormField scale="xs" isRequired>
-          <FormField.Label>メールアドレス</FormField.Label>
+          <FormField.Label>Email Address</FormField.Label>
           <Input type="email" placeholder="example@email.com" />
-          <FormField.Help>有効なメールアドレスを入力</FormField.Help>
+          <FormField.Help>Enter a valid email address</FormField.Help>
         </FormField>
       </GroupBox>
       <GroupBox label="Small (sm)">
         <FormField scale="sm" isRequired>
-          <FormField.Label>メールアドレス</FormField.Label>
+          <FormField.Label>Email Address</FormField.Label>
           <Input type="email" placeholder="example@email.com" />
-          <FormField.Help>有効なメールアドレスを入力</FormField.Help>
+          <FormField.Help>Enter a valid email address</FormField.Help>
         </FormField>
       </GroupBox>
       <GroupBox label="Standard (md)">
         <FormField scale="md" isRequired>
-          <FormField.Label>メールアドレス</FormField.Label>
+          <FormField.Label>Email Address</FormField.Label>
           <Input type="email" placeholder="example@email.com" />
-          <FormField.Help>有効なメールアドレスを入力</FormField.Help>
+          <FormField.Help>Enter a valid email address</FormField.Help>
         </FormField>
       </GroupBox>
       <GroupBox label="Large (lg)">
         <FormField scale="lg" isRequired>
-          <FormField.Label>メールアドレス</FormField.Label>
+          <FormField.Label>Email Address</FormField.Label>
           <Input type="email" placeholder="example@email.com" />
-          <FormField.Help>有効なメールアドレスを入力</FormField.Help>
+          <FormField.Help>Enter a valid email address</FormField.Help>
         </FormField>
       </GroupBox>
     </div>
@@ -142,30 +142,30 @@ export const CompleteForm: Story = {
   render: () => (
     <div className="cs:space-y-4 cs:max-w-md">
       <FormField isRequired>
-        <FormField.Label>名前</FormField.Label>
-        <Input placeholder="山田 太郎" />
+        <FormField.Label>Name</FormField.Label>
+        <Input placeholder="John Doe" />
       </FormField>
 
       <FormField isRequired isInvalid>
-        <FormField.Label>メールアドレス</FormField.Label>
+        <FormField.Label>Email Address</FormField.Label>
         <Input type="email" placeholder="example@email.com" />
-        <FormField.Error>有効なメールアドレスを入力してください</FormField.Error>
+        <FormField.Error>Please enter a valid email address</FormField.Error>
       </FormField>
 
       <FormField isRequired>
-        <FormField.Label>カテゴリ</FormField.Label>
+        <FormField.Label>Category</FormField.Label>
         <Select>
-          <SelectOption label="選択してください" value="" />
-          <SelectOption label="お問い合わせ" value="inquiry" />
-          <SelectOption label="フィードバック" value="feedback" />
-          <SelectOption label="バグ報告" value="bug" />
+          <SelectOption label="Please select" value="" />
+          <SelectOption label="Inquiry" value="inquiry" />
+          <SelectOption label="Feedback" value="feedback" />
+          <SelectOption label="Bug Report" value="bug" />
         </Select>
       </FormField>
 
       <FormField>
-        <FormField.Label>メッセージ</FormField.Label>
-        <TextArea placeholder="メッセージを入力してください" rows={4} />
-        <FormField.Help>最大1000文字まで入力できます</FormField.Help>
+        <FormField.Label>Message</FormField.Label>
+        <TextArea placeholder="Enter your message" rows={4} />
+        <FormField.Help>Up to 1000 characters</FormField.Help>
       </FormField>
     </div>
   ),

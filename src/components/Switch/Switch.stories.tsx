@@ -54,8 +54,8 @@ const BasicSwitch = (args: React.ComponentProps<typeof Switch>) => {
       {...args}
       checked={value}
       onClick={() => setValue(!value)}
-      onLabel="オン"
-      offLabel="オフ"
+      onLabel="ON"
+      offLabel="OFF"
     />
   );
 };
@@ -83,8 +83,8 @@ export const Scale: Story = {
             scale="xs"
             checked={xsSwitch}
             onClick={() => setXsSwitch(!xsSwitch)}
-            onLabel="オン"
-            offLabel="オフ"
+            onLabel="ON"
+            offLabel="OFF"
           />
         </div>
         <div>
@@ -93,8 +93,8 @@ export const Scale: Story = {
             scale="sm"
             checked={smSwitch}
             onClick={() => setSmSwitch(!smSwitch)}
-            onLabel="オン"
-            offLabel="オフ"
+            onLabel="ON"
+            offLabel="OFF"
           />
         </div>
         <div>
@@ -102,8 +102,8 @@ export const Scale: Story = {
           <Switch
             checked={mdSwitch}
             onClick={() => setMdSwitch(!mdSwitch)}
-            onLabel="オン"
-            offLabel="オフ"
+            onLabel="ON"
+            offLabel="OFF"
           />
         </div>
         <div>
@@ -112,8 +112,8 @@ export const Scale: Story = {
             scale="lg"
             checked={lgSwitch}
             onClick={() => setLgSwitch(!lgSwitch)}
-            onLabel="オン"
-            offLabel="オフ"
+            onLabel="ON"
+            offLabel="OFF"
           />
         </div>
       </div>

@@ -22,7 +22,7 @@ export const Default: Story = {
   render: () => (
     <Card>
       <Card.Body>
-        シンプルなカードコンテンツです。
+        Simple card content.
       </Card.Body>
     </Card>
   ),
@@ -31,13 +31,13 @@ export const Default: Story = {
 export const WithHeaderAndFooter: Story = {
   render: () => (
     <Card>
-      <Card.Header>カードタイトル</Card.Header>
+      <Card.Header>Card Title</Card.Header>
       <Card.Body>
-        カードの本文コンテンツです。ヘッダーとフッター付きのレイアウトを使用しています。
+        Card body content. This layout uses a header and footer.
       </Card.Body>
       <Card.Footer>
-        <Button variant="secondary" scale="sm">キャンセル</Button>
-        <Button scale="sm">保存</Button>
+        <Button variant="secondary" scale="sm">Cancel</Button>
+        <Button scale="sm">Save</Button>
       </Card.Footer>
     </Card>
   ),
@@ -49,7 +49,7 @@ export const Scales: Story = {
       {(["xs", "sm", "md", "lg"] as const).map(scale => (
         <Card key={scale} scale={scale}>
           <Card.Header>Scale: {scale}</Card.Header>
-          <Card.Body>パディングが {scale} サイズです。</Card.Body>
+          <Card.Body>Padding is {scale} size.</Card.Body>
         </Card>
       ))}
     </div>
@@ -59,7 +59,7 @@ export const Scales: Story = {
 export const WithoutBorder: Story = {
   render: () => (
     <Card bordered={false}>
-      <Card.Body>ボーダーなしのカードです。</Card.Body>
+      <Card.Body>Card without border.</Card.Body>
     </Card>
   ),
 };
@@ -67,7 +67,7 @@ export const WithoutBorder: Story = {
 export const WithoutShadow: Story = {
   render: () => (
     <Card shadow={false}>
-      <Card.Body>シャドウなしのカードです。</Card.Body>
+      <Card.Body>Card without shadow.</Card.Body>
     </Card>
   ),
 };
@@ -75,16 +75,16 @@ export const WithoutShadow: Story = {
 export const Composed: Story = {
   render: () => (
     <Card>
-      <Card.Header>ユーザー登録</Card.Header>
+      <Card.Header>User Registration</Card.Header>
       <Card.Body>
         <div className="cs:space-y-3">
-          <Input label="名前" placeholder="山田太郎" />
-          <Input label="メールアドレス" placeholder="example@mail.com" />
+          <Input label="Name" placeholder="John Doe" />
+          <Input label="Email Address" placeholder="example@mail.com" />
         </div>
       </Card.Body>
       <Card.Footer>
-        <Button variant="secondary" scale="sm">キャンセル</Button>
-        <Button scale="sm" color="green">登録</Button>
+        <Button variant="secondary" scale="sm">Cancel</Button>
+        <Button scale="sm" color="green">Register</Button>
       </Card.Footer>
     </Card>
   ),
