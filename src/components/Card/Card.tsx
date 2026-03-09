@@ -15,6 +15,19 @@ interface CardSectionProps {
   className?: string;
 }
 
+interface CardStatProps {
+  /** カードのラベル */
+  label: string;
+  /** 表示する数値 */
+  value: number | string;
+  /** サブテキスト（例: "退学 4 / 卒業 1"） */
+  subText?: string;
+  /** クリック時のコールバック */
+  onClick?: () => void;
+  /** 追加 className */
+  className?: string;
+}
+
 type CardContextType = { scale: Scale };
 const CardContext = createContext<CardContextType | null>(null);
 
@@ -47,7 +60,7 @@ export function Card({
     <CardContext.Provider value={{ scale }}>
       <div
         className={clsx(
-          "cs:bg-white cs:dark:bg-gray-800 cs:rounded-xl cs:font-sans cs:overflow-hidden",
+          "cs:bg-white cs:dark:bg-gray-800 cs:rounded-lg cs:font-sans cs:overflow-hidden",
           bordered && "cs:border cs:border-gray-200 cs:dark:border-gray-700",
           shadow && "cs:shadow-sm",
           className,
@@ -104,6 +117,73 @@ function CardFooter({ children, className }: CardSectionProps) {
   );
 }
 
+function CardStat({ label, value, subText, onClick, className }: CardStatProps) {
+  const { scale } = useCardContext();
+
+  const labelSizeMap: Record<Scale, string> = {
+    xs: "cs:text-xs",
+    sm: "cs:text-xs",
+    md: "cs:text-sm",
+    lg: "cs:text-sm",
+  };
+
+  const valueSizeMap: Record<Scale, string> = {
+    xs: "cs:text-lg",
+    sm: "cs:text-xl",
+    md: "cs:text-2xl",
+    lg: "cs:text-3xl",
+  };
+
+  const subTextSizeMap: Record<Scale, string> = {
+    xs: "cs:text-[10px]",
+    sm: "cs:text-xs",
+    md: "cs:text-xs",
+    lg: "cs:text-sm",
+  };
+
+  const content = (
+    <>
+      <p className={clsx(labelSizeMap[scale], "cs:text-gray-500 cs:dark:text-gray-400")}>
+        {label}
+      </p>
+      <p className={clsx(valueSizeMap[scale], "cs:font-bold cs:text-gray-900 cs:dark:text-gray-100")}>
+        {value}
+      </p>
+      {subText && (
+        <p className={clsx(subTextSizeMap[scale], "cs:text-gray-400 cs:dark:text-gray-500 cs:mt-1")}>
+          {subText}
+        </p>
+      )}
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className={clsx(
+          paddingMap[scale],
+          "cs:w-full cs:text-left cs:cursor-pointer",
+          "cs:rounded-lg cs:transition-shadow",
+          "cs:hover:ring-2 cs:hover:ring-offset-2 cs:hover:ring-indigo-500",
+          "cs:focus:outline-none cs:focus:ring-2 cs:focus:ring-offset-2 cs:focus:ring-indigo-500",
+          className,
+        )}
+      >
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <div className={clsx(paddingMap[scale], className)}>
+      {content}
+    </div>
+  );
+}
+
 Card.Header = CardHeader;
 Card.Body = CardBody;
 Card.Footer = CardFooter;
+Card.Stat = CardStat;

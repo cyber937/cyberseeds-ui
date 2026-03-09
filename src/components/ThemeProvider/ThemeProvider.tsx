@@ -7,11 +7,6 @@ import {
 
 const QUERY = "(prefers-color-scheme: dark)";
 
-function getSystemTheme(): ResolvedTheme {
-  if (typeof window === "undefined") return "light";
-  return window.matchMedia(QUERY).matches ? "dark" : "light";
-}
-
 interface ThemeProviderProps {
   children: ReactNode;
   mode?: ThemeMode;
@@ -28,11 +23,13 @@ export function ThemeProvider({
   const isControlled = controlledMode !== undefined;
   const mode = isControlled ? controlledMode : uncontrolledMode;
 
-  const [systemTheme, setSystemTheme] = useState<ResolvedTheme>(getSystemTheme);
+  // Always start with "light" to match SSR, then sync in useEffect
+  const [systemTheme, setSystemTheme] = useState<ResolvedTheme>("light");
 
-  // Listen for system theme changes
+  // Sync system theme on mount and listen for changes
   useEffect(() => {
     const mql = window.matchMedia(QUERY);
+    setSystemTheme(mql.matches ? "dark" : "light");
     const handler = (e: MediaQueryListEvent) => {
       setSystemTheme(e.matches ? "dark" : "light");
     };

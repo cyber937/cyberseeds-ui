@@ -78,7 +78,7 @@ type SelectOptionProps = {
 
 export function SelectOption({ label, value, ...props }: SelectOptionProps) {
   return (
-    <option value={value} {...props}>
+    <option value={value} className="cs:bg-white cs:text-gray-900 cs:dark:bg-gray-800 cs:dark:text-gray-200" {...props}>
       {label}
     </option>
   );

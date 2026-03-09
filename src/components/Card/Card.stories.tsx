@@ -89,3 +89,77 @@ export const Composed: Story = {
     </Card>
   ),
 };
+
+export const StatCard: Story = {
+  render: () => (
+    <div className="cs:w-48">
+      <Card>
+        <Card.Stat label="Total Students" value={120} />
+      </Card>
+    </div>
+  ),
+};
+
+export const StatCardWithSubText: Story = {
+  render: () => (
+    <div className="cs:w-48">
+      <Card>
+        <Card.Stat
+          label="Inactive"
+          value={5}
+          subText="Withdrawn 4 / Graduated 1"
+        />
+      </Card>
+    </div>
+  ),
+};
+
+export const StatCardClickable: Story = {
+  render: () => (
+    <div className="cs:w-48">
+      <Card>
+        <Card.Stat
+          label="Pending"
+          value={15}
+          onClick={() => alert("Clicked!")}
+        />
+      </Card>
+    </div>
+  ),
+};
+
+export const StatCardGrid: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-2 md:cs:grid-cols-5 cs:gap-4">
+      <Card>
+        <Card.Stat label="Total" value={25} subText="Withdrawn 4 / Graduated 1" />
+      </Card>
+      <Card className="cs:bg-blue-50 cs:dark:bg-blue-950">
+        <Card.Stat label="Submitted" value={10} />
+      </Card>
+      <Card className="cs:bg-green-50 cs:dark:bg-green-950">
+        <Card.Stat label="Approved" value={8} />
+      </Card>
+      <Card className="cs:bg-gray-50 cs:dark:bg-gray-800">
+        <Card.Stat label="Rejected" value={2} />
+      </Card>
+      <Card className="cs:bg-amber-50 cs:dark:bg-amber-950">
+        <Card.Stat label="Not Submitted" value={5} subText="Survey only" />
+      </Card>
+    </div>
+  ),
+};
+
+export const StatCardScales: Story = {
+  render: () => (
+    <div className="cs:space-y-4">
+      {(["xs", "sm", "md", "lg"] as const).map(scale => (
+        <div key={scale} className="cs:w-48">
+          <Card scale={scale}>
+            <Card.Stat label={`Scale: ${scale}`} value={42} subText="Sub text" />
+          </Card>
+        </div>
+      ))}
+    </div>
+  ),
+};

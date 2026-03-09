@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, act } from "@testing-library/react";
+import { render, screen, act, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { ThemeProvider } from "./ThemeProvider";
 import { useTheme } from "./useTheme";
@@ -59,14 +59,16 @@ describe("ThemeProvider", () => {
       expect(screen.getByTestId("resolved")).toHaveTextContent("light");
     });
 
-    it("resolves system mode to dark when prefers-color-scheme is dark", () => {
+    it("resolves system mode to dark when prefers-color-scheme is dark", async () => {
       mockMatchMedia(true);
       render(
         <ThemeProvider>
           <ThemeDisplay />
         </ThemeProvider>,
       );
-      expect(screen.getByTestId("resolved")).toHaveTextContent("dark");
+      await waitFor(() => {
+        expect(screen.getByTestId("resolved")).toHaveTextContent("dark");
+      });
     });
 
     it("respects explicit light mode", () => {
@@ -93,26 +95,30 @@ describe("ThemeProvider", () => {
   });
 
   describe("dark class", () => {
-    it("adds dark class when resolved theme is dark", () => {
+    it("adds dark class when resolved theme is dark", async () => {
       mockMatchMedia(false);
       render(
         <ThemeProvider mode="dark">
           <ThemeDisplay />
         </ThemeProvider>,
       );
-      const wrapper = screen.getByTestId("mode").closest(".dark");
-      expect(wrapper).toBeInTheDocument();
+      await waitFor(() => {
+        const wrapper = screen.getByTestId("mode").closest(".dark");
+        expect(wrapper).toBeInTheDocument();
+      });
     });
 
-    it("does not add dark class when resolved theme is light", () => {
+    it("does not add dark class when resolved theme is light", async () => {
       mockMatchMedia(false);
       render(
         <ThemeProvider mode="light">
           <ThemeDisplay />
         </ThemeProvider>,
       );
-      const wrapper = screen.getByTestId("mode").closest(".dark");
-      expect(wrapper).toBeNull();
+      await waitFor(() => {
+        const wrapper = screen.getByTestId("mode").closest(".dark");
+        expect(wrapper).toBeNull();
+      });
     });
   });
 
