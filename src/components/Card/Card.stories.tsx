@@ -134,17 +134,17 @@ export const StatCardGrid: Story = {
       <Card>
         <Card.Stat label="Total" value={25} subText="Withdrawn 4 / Graduated 1" />
       </Card>
-      <Card className="cs:bg-blue-50 cs:dark:bg-blue-950">
-        <Card.Stat label="Submitted" value={10} />
+      <Card bgColor="cs:bg-blue-50 cs:dark:bg-blue-950">
+        <Card.Stat label="Submitted" value={10} labelColor="cs:text-blue-600" valueColor="cs:text-blue-800" />
       </Card>
-      <Card className="cs:bg-green-50 cs:dark:bg-green-950">
-        <Card.Stat label="Approved" value={8} />
+      <Card bgColor="cs:bg-green-50 cs:dark:bg-green-950">
+        <Card.Stat label="Approved" value={8} labelColor="cs:text-green-600" valueColor="cs:text-green-800" />
       </Card>
-      <Card className="cs:bg-gray-50 cs:dark:bg-gray-800">
-        <Card.Stat label="Rejected" value={2} />
+      <Card bgColor="cs:bg-gray-50 cs:dark:bg-gray-800">
+        <Card.Stat label="Rejected" value={2} labelColor="cs:text-gray-600" valueColor="cs:text-gray-800" />
       </Card>
-      <Card className="cs:bg-amber-50 cs:dark:bg-amber-950">
-        <Card.Stat label="Not Submitted" value={5} subText="Survey only" />
+      <Card bgColor="cs:bg-amber-50 cs:dark:bg-amber-950">
+        <Card.Stat label="Not Submitted" value={5} subText="Survey only" labelColor="cs:text-amber-600" valueColor="cs:text-amber-800" subTextColor="cs:text-amber-500" />
       </Card>
     </div>
   ),

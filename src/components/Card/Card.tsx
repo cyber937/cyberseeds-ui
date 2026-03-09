@@ -7,6 +7,8 @@ interface CardProps {
   scale?: Scale;
   shadow?: boolean;
   bordered?: boolean;
+  /** 背景色クラス（例: "cs:bg-blue-50"）。指定時はデフォルトの白背景を上書き */
+  bgColor?: string;
   className?: string;
 }
 
@@ -24,6 +26,12 @@ interface CardStatProps {
   subText?: string;
   /** クリック時のコールバック */
   onClick?: () => void;
+  /** ラベルのテキスト色クラス（例: "cs:text-blue-600"） */
+  labelColor?: string;
+  /** 数値のテキスト色クラス（例: "cs:text-blue-800"） */
+  valueColor?: string;
+  /** サブテキストのテキスト色クラス（例: "cs:text-blue-400"） */
+  subTextColor?: string;
   /** 追加 className */
   className?: string;
 }
@@ -54,13 +62,15 @@ export function Card({
   scale = "md",
   shadow = true,
   bordered = true,
+  bgColor,
   className,
 }: CardProps) {
   return (
     <CardContext.Provider value={{ scale }}>
       <div
         className={clsx(
-          "cs:bg-white cs:dark:bg-gray-800 cs:rounded-lg cs:font-sans cs:overflow-hidden",
+          "cs:rounded-lg cs:font-sans cs:overflow-hidden",
+          bgColor ?? "cs:bg-white cs:dark:bg-gray-800",
           bordered && "cs:border cs:border-gray-200 cs:dark:border-gray-700",
           shadow && "cs:shadow-sm",
           className,
@@ -117,7 +127,7 @@ function CardFooter({ children, className }: CardSectionProps) {
   );
 }
 
-function CardStat({ label, value, subText, onClick, className }: CardStatProps) {
+function CardStat({ label, value, subText, onClick, labelColor, valueColor, subTextColor, className }: CardStatProps) {
   const { scale } = useCardContext();
 
   const labelSizeMap: Record<Scale, string> = {
@@ -143,14 +153,14 @@ function CardStat({ label, value, subText, onClick, className }: CardStatProps) 
 
   const content = (
     <>
-      <p className={clsx(labelSizeMap[scale], "cs:text-gray-500 cs:dark:text-gray-400")}>
+      <p className={clsx(labelSizeMap[scale], labelColor ?? "cs:text-gray-500 cs:dark:text-gray-400")}>
         {label}
       </p>
-      <p className={clsx(valueSizeMap[scale], "cs:font-bold cs:text-gray-900 cs:dark:text-gray-100")}>
+      <p className={clsx(valueSizeMap[scale], "cs:font-bold", valueColor ?? "cs:text-gray-900 cs:dark:text-gray-100")}>
         {value}
       </p>
       {subText && (
-        <p className={clsx(subTextSizeMap[scale], "cs:text-gray-400 cs:dark:text-gray-500 cs:mt-1")}>
+        <p className={clsx(subTextSizeMap[scale], "cs:mt-1", subTextColor ?? "cs:text-gray-400 cs:dark:text-gray-500")}>
           {subText}
         </p>
       )}

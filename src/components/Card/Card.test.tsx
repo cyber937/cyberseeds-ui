@@ -72,6 +72,19 @@ describe('Card Component', () => {
     });
   });
 
+  describe('Background Color', () => {
+    it('has default white background', () => {
+      const { container } = render(<Card>Content</Card>);
+      expect(container.firstElementChild?.className).toContain('cs:bg-white');
+    });
+
+    it('uses custom bgColor and removes default', () => {
+      const { container } = render(<Card bgColor="cs:bg-blue-50">Content</Card>);
+      expect(container.firstElementChild?.className).toContain('cs:bg-blue-50');
+      expect(container.firstElementChild?.className).not.toContain('cs:bg-white');
+    });
+  });
+
   describe('Border', () => {
     it('has border class by default', () => {
       const { container } = render(<Card>Content</Card>);
@@ -209,6 +222,36 @@ describe('Card Component', () => {
         </Card>
       );
       expect(screen.getByText('Active')).toBeInTheDocument();
+    });
+
+    it('applies custom label color', () => {
+      render(
+        <Card>
+          <Card.Stat label="Custom" value={1} labelColor="cs:text-blue-600" />
+        </Card>
+      );
+      expect(screen.getByText('Custom').className).toContain('cs:text-blue-600');
+      expect(screen.getByText('Custom').className).not.toContain('cs:text-gray-500');
+    });
+
+    it('applies custom value color', () => {
+      render(
+        <Card>
+          <Card.Stat label="Label" value={42} valueColor="cs:text-blue-800" />
+        </Card>
+      );
+      expect(screen.getByText('42').className).toContain('cs:text-blue-800');
+      expect(screen.getByText('42').className).not.toContain('cs:text-gray-900');
+    });
+
+    it('applies custom subText color', () => {
+      render(
+        <Card>
+          <Card.Stat label="Label" value={1} subText="Details" subTextColor="cs:text-amber-500" />
+        </Card>
+      );
+      expect(screen.getByText('Details').className).toContain('cs:text-amber-500');
+      expect(screen.getByText('Details').className).not.toContain('cs:text-gray-400');
     });
   });
 });
