@@ -90,3 +90,13 @@ export const ThreeSteps: Story = {
     currentStep: 1,
   },
 };
+
+export const MobileView: Story = {
+  args: {
+    steps: librarySteps,
+    currentStep: 2,
+  },
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+};
