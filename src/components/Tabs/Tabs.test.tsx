@@ -189,4 +189,80 @@ describe("Tabs Component", () => {
       expect(screen.getByRole("tabpanel")).toHaveAttribute("tabindex", "0");
     });
   });
+
+  describe("asChild", () => {
+    function AsChildTabs({ value, onChange }: { value: string; onChange?: (v: string) => void }) {
+      return (
+        <Tabs value={value} onChange={onChange}>
+          <Tabs.List>
+            <Tabs.Trigger value="tab1" asChild>
+              <a href="#tab1">Tab 1</a>
+            </Tabs.Trigger>
+            <Tabs.Trigger value="tab2" asChild>
+              <a href="#tab2">Tab 2</a>
+            </Tabs.Trigger>
+            <Tabs.Trigger value="tab3" asChild>
+              <a href="#tab3">Tab 3</a>
+            </Tabs.Trigger>
+          </Tabs.List>
+        </Tabs>
+      );
+    }
+
+    it("renders child element instead of button", () => {
+      render(<AsChildTabs value="tab1" />);
+      const tabs = screen.getAllByRole("tab");
+      expect(tabs).toHaveLength(3);
+      // Should be <a> elements, not <button>
+      expect(tabs[0].tagName).toBe("A");
+      expect(tabs[1].tagName).toBe("A");
+    });
+
+    it("merges ARIA attributes onto child element", () => {
+      render(<AsChildTabs value="tab1" />);
+      const tab1 = screen.getByText("Tab 1");
+      expect(tab1).toHaveAttribute("role", "tab");
+      expect(tab1).toHaveAttribute("aria-selected", "true");
+      expect(tab1).toHaveAttribute("tabindex", "0");
+      expect(tab1).toHaveAttribute("href", "#tab1");
+    });
+
+    it("inactive tab has aria-selected=false and tabindex=-1", () => {
+      render(<AsChildTabs value="tab1" />);
+      const tab2 = screen.getByText("Tab 2");
+      expect(tab2).toHaveAttribute("aria-selected", "false");
+      expect(tab2).toHaveAttribute("tabindex", "-1");
+    });
+
+    it("calls onChange when child is clicked", () => {
+      const onChange = vi.fn();
+      render(<AsChildTabs value="tab1" onChange={onChange} />);
+      fireEvent.click(screen.getByText("Tab 2"));
+      expect(onChange).toHaveBeenCalledWith("tab2");
+    });
+
+    it("keyboard navigation works with asChild elements", () => {
+      const onChange = vi.fn();
+      render(<AsChildTabs value="tab1" onChange={onChange} />);
+      const tab1 = screen.getByText("Tab 1");
+      tab1.focus();
+      fireEvent.keyDown(tab1, { key: "ArrowRight" });
+      expect(onChange).toHaveBeenCalledWith("tab2");
+    });
+
+    it("merges className from both Trigger and child", () => {
+      render(
+        <Tabs value="tab1">
+          <Tabs.List>
+            <Tabs.Trigger value="tab1" asChild className="trigger-class">
+              <a href="#tab1" className="child-class">Tab 1</a>
+            </Tabs.Trigger>
+          </Tabs.List>
+        </Tabs>,
+      );
+      const tab = screen.getByText("Tab 1");
+      expect(tab.className).toContain("trigger-class");
+      expect(tab.className).toContain("child-class");
+    });
+  });
 });

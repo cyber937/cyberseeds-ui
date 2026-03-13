@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import {
+import React, {
   type KeyboardEvent,
   type ReactNode,
   useCallback,
@@ -13,6 +13,7 @@ import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING, TOUCH_TARGET_MIN, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
+import { Slot } from "../Slot/Slot";
 import { TabsContext, useTabsContext } from "./TabsContext";
 
 interface TabsProps {
@@ -35,6 +36,7 @@ interface TabsTriggerProps {
   value: string;
   disabled?: boolean;
   className?: string;
+  asChild?: boolean;
 }
 
 interface TabsContentProps {
@@ -119,9 +121,9 @@ function TabsList({ children, className }: TabsListProps) {
 
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
     const tabs = Array.from(
-      e.currentTarget.querySelectorAll<HTMLButtonElement>('[role="tab"]:not([disabled])'),
+      e.currentTarget.querySelectorAll<HTMLElement>('[role="tab"]:not([disabled]):not([aria-disabled="true"])'),
     );
-    const currentIndex = tabs.indexOf(e.target as HTMLButtonElement);
+    const currentIndex = tabs.indexOf(e.target as HTMLElement);
     if (currentIndex === -1) return;
 
     let nextIndex: number | null = null;
@@ -196,18 +198,18 @@ function TabsList({ children, className }: TabsListProps) {
   );
 }
 
-function TabsTrigger({ children, value, disabled = false, className }: TabsTriggerProps) {
+function TabsTrigger({ children, value, disabled = false, className, asChild = false }: TabsTriggerProps) {
   const ctx = useTabsContext();
   const isActive = ctx.activeValue === value;
   const tabId = `${ctx.baseId}-tab-${value}`;
   const panelId = `${ctx.baseId}-panel-${value}`;
-  const buttonRef = useRef<HTMLButtonElement>(null);
+  const elRef = useRef<HTMLElement>(null);
 
   const colorStyle = colorToCSSVars(ctx.color);
 
   useEffect(() => {
-    if (isActive && buttonRef.current) {
-      buttonRef.current.scrollIntoView?.({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    if (isActive && elRef.current) {
+      elRef.current.scrollIntoView?.({ behavior: "smooth", block: "nearest", inline: "nearest" });
     }
   }, [isActive]);
 
@@ -215,24 +217,36 @@ function TabsTrigger({ children, value, disabled = false, className }: TabsTrigg
     ? "cs:border-b-2 cs:-mb-px cs-tab-active"
     : "cs:text-gray-500 cs:dark:text-gray-400 cs:hover:text-gray-700 cs:dark:hover:text-gray-300";
 
+  const sharedProps = {
+    role: "tab" as const,
+    id: tabId,
+    "aria-selected": isActive,
+    ...(!asChild && { "aria-controls": panelId }),
+    tabIndex: isActive ? 0 : -1,
+    style: isActive ? colorStyle : undefined,
+    onClick: () => ctx.onChange(value),
+    className: clsx(
+      `cs:border-0 cs:shadow-none cs:font-medium cs:whitespace-nowrap cs:no-underline ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
+      scaleMap[ctx.scale ?? "md"],
+      activeClasses,
+      className,
+    ),
+  };
+
+  if (asChild) {
+    return (
+      <Slot ref={elRef} {...sharedProps}>
+        {children as React.ReactElement}
+      </Slot>
+    );
+  }
+
   return (
     <button
-      ref={buttonRef}
+      ref={elRef as React.RefObject<HTMLButtonElement>}
       type="button"
-      role="tab"
-      id={tabId}
-      aria-selected={isActive}
-      aria-controls={panelId}
-      tabIndex={isActive ? 0 : -1}
       disabled={disabled}
-      style={isActive ? colorStyle : undefined}
-      onClick={() => ctx.onChange(value)}
-      className={clsx(
-        `cs:border-0 cs:shadow-none cs:font-medium cs:whitespace-nowrap ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
-        scaleMap[ctx.scale ?? "md"],
-        activeClasses,
-        className,
-      )}
+      {...sharedProps}
     >
       {children}
     </button>

@@ -191,3 +191,23 @@ export const MobileScroll: Story = {
     </Tabs>
   ),
 };
+
+/** asChild パターン — Trigger を `<a>` としてレンダリング。Next.js の `<Link>` でも同様に使用可能。 */
+export const LinkNavigation: Story = {
+  name: "Link Navigation (asChild)",
+  render: () => (
+    <Tabs value="account">
+      <Tabs.List>
+        <Tabs.Trigger value="account" asChild>
+          <a href="#account">Account</a>
+        </Tabs.Trigger>
+        <Tabs.Trigger value="password" asChild>
+          <a href="#password">Password</a>
+        </Tabs.Trigger>
+        <Tabs.Trigger value="billing" asChild>
+          <a href="#billing">Billing</a>
+        </Tabs.Trigger>
+      </Tabs.List>
+    </Tabs>
+  ),
+};
