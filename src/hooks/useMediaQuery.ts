@@ -1,12 +1,8 @@
 import { useEffect, useState } from "react";
 
-function getInitialState(query: string): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia(query).matches;
-}
-
 export function useMediaQuery(query: string): boolean {
-  const [matches, setMatches] = useState(() => getInitialState(query));
+  // SSR・初回レンダリングは常にfalseで統一し、hydration mismatchを防止
+  const [matches, setMatches] = useState(false);
 
   useEffect(() => {
     const mql = window.matchMedia(query);
