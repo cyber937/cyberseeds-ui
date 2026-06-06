@@ -34,6 +34,23 @@
   - `prefers-reduced-motion: reduce` を尊重して slide / fade transition を抑制
   - backdrop click でも `onClose` を発火
 
+- **`Breadcrumb` 複合コンポーネント** — 深い階層ナビゲーションで道筋を表示するためのシンプルな compound。`Breadcrumb` (root) + `Breadcrumb.Item` の 2 つだけで構成。`Breadcrumb.Item` に `href` を渡すと `<a>` でリンク、`current` を渡すと `<span aria-current="page">` で plain text に変わる (= 最後の項目)。`separator` prop でデフォルトの `"/"` を任意の文字列・SVG・ReactNode に差し替え可能。
+
+  ```tsx
+  <Breadcrumb>
+    <Breadcrumb.Item href="/">Home</Breadcrumb.Item>
+    <Breadcrumb.Item href="/items">Items</Breadcrumb.Item>
+    <Breadcrumb.Item current>SKU-1234</Breadcrumb.Item>
+  </Breadcrumb>
+
+  // カスタム separator (SVG, chevron 等)
+  <Breadcrumb separator="›">...</Breadcrumb>
+  ```
+
+  - root は `<nav aria-label="Breadcrumb">` + `<ol>` で WAI-ARIA / WCAG に準拠
+  - 自動的に最終項目の後ろの separator を省略
+  - dark mode 対応
+
 ## Unreleased
 
 ### New Features

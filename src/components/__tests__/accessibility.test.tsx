@@ -17,6 +17,7 @@ import * as TextAreaStories from '../TextArea/TextArea.stories';
 import * as PhoneInputStories from '../PhoneInput/PhoneInput.stories';
 import * as RadioGroupStories from '../RadioGroup/RadioGroup.stories';
 import * as BadgeStories from '../Badge/Badge.stories';
+import * as BreadcrumbStories from '../Breadcrumb/Breadcrumb.stories';
 import * as FormFieldStories from '../FormField/FormField.stories';
 import * as ProgressStories from '../Progress/Progress.stories';
 import * as SpinnerStories from '../Spinner/Spinner.stories';
@@ -53,6 +54,7 @@ const TextAreaComposed = composeStories(TextAreaStories);
 const PhoneInputComposed = composeStories(PhoneInputStories);
 const RadioGroupComposed = composeStories(RadioGroupStories);
 const BadgeComposed = composeStories(BadgeStories);
+const BreadcrumbComposed = composeStories(BreadcrumbStories);
 const FormFieldComposed = composeStories(FormFieldStories);
 const ProgressComposed = composeStories(ProgressStories);
 const SpinnerComposed = composeStories(SpinnerStories);
@@ -195,6 +197,16 @@ describe('Accessibility Tests', () => {
 
   describe('Badge Component A11y', () => {
     Object.entries(BadgeComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Breadcrumb Component A11y', () => {
+    Object.entries(BreadcrumbComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);

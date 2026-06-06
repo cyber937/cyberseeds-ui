@@ -4,6 +4,7 @@ export type { AlertVariant } from "./Alert/Alert";
 export { Avatar } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
 export type { BadgeVariant } from "./Badge/Badge";
+export { Breadcrumb } from "./Breadcrumb/Breadcrumb";
 export { Button } from "./Button/Button";
 export { ButtonGroup } from "./ButtonGroup";
 export type { ButtonGroupContextType } from "./ButtonGroup/ButtonGroupContext";

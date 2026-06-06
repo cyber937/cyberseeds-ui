@@ -17,6 +17,7 @@ const componentEntries = {
   Alert: "src/components/Alert/Alert.tsx",
   Avatar: "src/components/Avatar/Avatar.tsx",
   Badge: "src/components/Badge/Badge.tsx",
+  Breadcrumb: "src/components/Breadcrumb/Breadcrumb.tsx",
   Button: "src/components/Button/Button.tsx",
   ButtonGroup: "src/components/ButtonGroup/index.tsx",
   ButtonTabs: "src/components/ButtonTabs/index.tsx",
