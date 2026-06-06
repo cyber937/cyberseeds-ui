@@ -73,6 +73,22 @@
   </Table>
   ```
 
+- **`Combobox` コンポーネント** — 検索可能な単一選択ドロップダウン。WAI-ARIA 1.2 combobox パターンに準拠し、ArrowUp/Down/Home/End/Enter/Escape/Tab のキーボードナビゲーションをサポート。`options: ComboboxOption[]` で選択肢を受け取り、case-insensitive substring filter がデフォルトで動作（`filter` プロップで上書き可）。`clearable` (default true)、`disabled` オプション、`isInvalid`、`name`（hidden input でフォーム連携）を含む。
+
+  ```tsx
+  <Combobox
+    options={[
+      { value: "apple", label: "Apple" },
+      { value: "banana", label: "Banana" },
+    ]}
+    value={selectedId}
+    onChange={setSelectedId}
+    placeholder="Pick a fruit"
+  />
+  ```
+
+  **v1 のスコープ外**（将来 PR で追加検討）: 複数選択、非同期/サーバ駆動オプション、フリーテキスト入力、option グルーピング、仮想化、Floating UI による表示位置フリップ。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
