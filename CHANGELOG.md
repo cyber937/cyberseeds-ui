@@ -41,6 +41,17 @@
   <Skeleton lines={3} />
   ```
 
+- **`Pagination` コンポーネント** — `offset` / `limit` / `total` / `onChange` 4 つの controlled props で動作する Prev/Next 型ページネーション。"X-Y of Z" のカウントを内蔵（`showSummary={false}` で非表示可）。境界では Prev/Next ボタンを自動 disable、Prev は 0 にクランプ。`previousLabel` / `nextLabel` で多言語対応。`role="navigation" aria-label="Pagination"` で SR 対応。
+
+  ```tsx
+  <Pagination
+    offset={offset}
+    limit={50}
+    total={total}
+    onChange={(next) => setOffset(next)}
+  />
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
