@@ -52,6 +52,27 @@
   />
   ```
 
+- **`Table` 複合コンポーネント** — `Table` / `Table.Head` / `Table.Body` / `Table.Row` / `Table.HeaderCell` / `Table.Cell` の compound 構造で in-memory 一覧を表示。`scale` は React context で全セルに伝播するので prop drilling 不要。`striped` で偶数行ストライプ、`bordered` (default true) で外側丸枠、`interactive` を Row につけると hover / cursor、`numeric` を Cell につけると `tabular-nums`、`align` で text-align。TanStack Table の headless モードと組み合わせて使えるよう、各 compound は標準 HTML 属性を素通しする。
+
+  ```tsx
+  <Table scale="md" striped>
+    <Table.Head>
+      <Table.Row>
+        <Table.HeaderCell>SKU</Table.HeaderCell>
+        <Table.HeaderCell align="right">On hand</Table.HeaderCell>
+      </Table.Row>
+    </Table.Head>
+    <Table.Body>
+      {rows.map(r => (
+        <Table.Row key={r.sku} interactive onClick={() => open(r)}>
+          <Table.Cell>{r.sku}</Table.Cell>
+          <Table.Cell align="right" numeric>{r.onHand}</Table.Cell>
+        </Table.Row>
+      ))}
+    </Table.Body>
+  </Table>
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
