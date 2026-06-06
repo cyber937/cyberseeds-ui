@@ -5,7 +5,7 @@ import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorU
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
-type BadgeVariant = "solid" | "outline" | "dot";
+export type BadgeVariant = "solid" | "outline" | "dot";
 
 interface BadgeProps {
   children?: ReactNode;
