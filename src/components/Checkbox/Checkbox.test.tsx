@@ -27,9 +27,33 @@ describe('Checkbox Component', () => {
     it('handles change events', () => {
       const handleChange = vi.fn();
       render(<Checkbox onChange={handleChange} />);
-      
+
       const checkbox = screen.getByRole('checkbox');
       fireEvent.click(checkbox);
+      expect(handleChange).toHaveBeenCalledTimes(1);
+    });
+
+    it('invokes onCheckedChange with the new checked state', () => {
+      const handleCheckedChange = vi.fn();
+      render(<Checkbox onCheckedChange={handleCheckedChange} />);
+
+      fireEvent.click(screen.getByRole('checkbox'));
+      expect(handleCheckedChange).toHaveBeenCalledTimes(1);
+      expect(handleCheckedChange).toHaveBeenCalledWith(true);
+    });
+
+    it('calls both onCheckedChange and onChange', () => {
+      const handleCheckedChange = vi.fn();
+      const handleChange = vi.fn();
+      render(
+        <Checkbox
+          onCheckedChange={handleCheckedChange}
+          onChange={handleChange}
+        />
+      );
+
+      fireEvent.click(screen.getByRole('checkbox'));
+      expect(handleCheckedChange).toHaveBeenCalledWith(true);
       expect(handleChange).toHaveBeenCalledTimes(1);
     });
 

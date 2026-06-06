@@ -8,6 +8,15 @@ interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
   label?: string;
   scale?: Scale;
   color?: Color;
+  /**
+   * Typed callback that receives the next checked state on every toggle.
+   *
+   * Equivalent to writing `onChange={(e) => fn(e.target.checked)}`, but
+   * matches the API surface of {@link Switch} so callers can swap between
+   * them without rewriting the handler. The raw `onChange(event)` still
+   * fires for callers that need the original event.
+   */
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 const gapScaleMap: Record<Scale, string> = {
@@ -43,6 +52,8 @@ export function Checkbox({
   color = "blue",
   label,
   id: externalId,
+  onCheckedChange,
+  onChange,
   ...props
 }: CheckboxProps) {
   const generatedId = useId();
@@ -53,6 +64,11 @@ export function Checkbox({
   const finalUIColor = resolveColor(contextUIColor ?? color);
 
   const colorStyle = colorToCSSVars(finalUIColor);
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onCheckedChange?.(event.target.checked);
+    onChange?.(event);
+  };
 
   return (
     <div className={`cs:flex cs:max-md:min-h-11 cs:max-md:items-center ${gapScaleMap[scale]}`}>
@@ -65,6 +81,7 @@ export function Checkbox({
             type="checkbox"
             style={colorStyle}
             className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:checked:bg-gray-200 cs:forced-colors:appearance-auto cs-checked`}
+            onChange={handleChange}
             {...props}
           />
           <svg

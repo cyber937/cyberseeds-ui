@@ -9,6 +9,15 @@ interface SwitchProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
   scale?: Scale;
   color?: Color;
   checked?: boolean;
+  /**
+   * Called with the *next* checked state when the user toggles the switch.
+   *
+   * The underlying element is a `<button>` (not an `<input type="checkbox">`),
+   * so the inherited `onChange` event never fires. Use `onCheckedChange` for a
+   * typed, React-idiomatic callback. `onClick` still works for callers that
+   * want the raw event.
+   */
+  onCheckedChange?: (checked: boolean) => void;
   onLabel?: string;
   offLabel?: string;
   disabled?: boolean;
@@ -46,10 +55,12 @@ export function Switch({
   scale = "md",
   color = "blue",
   checked = false,
+  onCheckedChange,
   onLabel = "オン",
   offLabel = "オフ",
   disabled = false,
   id: externalId,
+  onClick,
   ...props
 }: SwitchProps) {
   const generatedId = useId();
@@ -60,6 +71,13 @@ export function Switch({
   const finalUIColor = resolveColor(contextUIColor ?? color);
 
   const colorStyle = colorToCSSVars(finalUIColor);
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    // Order matters: fire the typed callback first so that consumers updating
+    // state see it before any onClick side effects (analytics, focus, etc.).
+    onCheckedChange?.(!checked);
+    onClick?.(event);
+  };
 
   return (
     <div className="cs:flex cs:gap-1 cs:items-center cs:max-md:min-h-11">
@@ -79,6 +97,7 @@ export function Switch({
             ? "cs-bg cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-700"
             : "cs:bg-gray-300 cs:dark:bg-gray-600 cs:disabled:bg-gray-200 cs:dark:disabled:bg-gray-700"
         )}
+        onClick={handleClick}
         {...props}
       >
         <div
