@@ -149,3 +149,27 @@ export const WithDisabled: Story = {
     </ButtonGroup>
   ),
 };
+
+export const Vertical: Story = {
+  render: () => (
+    <div className="cs:flex cs:gap-8">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Single-select, vertical (ArrowUp/Down)</p>
+        <ButtonGroup defaultValue="dashboard" orientation="vertical">
+          <ButtonGroup.Item value="dashboard">Dashboard</ButtonGroup.Item>
+          <ButtonGroup.Item value="items">Items</ButtonGroup.Item>
+          <ButtonGroup.Item value="movements">Movements</ButtonGroup.Item>
+          <ButtonGroup.Item value="settings">Settings</ButtonGroup.Item>
+        </ButtonGroup>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Multi-select, vertical</p>
+        <ButtonGroup defaultValue={["a", "c"]} multiple orientation="vertical">
+          <ButtonGroup.Item value="a">Apples</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">Bananas</ButtonGroup.Item>
+          <ButtonGroup.Item value="c">Cherries</ButtonGroup.Item>
+        </ButtonGroup>
+      </div>
+    </div>
+  ),
+};
