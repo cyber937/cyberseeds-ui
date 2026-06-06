@@ -16,6 +16,22 @@
   <Radio checked={x} onCheckedChange={setX} />
   ```
 
+- **`EmptyState` コンポーネント** — リストやテーブルが空のときに表示する placeholder。
+  - 中央寄せの `icon` / `title` / `description` / `action` 4 スロット
+  - `Alert` よりも控えめな視覚（点線ボーダー、色なし）で「長期的な空状態」を表現
+  - 一時的なフィードバックは引き続き `Alert` を使う、永続的な「データなし」は `EmptyState` を使う、という棲み分け
+  - `scale="xs" | "sm" | "md" | "lg"` でパディング / フォントサイズ調整
+  - `role="status"` でスクリーンリーダーが空状態を告知
+
+  ```tsx
+  <EmptyState
+    icon="📦"
+    title="No items yet"
+    description="Import an .xlsx workbook or create your first item to get started."
+    action={<Button>Import</Button>}
+  />
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
