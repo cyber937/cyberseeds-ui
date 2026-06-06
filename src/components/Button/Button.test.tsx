@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
 import * as stories from './Button.stories';
 import { Button } from './Button';
@@ -29,13 +30,33 @@ describe('Button Component', () => {
   });
 
   describe('Component Functionality', () => {
-    it('handles click events', () => {
+    it('handles click events', async () => {
+      const user = userEvent.setup();
       const handleClick = vi.fn();
       render(<Button onClick={handleClick}>Click me</Button>);
-      
+
       const button = screen.getByRole('button');
-      fireEvent.click(button);
+      await user.click(button);
       expect(handleClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('does not fire click when disabled (userEvent respects pointer-events)', async () => {
+      const user = userEvent.setup();
+      const handleClick = vi.fn();
+      render(<Button disabled onClick={handleClick}>Disabled</Button>);
+      await user.click(screen.getByRole('button'));
+      expect(handleClick).not.toHaveBeenCalled();
+    });
+
+    it('handles keyboard activation (Enter and Space) like a real button', async () => {
+      const user = userEvent.setup();
+      const handleClick = vi.fn();
+      render(<Button onClick={handleClick}>Activate</Button>);
+      const button = screen.getByRole('button');
+      button.focus();
+      await user.keyboard('{Enter}');
+      await user.keyboard(' ');
+      expect(handleClick).toHaveBeenCalledTimes(2);
     });
 
     it('can be disabled', () => {

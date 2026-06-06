@@ -169,6 +169,12 @@
   - `Select`: `Disabled`、`States` (Default / Invalid / Disabled / Pre-selected を並列)
 - **Radio に story ファイルを新規作成** — 今まで `Radio.stories.tsx` が無く、Radio は `RadioGroup` 経由でしか視覚確認できなかった。`Default` / `Checked` / `Disabled` / `Scales` / `Color` (20 色)/ `States` の 6 stories を追加。
 
+### Test Quality
+
+- **`@testing-library/user-event` への段階移行を開始** — `Button` / `Switch` / `Input` / `Checkbox` の test で `fireEvent.click` / `fireEvent.change` を `user.click()` / `user.type()` に置き換えた。`userEvent` は実ブラウザ挙動に近い (pointerdown → mousedown → focus → mouseup → click のシーケンス, `:disabled` の pointer-events check, per-keystroke `change` event 等) ため、 `fireEvent` だと通過していた潜在バグを検知できるようになる。
+- **`Button.test.tsx` に新規 2 件追加**: `userEvent` を使うことで初めて書ける検証 (disabled 時に click が物理的に届かないこと、Enter/Space キー activation がネイティブ button と同じく発火すること) を実装。
+- **`CLAUDE.md` に testing convention セクションを追加** — 新規 test は `userEvent` 優先、 `fireEvent` は `transitionEnd` 等のシミュレートで止むを得ない時のみ、と運用ルールを明文化。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
