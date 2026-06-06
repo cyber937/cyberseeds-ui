@@ -14,6 +14,7 @@ export { createSemanticColorMap } from "./Constants/semanticColor";
 export type { SemanticColorMap, SemanticColorName } from "./Constants/semanticColor";
 export { PRESET_COLOR_VARS } from "./Constants/presetColorVars";
 export type { Color, CustomColor, PresetColor, ResolvedCustomColor, Scale, SemanticColor, Variant } from "./DesignSystemUtils";
+export { EmptyState } from "./EmptyState/EmptyState";
 export { FormField } from "./FormField/FormField";
 export { useFormField } from "./FormField/FormFieldContext";
 export { GroupBox } from "./GroupBox/GroupBox";
