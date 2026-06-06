@@ -101,6 +101,15 @@
   <Checkbox ref={ref} className="self-end" />
   ```
 
+### Accessibility
+
+- **Switch: WCAG AA contrast on light backgrounds** — `Switch` の thumb（白丸）が `amber` / `yellow` / `lime` の -600 トラック上に乗ると UI コンポーネントの contrast 比 3:1 を下回るため、これらのカラーが選択され、かつ `checked` の時のみ thumb の background を `gray-900` に切り替えるようにした。`Button` / `Badge` / `Checkbox` / `Radio` で確立済みの `LIGHT_BG_COLORS` パターンを踏襲。`unchecked` 時はトラックがグレーなので白 thumb のまま。
+- **PillBox: 既存設計が AA 達成済みを検証** — `PillBox` は pastel `-50` background + `--cs-ui-lightText`（カラーシステムが各色の `-700` shade を算出）でテキストを描画しており、全パレットで WCAG AA を満たしているため、`LIGHT_BG_COLORS` のオーバーライドは不要。これを `color-contrast.test.tsx` に検証ケースとして固定。
+
+### Tests
+
+- `src/components/__tests__/color-contrast.test.ts` → `.tsx` にリネーム（コンポーネントを実際に render して検証するため）。`Switch` の thumb 色切替（light/dark カラー両方） と `PillBox` の `cs-pill` 配線を検証する 11 件の test を追加。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
