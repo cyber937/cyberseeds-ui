@@ -23,6 +23,7 @@ const componentEntries = {
   Card: "src/components/Card/Card.tsx",
   Checkbox: "src/components/Checkbox/Checkbox.tsx",
   Combobox: "src/components/Combobox/Combobox.tsx",
+  Drawer: "src/components/Drawer/Drawer.tsx",
   EmptyState: "src/components/EmptyState/EmptyState.tsx",
   FormField: "src/components/FormField/FormField.tsx",
   GroupBox: "src/components/GroupBox/GroupBox.tsx",

@@ -13,6 +13,7 @@ export { Card } from "./Card/Card";
 export { Checkbox } from "./Checkbox/Checkbox";
 export { Combobox } from "./Combobox/Combobox";
 export type { ComboboxOption } from "./Combobox/Combobox";
+export { Drawer } from "./Drawer/Drawer";
 export { LIGHT_BG_COLORS } from "./Constants/colorContrast";
 export { colorToCSSVars, isCustomColor, isPresetColor, isSemanticColor, resolveColor } from "./Constants/colorUtils";
 export { generateShadesFromBase, resolveCustomColor } from "./Constants/colorShadeGenerator";

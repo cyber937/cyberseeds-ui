@@ -74,6 +74,11 @@
       "import": "./dist/Combobox.js",
       "default": "./dist/Combobox.js"
     },
+    "./Drawer": {
+      "types": "./dist/Drawer.d.ts",
+      "import": "./dist/Drawer.js",
+      "default": "./dist/Drawer.js"
+    },
     "./EmptyState": {
       "types": "./dist/EmptyState.d.ts",
       "import": "./dist/EmptyState.js",
