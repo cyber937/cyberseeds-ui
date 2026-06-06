@@ -11,18 +11,183 @@
     "dist",
     "dist/style.css"
   ],
-  "main": "dist/cyberseeds-ui.js",
-  "module": "dist/cyberseeds-ui.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
   "types": "./dist/index.d.ts",
   "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/cyberseeds-ui.js",
-      "default": "./dist/cyberseeds-ui.js"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
     "./style.css": {
       "default": "./dist/style.css"
+    },
+    "./Accordion": {
+      "types": "./dist/Accordion.d.ts",
+      "import": "./dist/Accordion.js",
+      "default": "./dist/Accordion.js"
+    },
+    "./Alert": {
+      "types": "./dist/Alert.d.ts",
+      "import": "./dist/Alert.js",
+      "default": "./dist/Alert.js"
+    },
+    "./Badge": {
+      "types": "./dist/Badge.d.ts",
+      "import": "./dist/Badge.js",
+      "default": "./dist/Badge.js"
+    },
+    "./Button": {
+      "types": "./dist/Button.d.ts",
+      "import": "./dist/Button.js",
+      "default": "./dist/Button.js"
+    },
+    "./ButtonGroup": {
+      "types": "./dist/ButtonGroup.d.ts",
+      "import": "./dist/ButtonGroup.js",
+      "default": "./dist/ButtonGroup.js"
+    },
+    "./ButtonTabs": {
+      "types": "./dist/ButtonTabs.d.ts",
+      "import": "./dist/ButtonTabs.js",
+      "default": "./dist/ButtonTabs.js"
+    },
+    "./Card": {
+      "types": "./dist/Card.d.ts",
+      "import": "./dist/Card.js",
+      "default": "./dist/Card.js"
+    },
+    "./Checkbox": {
+      "types": "./dist/Checkbox.d.ts",
+      "import": "./dist/Checkbox.js",
+      "default": "./dist/Checkbox.js"
+    },
+    "./Combobox": {
+      "types": "./dist/Combobox.d.ts",
+      "import": "./dist/Combobox.js",
+      "default": "./dist/Combobox.js"
+    },
+    "./EmptyState": {
+      "types": "./dist/EmptyState.d.ts",
+      "import": "./dist/EmptyState.js",
+      "default": "./dist/EmptyState.js"
+    },
+    "./FormField": {
+      "types": "./dist/FormField.d.ts",
+      "import": "./dist/FormField.js",
+      "default": "./dist/FormField.js"
+    },
+    "./GroupBox": {
+      "types": "./dist/GroupBox.d.ts",
+      "import": "./dist/GroupBox.js",
+      "default": "./dist/GroupBox.js"
+    },
+    "./Input": {
+      "types": "./dist/Input.d.ts",
+      "import": "./dist/Input.js",
+      "default": "./dist/Input.js"
+    },
+    "./Label": {
+      "types": "./dist/Label.d.ts",
+      "import": "./dist/Label.js",
+      "default": "./dist/Label.js"
+    },
+    "./Modal": {
+      "types": "./dist/Modal.d.ts",
+      "import": "./dist/Modal.js",
+      "default": "./dist/Modal.js"
+    },
+    "./Pagination": {
+      "types": "./dist/Pagination.d.ts",
+      "import": "./dist/Pagination.js",
+      "default": "./dist/Pagination.js"
+    },
+    "./PhoneInput": {
+      "types": "./dist/PhoneInput.d.ts",
+      "import": "./dist/PhoneInput.js",
+      "default": "./dist/PhoneInput.js"
+    },
+    "./PillBox": {
+      "types": "./dist/PillBox.d.ts",
+      "import": "./dist/PillBox.js",
+      "default": "./dist/PillBox.js"
+    },
+    "./Progress": {
+      "types": "./dist/Progress.d.ts",
+      "import": "./dist/Progress.js",
+      "default": "./dist/Progress.js"
+    },
+    "./Radio": {
+      "types": "./dist/Radio.d.ts",
+      "import": "./dist/Radio.js",
+      "default": "./dist/Radio.js"
+    },
+    "./RadioGroup": {
+      "types": "./dist/RadioGroup.d.ts",
+      "import": "./dist/RadioGroup.js",
+      "default": "./dist/RadioGroup.js"
+    },
+    "./Select": {
+      "types": "./dist/Select.d.ts",
+      "import": "./dist/Select.js",
+      "default": "./dist/Select.js"
+    },
+    "./Skeleton": {
+      "types": "./dist/Skeleton.d.ts",
+      "import": "./dist/Skeleton.js",
+      "default": "./dist/Skeleton.js"
+    },
+    "./Spinner": {
+      "types": "./dist/Spinner.d.ts",
+      "import": "./dist/Spinner.js",
+      "default": "./dist/Spinner.js"
+    },
+    "./Stepper": {
+      "types": "./dist/Stepper.d.ts",
+      "import": "./dist/Stepper.js",
+      "default": "./dist/Stepper.js"
+    },
+    "./Switch": {
+      "types": "./dist/Switch.d.ts",
+      "import": "./dist/Switch.js",
+      "default": "./dist/Switch.js"
+    },
+    "./Table": {
+      "types": "./dist/Table.d.ts",
+      "import": "./dist/Table.js",
+      "default": "./dist/Table.js"
+    },
+    "./Tabs": {
+      "types": "./dist/Tabs.d.ts",
+      "import": "./dist/Tabs.js",
+      "default": "./dist/Tabs.js"
+    },
+    "./TextArea": {
+      "types": "./dist/TextArea.d.ts",
+      "import": "./dist/TextArea.js",
+      "default": "./dist/TextArea.js"
+    },
+    "./ThemeProvider": {
+      "types": "./dist/ThemeProvider.d.ts",
+      "import": "./dist/ThemeProvider.js",
+      "default": "./dist/ThemeProvider.js"
+    },
+    "./Toast": {
+      "types": "./dist/Toast.d.ts",
+      "import": "./dist/Toast.js",
+      "default": "./dist/Toast.js"
+    },
+    "./Tooltip": {
+      "types": "./dist/Tooltip.d.ts",
+      "import": "./dist/Tooltip.js",
+      "default": "./dist/Tooltip.js"
+    },
+    "./UIColorProvider": {
+      "types": "./dist/UIColorProvider.d.ts",
+      "import": "./dist/UIColorProvider.js",
+      "default": "./dist/UIColorProvider.js"
     }
   },
   "scripts": {
