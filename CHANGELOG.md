@@ -124,6 +124,17 @@
 
 - **`useFocusTrap(containerRef, active, options)`** — 上記の focus 管理ロジックを再利用可能なフックとして `src/hooks/useFocusTrap.ts` に切り出し。今後追加予定の Drawer / Popover などからも流用可能。`initialFocus` / `restoreFocus` を個別に opt-out 可能。
 
+### Type Exports
+
+- **公開型の export 漏れを補完** — consumer から参照したいのに `import type` できなかった以下 7 つの型を `index.tsx` から re-export した:
+  - `BadgeVariant`（Badge.tsx で宣言だけされて非 export だった）
+  - `ButtonGroupContextType` / `ButtonTabsContextType`
+  - `FormFieldContextType`
+  - `TabsContextType`
+  - `ToastState`
+  - `UIColorContextType`
+- **将来の漏れを防ぐ retest** — `src/components/__tests__/public-types.test.ts` を追加。23 個の公開型を `import type` してコンパイル時にアサインメント可能性を検証する。新しい型を public surface に追加した時はここに追記する運用に。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
