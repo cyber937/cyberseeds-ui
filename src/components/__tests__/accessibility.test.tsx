@@ -9,6 +9,7 @@ import * as InputStories from '../Input/Input.stories';
 import * as CheckboxStories from '../Checkbox/Checkbox.stories';
 import * as SelectStories from '../Select/Select.stories';
 import * as ModalStories from '../Modal/Modal.stories';
+import * as NavMenuStories from '../NavMenu/NavMenu.stories';
 import * as SwitchStories from '../Switch/Switch.stories';
 import * as GroupBoxStories from '../GroupBox/GroupBox.stories';
 import * as AccordionStories from '../Accordion/Accordion.stories';
@@ -46,6 +47,7 @@ const InputComposed = composeStories(InputStories);
 const CheckboxComposed = composeStories(CheckboxStories);
 const SelectComposed = composeStories(SelectStories);
 const ModalComposed = composeStories(ModalStories);
+const NavMenuComposed = composeStories(NavMenuStories);
 const SwitchComposed = composeStories(SwitchStories);
 const GroupBoxComposed = composeStories(GroupBoxStories);
 const AccordionComposed = composeStories(AccordionStories);
@@ -117,6 +119,16 @@ describe('Accessibility Tests', () => {
 
   describe('Modal Component A11y', () => {
     Object.entries(ModalComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('NavMenu Component A11y', () => {
+    Object.entries(NavMenuComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);

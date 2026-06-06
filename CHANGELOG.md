@@ -51,6 +51,27 @@
   - 自動的に最終項目の後ろの separator を省略
   - dark mode 対応
 
+- **`NavMenu` 複合コンポーネント** — サイドバー / 縦型ナビゲーションを `NavMenu` + `NavMenu.Section` + `NavMenu.Item` の 3 要素で構築する compound API。inventory-core の admin AppShell で手書きしていたパターンを正式に library 化した。
+
+  ```tsx
+  <NavMenu color="indigo">
+    <NavMenu.Section title="Operations">
+      <NavMenu.Item href="/" icon={<HomeIcon />}>Dashboard</NavMenu.Item>
+      <NavMenu.Item href="/items" icon={<ItemsIcon />} active>Items</NavMenu.Item>
+    </NavMenu.Section>
+    <NavMenu.Section title="Admin">
+      <NavMenu.Item href="/users" icon={<UsersIcon />} trailing={<Badge>3</Badge>}>
+        Users
+      </NavMenu.Item>
+    </NavMenu.Section>
+  </NavMenu>
+  ```
+
+  - `NavMenu.Item` は `href` 指定で `<a>`、未指定で `<button>` をレンダー (router の客先ハンドラに合わせて選べる)
+  - `active` で `aria-current="page"` を付与し、UIColor の base color を 15% 透過したハイライト bg を適用
+  - `icon` / `trailing` (badge / kbd など) スロット、`disabled` 状態 (a11y: `aria-disabled` + tabIndex=-1) もサポート
+  - root は `<nav aria-label="Main navigation">` (ariaLabel prop で変更可) で WAI-ARIA landmark を提供
+
 ## Unreleased
 
 ### New Features
