@@ -120,3 +120,61 @@ export const Scale: Story = {
     );
   },
 };
+
+export const Color: Story = {
+  render: () => {
+    const colors = [
+      "red", "orange", "amber", "yellow", "lime", "green", "emerald", "teal",
+      "cyan", "sky", "blue", "indigo", "violet", "purple", "fuchsia", "pink",
+      "gray", "zinc", "neutral", "stone",
+    ] as const;
+    return (
+      <div className="cs:grid cs:grid-cols-2 cs:sm:grid-cols-4 cs:md:grid-cols-5 cs:gap-4">
+        {colors.map((c) => (
+          <div key={c} className="cs:flex cs:items-center cs:gap-2">
+            <Switch checked color={c} onLabel="ON" offLabel="OFF" />
+            <span className="cs:text-xs cs:text-gray-500">{c}</span>
+          </div>
+        ))}
+      </div>
+    );
+  },
+};
+
+export const Disabled: Story = {
+  render: () => (
+    <div className="cs:flex cs:flex-wrap cs:gap-6 cs:items-center">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Disabled / unchecked</p>
+        <Switch disabled checked={false} onLabel="ON" offLabel="OFF" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Disabled / checked</p>
+        <Switch disabled checked onLabel="ON" offLabel="OFF" />
+      </div>
+    </div>
+  ),
+};
+
+export const States: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-2 cs:gap-4">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Unchecked</p>
+        <Switch checked={false} onLabel="ON" offLabel="OFF" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Checked</p>
+        <Switch checked onLabel="ON" offLabel="OFF" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Disabled (off)</p>
+        <Switch disabled checked={false} onLabel="ON" offLabel="OFF" />
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Disabled (on)</p>
+        <Switch disabled checked onLabel="ON" offLabel="OFF" />
+      </div>
+    </div>
+  ),
+};
