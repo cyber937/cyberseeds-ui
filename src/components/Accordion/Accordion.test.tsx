@@ -203,4 +203,41 @@ describe('Accordion Component', () => {
       expect(buttons[0]).toHaveAttribute('aria-expanded', 'true');
     });
   });
+
+  describe('Compound API', () => {
+    it('exposes Accordion.Item as an alias for AccordionItem', () => {
+      expect(Accordion.Item).toBe(AccordionItem);
+    });
+
+    it('renders identically whether children use Accordion.Item or AccordionItem', () => {
+      const { container: dotted } = render(
+        <Accordion>
+          <Accordion.Item title="A">A body</Accordion.Item>
+          <Accordion.Item title="B">B body</Accordion.Item>
+        </Accordion>
+      );
+      const dottedTitles = Array.from(dotted.querySelectorAll('button')).map(b => b.textContent);
+
+      const { container: named } = render(
+        <Accordion>
+          <AccordionItem title="A">A body</AccordionItem>
+          <AccordionItem title="B">B body</AccordionItem>
+        </Accordion>
+      );
+      const namedTitles = Array.from(named.querySelectorAll('button')).map(b => b.textContent);
+
+      expect(dottedTitles).toEqual(namedTitles);
+    });
+
+    it('lets both forms coexist inside the same Accordion (backwards compat)', () => {
+      render(
+        <Accordion>
+          <Accordion.Item title="dotted">dotted body</Accordion.Item>
+          <AccordionItem title="named">named body</AccordionItem>
+        </Accordion>
+      );
+      expect(screen.getByText('dotted')).toBeInTheDocument();
+      expect(screen.getByText('named')).toBeInTheDocument();
+    });
+  });
 });
