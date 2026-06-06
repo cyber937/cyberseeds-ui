@@ -1,6 +1,7 @@
 import { createRef } from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
 import * as stories from './Checkbox.stories';
 import { Checkbox } from './Checkbox';
@@ -25,25 +26,28 @@ describe('Checkbox Component', () => {
   });
 
   describe('Component Functionality', () => {
-    it('handles change events', () => {
+    it('handles change events', async () => {
+      const user = userEvent.setup();
       const handleChange = vi.fn();
       render(<Checkbox onChange={handleChange} />);
 
       const checkbox = screen.getByRole('checkbox');
-      fireEvent.click(checkbox);
+      await user.click(checkbox);
       expect(handleChange).toHaveBeenCalledTimes(1);
     });
 
-    it('invokes onCheckedChange with the new checked state', () => {
+    it('invokes onCheckedChange with the new checked state', async () => {
+      const user = userEvent.setup();
       const handleCheckedChange = vi.fn();
       render(<Checkbox onCheckedChange={handleCheckedChange} />);
 
-      fireEvent.click(screen.getByRole('checkbox'));
+      await user.click(screen.getByRole('checkbox'));
       expect(handleCheckedChange).toHaveBeenCalledTimes(1);
       expect(handleCheckedChange).toHaveBeenCalledWith(true);
     });
 
-    it('calls both onCheckedChange and onChange', () => {
+    it('calls both onCheckedChange and onChange', async () => {
+      const user = userEvent.setup();
       const handleCheckedChange = vi.fn();
       const handleChange = vi.fn();
       render(
@@ -53,17 +57,18 @@ describe('Checkbox Component', () => {
         />
       );
 
-      fireEvent.click(screen.getByRole('checkbox'));
+      await user.click(screen.getByRole('checkbox'));
       expect(handleCheckedChange).toHaveBeenCalledWith(true);
       expect(handleChange).toHaveBeenCalledTimes(1);
     });
 
-    it('toggles checked state', () => {
+    it('toggles checked state', async () => {
+      const user = userEvent.setup();
       render(<Checkbox />);
       const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
-      
+
       expect(checkbox.checked).toBe(false);
-      fireEvent.click(checkbox);
+      await user.click(checkbox);
       expect(checkbox.checked).toBe(true);
     });
 

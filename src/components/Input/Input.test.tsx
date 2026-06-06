@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
 import * as stories from './Input.stories';
 import { Input } from './Input';
@@ -37,13 +38,17 @@ describe('Input Component', () => {
   });
 
   describe('Component Functionality', () => {
-    it('handles input changes', () => {
+    it('handles input changes (per-keystroke, like real typing)', async () => {
+      const user = userEvent.setup();
       const handleChange = vi.fn();
       render(<Input onChange={handleChange} />);
-      
+
       const input = screen.getByRole('textbox');
-      fireEvent.change(input, { target: { value: 'test@example.com' } });
-      expect(handleChange).toHaveBeenCalled();
+      await user.type(input, 'hi');
+      // userEvent.type fires one change per character, matching real keyboard input
+      // (fireEvent.change would only fire once, masking input-bookkeeping bugs).
+      expect(handleChange).toHaveBeenCalledTimes(2);
+      expect(input).toHaveValue('hi');
     });
 
     it('renders with label', () => {

@@ -127,6 +127,35 @@ import { renderWithUIColorProvider, testColors, testScales, mockMatchMedia } fro
 - `matchMedia`, `getComputedStyle`
 - `requestAnimationFrame` / `cancelAnimationFrame`
 
+### User interaction: prefer `@testing-library/user-event` over `fireEvent`
+
+Default to `userEvent` for any test that simulates a user action (click, type, tab, keyboard activation). `fireEvent` dispatches a single low-level DOM event and misses the rest of the real interaction (`pointerdown` → `mousedown` → `focus` → `mouseup` → `click`, the `:disabled` pointer-events check on buttons, etc.), so tests that pass with `fireEvent` can still mask real bugs.
+
+```tsx
+// Preferred
+import userEvent from '@testing-library/user-event';
+
+it('handles click', async () => {
+  const user = userEvent.setup();          // create the user *outside* of any timer
+  render(<Button onClick={spy} />);
+  await user.click(screen.getByRole('button'));
+  expect(spy).toHaveBeenCalledTimes(1);
+});
+
+// Acceptable only when userEvent can't model the case (e.g. synthesizing a
+// non-trusted event, or stubbing a single transitionend / animationend hook)
+import { fireEvent } from '@testing-library/react';
+fireEvent.transitionEnd(node);
+```
+
+Notes for migration:
+- `fireEvent.click` → `await user.click(el)` — the test becomes `async`.
+- `fireEvent.change(input, { target: { value } })` → `await user.type(input, value)` (per-character) or `await user.clear(input); await user.type(input, value)` if you also need to overwrite.
+- `fireEvent.keyDown(el, { key: 'Enter' })` → `el.focus(); await user.keyboard('{Enter}')`.
+- For Escape close-on-modal / global keydown handlers attached to `document`, `fireEvent.keyDown(document, …)` is still fine — there's no element to focus.
+
+The migration is incremental — new tests use `userEvent`; old `fireEvent` tests are converted as they're touched.
+
 ### Integration Tests (`src/components/__tests__/`)
 
 | File | Purpose |
