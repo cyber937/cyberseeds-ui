@@ -32,6 +32,8 @@ export { Skeleton } from "./Skeleton/Skeleton";
 export { Spinner } from "./Spinner/Spinner";
 export { Stepper } from "./Stepper/Stepper";
 export { Switch } from "./Switch/Switch";
+export { Table } from "./Table/Table";
+export type { TableAlign } from "./Table/Table";
 export { Tabs } from "./Tabs/Tabs";
 export { TextArea } from "./TextArea/TextArea";
 export { ThemeProvider } from "./ThemeProvider/ThemeProvider";
