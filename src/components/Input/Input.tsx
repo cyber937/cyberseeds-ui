@@ -40,6 +40,7 @@ export function Input({
   const finalUIColor = resolveColor(contextUIColor ?? color);
   const mergedInvalid = isInvalid || formField?.isInvalid || false;
   const mergedDisabled = props.disabled || formField?.isDisabled || false;
+  const mergedRequired = props.required || formField?.isRequired || false;
   const mergedScale = scale ?? formField?.scale ?? "md";
 
   const describedBy = formField
@@ -60,6 +61,7 @@ export function Input({
         aria-invalid={mergedInvalid || undefined}
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
+        required={mergedRequired || undefined}
         style={colorStyle}
         className={`${baseClassName} ${className}`}
         {...props}
@@ -81,6 +83,7 @@ export function Input({
         aria-invalid={mergedInvalid || undefined}
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
+        required={mergedRequired || undefined}
         style={colorStyle}
         className={`cs:w-full ${baseClassName} ${className}`}
         {...props}

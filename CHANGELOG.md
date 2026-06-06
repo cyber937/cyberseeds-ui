@@ -152,6 +152,15 @@
   </Accordion>
   ```
 
+### Accessibility / FormField integration
+
+- **`FormField.isRequired` を form control に伝播** — `<FormField isRequired>` で囲んだ `Input` / `Select` / `TextArea` / `PhoneInput` の underlying form element に native `required` 属性が反映されるようにした。今までは `FormField.isRequired` は `FormField.Label` のアスタリスク表示にしか使われておらず、form control 側は無視していたため、ブラウザのネイティブ form validation が走らず、AT も「required」と読み上げないバグ的状態だった。
+- 個別の form control に明示的に `required` prop を渡した場合はそれが優先される（OR-merge）。`FormField` が無い場合の従来挙動は完全に保持。
+
+### FormField Tests
+
+- `FormField.isRequired.test.tsx` を追加。4 つの form control 全部で `FormField.isRequired` → `required` が伝播することと、 OR-merge / 非 FormField ケースの 7 件を検証。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features

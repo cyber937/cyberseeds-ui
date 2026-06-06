@@ -40,6 +40,7 @@ export function TextArea({
   const finalUIColor = resolveColor(contextUIColor ?? color);
   const mergedInvalid = isInvalid || formField?.isInvalid || false;
   const mergedDisabled = props.disabled || formField?.isDisabled || false;
+  const mergedRequired = props.required || formField?.isRequired || false;
   const mergedScale = scale ?? formField?.scale ?? "md";
 
   const describedBy = formField
@@ -54,6 +55,7 @@ export function TextArea({
       aria-invalid={mergedInvalid || undefined}
       aria-describedby={describedBy}
       disabled={mergedDisabled || undefined}
+      required={mergedRequired || undefined}
       style={colorStyle}
       className={`cs:border-0 cs:shadow-none cs:block cs:w-full cs:dark:bg-gray-800 cs:dark:text-gray-400 cs:rounded-md cs:disabled:bg-gray-100 cs:disabled:text-gray-400 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500 cs:outline-1 cs:-outline-offset-1 cs:placeholder:text-gray-400 ${FOCUS_RING_INSET} ${TRANSITION_NORMAL} ${
         mergedInvalid

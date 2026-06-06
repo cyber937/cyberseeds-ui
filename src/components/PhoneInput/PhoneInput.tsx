@@ -62,6 +62,7 @@ export function PhoneInput({
   const finalUIColor = resolveColor(contextUIColor ?? color);
   const mergedInvalid = isInvalid || formField?.isInvalid || false;
   const mergedDisabled = props.disabled || formField?.isDisabled || false;
+  const mergedRequired = props.required || formField?.isRequired || false;
   const mergedScale = scale ?? formField?.scale ?? "md";
 
   const describedBy = formField
@@ -166,6 +167,7 @@ export function PhoneInput({
     "aria-invalid": mergedInvalid || undefined,
     "aria-describedby": describedBy,
     disabled: mergedDisabled || undefined,
+    required: mergedRequired || undefined,
     value: value ? formatPhoneNumber(String(value)) : "",
     onChange: handleChange,
     onKeyDown: handleKeyDown,
