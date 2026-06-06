@@ -130,3 +130,52 @@ export const Invalid: Story = {
     </Select>
   ),
 };
+
+export const Disabled: Story = {
+  args: {
+    scale: "md",
+    disabled: true,
+    "aria-label": "Select",
+  },
+  render: (args) => (
+    <Select {...args}>
+      <SelectOption key="0" label="Please select" value="0" />
+      <SelectOption key="1" label="Option 1" value="1" />
+    </Select>
+  ),
+};
+
+export const States: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-2 cs:gap-4">
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Default</p>
+        <Select aria-label="Default">
+          <SelectOption value="" label="Pick one" />
+          <SelectOption value="a" label="Option A" />
+        </Select>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Invalid</p>
+        <Select aria-label="Invalid" isInvalid>
+          <SelectOption value="" label="Pick one" />
+          <SelectOption value="a" label="Option A" />
+        </Select>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Disabled</p>
+        <Select aria-label="Disabled" disabled>
+          <SelectOption value="" label="Pick one" />
+          <SelectOption value="a" label="Option A" />
+        </Select>
+      </div>
+      <div>
+        <p className="cs:text-xs cs:text-gray-500 cs:mb-1">Pre-selected</p>
+        <Select aria-label="Pre-selected" defaultValue="a">
+          <SelectOption value="a" label="Option A" />
+          <SelectOption value="b" label="Option B" />
+        </Select>
+      </div>
+    </div>
+  ),
+};

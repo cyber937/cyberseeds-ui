@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useEffect, useRef } from "react";
 import { Checkbox } from "./Checkbox";
 
 const meta: Meta<typeof Checkbox> = {
@@ -112,6 +113,46 @@ export const Scales: Story = {
         <p className="cs:text-xs cs:text-gray-500 cs:mb-2">Large (lg)</p>
         <Checkbox label="Agree to terms" scale="lg" color="blue" />
       </div>
+    </div>
+  ),
+};
+
+export const Checked: Story = {
+  args: { label: "Already checked", defaultChecked: true, color: "blue" },
+  render: (args) => <Checkbox {...args} />,
+};
+
+export const Indeterminate: Story = {
+  render: () => {
+    const wrapperRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+      const input = wrapperRef.current?.querySelector("input[type=checkbox]");
+      if (input instanceof HTMLInputElement) input.indeterminate = true;
+    }, []);
+    return (
+      <div ref={wrapperRef}>
+        <Checkbox label="Indeterminate (mixed selection)" />
+      </div>
+    );
+  },
+};
+
+export const Disabled: Story = {
+  render: () => (
+    <div className="cs:flex cs:flex-col cs:gap-2">
+      <Checkbox label="Disabled (unchecked)" disabled />
+      <Checkbox label="Disabled (checked)" disabled defaultChecked />
+    </div>
+  ),
+};
+
+export const States: Story = {
+  render: () => (
+    <div className="cs:grid cs:grid-cols-2 cs:gap-3">
+      <Checkbox label="Unchecked" />
+      <Checkbox label="Checked" defaultChecked />
+      <Checkbox label="Disabled / unchecked" disabled />
+      <Checkbox label="Disabled / checked" disabled defaultChecked />
     </div>
   ),
 };

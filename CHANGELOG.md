@@ -161,6 +161,14 @@
 
 - `FormField.isRequired.test.tsx` を追加。4 つの form control 全部で `FormField.isRequired` → `required` が伝播することと、 OR-merge / 非 FormField ケースの 7 件を検証。
 
+### Documentation / Stories
+
+- **フォーム系コンポーネントの状態 variant stories を完全化** — Storybook で実装の visual coverage が薄かった以下を追加。これらの variant は自動 a11y sweep（`accessibility.test.tsx` の jest-axe）にも自動的に組み込まれる。
+  - `Switch`: `Color` (20 色一覧)、`Disabled` (off / on)、`States` (4 状態並列)
+  - `Checkbox`: `Checked`、`Indeterminate` (DOM 経由で `input.indeterminate` を設定)、`Disabled`、`States`
+  - `Select`: `Disabled`、`States` (Default / Invalid / Disabled / Pre-selected を並列)
+- **Radio に story ファイルを新規作成** — 今まで `Radio.stories.tsx` が無く、Radio は `RadioGroup` 経由でしか視覚確認できなかった。`Default` / `Checked` / `Disabled` / `Scales` / `Color` (20 色)/ `States` の 6 stories を追加。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
