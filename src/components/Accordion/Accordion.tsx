@@ -53,6 +53,10 @@ interface AccordionProps {
   children: ReactNode;
 }
 
-export function Accordion({ children }: AccordionProps) {
+function AccordionRoot({ children }: AccordionProps) {
   return <div className="cs:bg-white cs:dark:bg-gray-800 cs:text-sm cs:border cs:border-gray-300 cs:dark:border-gray-600">{children}</div>;
 }
+
+AccordionRoot.Item = AccordionItem;
+
+export const Accordion = AccordionRoot;

@@ -135,6 +135,23 @@
   - `UIColorContextType`
 - **将来の漏れを防ぐ retest** — `src/components/__tests__/public-types.test.ts` を追加。23 個の公開型を `import type` してコンパイル時にアサインメント可能性を検証する。新しい型を public surface に追加した時はここに追記する運用に。
 
+### API
+
+- **Accordion: 複合 (compound) API へ統一** — `Accordion.Item` を追加。他のコンパウンドコンポーネント (`Tabs.List` / `Tabs.Trigger`、`Modal.Header` / `Modal.Body` / `Modal.Footer`) と書き味を揃えた。`AccordionItem` の named export はそのまま維持しているので既存コードは無変更で動作する (両方を混在させても可)。
+
+  ```tsx
+  // ✓ 推奨
+  <Accordion>
+    <Accordion.Item title="Section 1">...</Accordion.Item>
+  </Accordion>
+
+  // ✓ 後方互換 (既存コードは無変更で動く)
+  import { Accordion, AccordionItem } from "cyberseeds-ui";
+  <Accordion>
+    <AccordionItem title="Section 1">...</AccordionItem>
+  </Accordion>
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
