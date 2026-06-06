@@ -49,9 +49,14 @@ export function UIColorProvider({
   );
 
   // Resolve the effective color (handle semantic → preset/custom)
-  const effectiveColor = isSemanticColor(color) ? resolveColor(color, resolvedSemanticMap) : color;
+  const effectiveColor = useMemo(
+    () => (isSemanticColor(color) ? resolveColor(color, resolvedSemanticMap) : color),
+    [color, resolvedSemanticMap],
+  );
 
-  // Determine dark mode state from ThemeProvider if available
+  // Determine dark mode state from ThemeProvider if available.
+  // Read on every render: the result is captured by the cssVars memo via deps,
+  // and the DOM read is far cheaper than rebuilding the CSS variable map.
   let isDark = false;
   try {
     if (typeof document !== "undefined") {
@@ -62,16 +67,22 @@ export function UIColorProvider({
   }
 
   // All colors (preset and custom) now get CSS variables via the unified path
-  let cssVars: React.CSSProperties;
-  if (isDark && darkColor) {
-    cssVars = customColorToCSSVars(darkColor);
-  } else {
-    cssVars = colorToCSSVars(effectiveColor, isDark);
-  }
+  const cssVars = useMemo<React.CSSProperties>(
+    () =>
+      isDark && darkColor
+        ? customColorToCSSVars(darkColor)
+        : colorToCSSVars(effectiveColor, isDark),
+    [isDark, darkColor, effectiveColor],
+  );
+
+  const wrapperStyle = useMemo<React.CSSProperties>(
+    () => ({ display: "contents", ...cssVars }),
+    [cssVars],
+  );
 
   return (
     <UIColorContext.Provider value={contextValue}>
-      <div style={{ display: "contents", ...cssVars }}>{children}</div>
+      <div style={wrapperStyle}>{children}</div>
     </UIColorContext.Provider>
   );
 }
