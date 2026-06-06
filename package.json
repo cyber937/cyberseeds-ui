@@ -89,6 +89,11 @@
       "import": "./dist/EmptyState.js",
       "default": "./dist/EmptyState.js"
     },
+    "./FileUpload": {
+      "types": "./dist/FileUpload.d.ts",
+      "import": "./dist/FileUpload.js",
+      "default": "./dist/FileUpload.js"
+    },
     "./FormField": {
       "types": "./dist/FormField.d.ts",
       "import": "./dist/FormField.js",
@@ -108,6 +113,11 @@
       "types": "./dist/Label.d.ts",
       "import": "./dist/Label.js",
       "default": "./dist/Label.js"
+    },
+    "./Menu": {
+      "types": "./dist/Menu.d.ts",
+      "import": "./dist/Menu.js",
+      "default": "./dist/Menu.js"
     },
     "./Modal": {
       "types": "./dist/Modal.d.ts",
@@ -133,6 +143,11 @@
       "types": "./dist/PillBox.d.ts",
       "import": "./dist/PillBox.js",
       "default": "./dist/PillBox.js"
+    },
+    "./Popover": {
+      "types": "./dist/Popover.d.ts",
+      "import": "./dist/Popover.js",
+      "default": "./dist/Popover.js"
     },
     "./Progress": {
       "types": "./dist/Progress.d.ts",

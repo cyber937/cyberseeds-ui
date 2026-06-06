@@ -37,6 +37,9 @@ import * as PaginationStories from '../Pagination/Pagination.stories';
 import * as TableStories from '../Table/Table.stories';
 import * as ComboboxStories from '../Combobox/Combobox.stories';
 import * as DrawerStories from '../Drawer/Drawer.stories';
+import * as PopoverStories from '../Popover/Popover.stories';
+import * as MenuStories from '../Menu/Menu.stories';
+import * as FileUploadStories from '../FileUpload/FileUpload.stories';
 import * as LabelStories from '../Label/Label.stories';
 import * as ThemeProviderStories from '../ThemeProvider/ThemeProvider.stories';
 import * as UIColorProviderStories from '../UIColorProvider/UIColorProvider.stories';
@@ -78,6 +81,9 @@ const PaginationComposed = composeStories(PaginationStories);
 const TableComposed = composeStories(TableStories);
 const ComboboxComposed = composeStories(ComboboxStories);
 const DrawerComposed = composeStories(DrawerStories);
+const PopoverComposed = composeStories(PopoverStories);
+const MenuComposed = composeStories(MenuStories);
+const FileUploadComposed = composeStories(FileUploadStories);
 const LabelComposed = composeStories(LabelStories);
 const ThemeProviderComposed = composeStories(ThemeProviderStories);
 const UIColorProviderComposed = composeStories(UIColorProviderStories);
@@ -477,6 +483,36 @@ describe('Accessibility Tests', () => {
       
       // Clean up
       document.documentElement.classList.remove('dark');
+    });
+  });
+
+  describe('Popover Component A11y', () => {
+    Object.entries(PopoverComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Menu Component A11y', () => {
+    Object.entries(MenuComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('FileUpload Component A11y', () => {
+    Object.entries(FileUploadComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
     });
   });
 
