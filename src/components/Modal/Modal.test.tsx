@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { useState } from 'react';
 import { composeStories } from '@storybook/react';
 import * as stories from './Modal.stories';
 import { Modal } from './Modal';
@@ -160,6 +161,104 @@ describe('Modal Component', () => {
       // Test Escape key closes modal
       fireEvent.keyDown(document, { key: 'Escape' });
       expect(handleClose).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Focus management', () => {
+    it('focuses the first focusable element on mount', () => {
+      render(
+        <Modal>
+          <Modal.Body>
+            <button>First</button>
+            <button>Second</button>
+          </Modal.Body>
+        </Modal>
+      );
+
+      const first = screen.getByText('First');
+      expect(document.activeElement).toBe(first);
+    });
+
+    it('wraps Tab from the last focusable back to the first', () => {
+      render(
+        <Modal>
+          <Modal.Body>
+            <button>First</button>
+            <button>Last</button>
+          </Modal.Body>
+        </Modal>
+      );
+
+      const first = screen.getByText('First');
+      const last = screen.getByText('Last');
+
+      act(() => last.focus());
+      fireEvent.keyDown(document, { key: 'Tab' });
+      expect(document.activeElement).toBe(first);
+    });
+
+    it('wraps Shift+Tab from the first focusable back to the last', () => {
+      render(
+        <Modal>
+          <Modal.Body>
+            <button>First</button>
+            <button>Last</button>
+          </Modal.Body>
+        </Modal>
+      );
+
+      const first = screen.getByText('First');
+      const last = screen.getByText('Last');
+
+      act(() => first.focus());
+      fireEvent.keyDown(document, { key: 'Tab', shiftKey: true });
+      expect(document.activeElement).toBe(last);
+    });
+
+    it('restores focus to the previously-focused element on unmount', () => {
+      function Harness() {
+        const [open, setOpen] = useState(false);
+        return (
+          <>
+            <button onClick={() => setOpen(true)}>opener</button>
+            {open && (
+              <Modal onClose={() => setOpen(false)}>
+                <Modal.Body>
+                  <button>inside</button>
+                </Modal.Body>
+              </Modal>
+            )}
+          </>
+        );
+      }
+
+      render(<Harness />);
+      const opener = screen.getByText('opener');
+      act(() => opener.focus());
+      expect(document.activeElement).toBe(opener);
+
+      act(() => opener.click());
+      // Modal mounted; focus moved inside.
+      expect(document.activeElement).toBe(screen.getByText('inside'));
+
+      // Close via Escape; modal unmounts and focus should restore.
+      act(() => {
+        fireEvent.keyDown(document, { key: 'Escape' });
+      });
+      expect(document.activeElement).toBe(opener);
+    });
+
+    it('falls back to focusing the dialog container when there are no focusable children', () => {
+      render(
+        <Modal>
+          <Modal.Body>
+            <p>Just text, no interactive elements.</p>
+          </Modal.Body>
+        </Modal>
+      );
+      const dialog = screen.getByRole('dialog', { hidden: true });
+      expect(document.activeElement).toBe(dialog);
+      expect(dialog).toHaveAttribute('tabindex', '-1');
     });
   });
 });
