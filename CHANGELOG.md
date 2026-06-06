@@ -16,6 +16,24 @@
   - フォールバック時は wrapper に `role="img"` + `aria-label={alt ?? name ?? "Avatar"}` を付与
   - Tailwind の `cs:ring-2 cs:-space-x-2` などで avatar スタックを組める (Story 参照)
 
+- **`Drawer` コンポーネント** — Modal の sliding panel 変種。`position` ("right" / "left" / "top" / "bottom") で 4 辺どこからでも slide-in でき、`size` ("sm" / "md" / "lg" / "xl") でパネル幅 / 高さを制御。Modal で書いた `useFocusTrap` / `useBodyScrollLock` / Escape-to-close をそのまま流用しているので、a11y 挙動 (focus trap + 初期 focus + restore) は同等。Compound API: `Drawer.Header` / `Drawer.Body` / `Drawer.Footer`。
+
+  ```tsx
+  <Drawer position="right" onClose={() => setOpen(false)}>
+    <Drawer.Header>Filters</Drawer.Header>
+    <Drawer.Body>
+      <Switch onLabel="Below reorder min" offLabel="All" />
+    </Drawer.Body>
+    <Drawer.Footer>
+      <Button onClick={() => setOpen(false)}>Apply</Button>
+    </Drawer.Footer>
+  </Drawer>
+  ```
+
+  - mobile 用の item detail view、admin の filter panel、設定パネルなどに向く
+  - `prefers-reduced-motion: reduce` を尊重して slide / fade transition を抑制
+  - backdrop click でも `onClose` を発火
+
 ## Unreleased
 
 ### New Features
