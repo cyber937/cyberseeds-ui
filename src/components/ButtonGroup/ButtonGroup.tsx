@@ -20,6 +20,13 @@ interface ButtonGroupProps {
   onChange?: (value: string | string[]) => void;
   multiple?: boolean;
   fullWidth?: boolean;
+  /**
+   * Layout direction. Horizontal puts items in a row with left/right rounded
+   * corners on the ends; vertical stacks them in a column with top/bottom
+   * rounded corners. Keyboard navigation follows the axis (Arrow Left/Right
+   * for horizontal, Arrow Up/Down for vertical).
+   */
+  orientation?: "horizontal" | "vertical";
   color?: Color;
   scale?: Scale;
   className?: string;
@@ -51,6 +58,7 @@ export function ButtonGroup({
   onChange,
   multiple = false,
   fullWidth = false,
+  orientation = "horizontal",
   color = "blue",
   scale = "md",
   className,
@@ -83,8 +91,8 @@ export function ButtonGroup({
   );
 
   const contextValue = useMemo(
-    () => ({ selectedValues, onSelect, scale, color: finalColor, multiple }),
-    [selectedValues, onSelect, scale, finalColor, multiple],
+    () => ({ selectedValues, onSelect, scale, color: finalColor, multiple, orientation }),
+    [selectedValues, onSelect, scale, finalColor, multiple, orientation],
   );
 
   const handleKeyDown = useCallback((e: KeyboardEvent<HTMLDivElement>) => {
@@ -96,13 +104,16 @@ export function ButtonGroup({
     const currentIndex = buttons.indexOf(e.target as HTMLButtonElement);
     if (currentIndex === -1) return;
 
+    const nextKey = orientation === "vertical" ? "ArrowDown" : "ArrowRight";
+    const prevKey = orientation === "vertical" ? "ArrowUp" : "ArrowLeft";
+
     let nextIndex: number | null = null;
 
     switch (e.key) {
-      case "ArrowRight":
+      case nextKey:
         nextIndex = (currentIndex + 1) % buttons.length;
         break;
-      case "ArrowLeft":
+      case prevKey:
         nextIndex = (currentIndex - 1 + buttons.length) % buttons.length;
         break;
       case "Home":
@@ -118,16 +129,20 @@ export function ButtonGroup({
       buttons[nextIndex].focus();
       buttons[nextIndex].click();
     }
-  }, [multiple]);
+  }, [multiple, orientation]);
 
   return (
     <ButtonGroupContext.Provider value={contextValue}>
       <div
         role={multiple ? "group" : "radiogroup"}
+        // aria-orientation is only valid on radiogroup / toolbar / tablist / etc.,
+        // not on a plain role="group" — so omit it for multi-select.
+        aria-orientation={multiple ? undefined : orientation}
         onKeyDown={handleKeyDown}
         className={clsx(
           "cs:font-sans",
-          fullWidth ? "cs-full-width" : "cs:inline-flex",
+          orientation === "vertical" && "cs:inline-flex cs:flex-col",
+          orientation === "horizontal" && (fullWidth ? "cs-full-width" : "cs:inline-flex"),
           className,
         )}
       >
@@ -160,7 +175,9 @@ function ButtonGroupItem({ children, value, disabled = false, className }: Butto
       style={isSelected ? colorStyle : undefined}
       className={clsx(
         "cs:border-0 cs:shadow-none cs:font-medium cs:cursor-pointer cs:whitespace-nowrap",
-        "first:cs:rounded-l-md last:cs:rounded-r-md",
+        ctx.orientation === "vertical"
+          ? "first:cs:rounded-t-md last:cs:rounded-b-md"
+          : "first:cs:rounded-l-md last:cs:rounded-r-md",
         scaleMap[ctx.scale],
         TRANSITION_FAST,
         FOCUS_RING,

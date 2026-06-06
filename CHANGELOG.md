@@ -2,6 +2,21 @@
 
 ## Next
 
+### Improvements
+
+- **ButtonGroup: `orientation="horizontal" | "vertical"` prop** — `ButtonGroup` を縦方向にスタックして表示できるようにした。デフォルトは horizontal (既存挙動)。`vertical` を指定すると `flex-col` レイアウトに切り替わり、最初と最後のアイテムが上下に丸まり、キーボードナビゲーションが ArrowUp/ArrowDown に切り替わる (horizontal の時は ArrowLeft/Right のまま)。`aria-orientation` 属性も radiogroup の時のみ付与される (`role="group"` には allow されていないので multi-select 時は省略)。
+
+  ```tsx
+  // 縦並び (filter sidebar、segmented control 等)
+  <ButtonGroup defaultValue="dashboard" orientation="vertical">
+    <ButtonGroup.Item value="dashboard">Dashboard</ButtonGroup.Item>
+    <ButtonGroup.Item value="items">Items</ButtonGroup.Item>
+    <ButtonGroup.Item value="settings">Settings</ButtonGroup.Item>
+  </ButtonGroup>
+  ```
+
+## Next
+
 ### New Components
 
 - **`Avatar` コンポーネント** — ユーザープロフィール / KPI カード / activity feed 用のコンパクトな avatar。`src` 画像を読み込み、`onerror` で broken → 自動的に `name` の頭文字 (例: "Kiyoshi Nagahama" → "KN") にフォールバック、さらにカスタム `fallback` で絵文字やアイコンも置ける。`scale` (xs / sm / md / lg), `color`, `shape` ("circle" / "square") をサポート。

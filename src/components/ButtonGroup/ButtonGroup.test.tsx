@@ -234,4 +234,79 @@ describe('ButtonGroup Component', () => {
       }).toThrow('ButtonGroup.Item must be used within a ButtonGroup component');
     });
   });
+
+  describe('Orientation', () => {
+    it('defaults to aria-orientation="horizontal"', () => {
+      render(
+        <ButtonGroup defaultValue="a">
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">B</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-orientation', 'horizontal');
+    });
+
+    it('sets aria-orientation="vertical" when orientation="vertical"', () => {
+      render(
+        <ButtonGroup defaultValue="a" orientation="vertical">
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">B</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-orientation', 'vertical');
+    });
+
+    it('uses ArrowDown/ArrowUp for keyboard nav when vertical', () => {
+      const onChange = vi.fn();
+      render(
+        <ButtonGroup defaultValue="a" orientation="vertical" onChange={onChange}>
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">B</ButtonGroup.Item>
+          <ButtonGroup.Item value="c">C</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      const btnA = screen.getByText('A');
+      btnA.focus();
+      fireEvent.keyDown(btnA, { key: 'ArrowDown' });
+      expect(onChange).toHaveBeenCalledWith('b');
+      fireEvent.keyDown(screen.getByText('B'), { key: 'ArrowUp' });
+      expect(onChange).toHaveBeenCalledWith('a');
+    });
+
+    it('ignores ArrowLeft/ArrowRight when vertical', () => {
+      const onChange = vi.fn();
+      render(
+        <ButtonGroup defaultValue="a" orientation="vertical" onChange={onChange}>
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">B</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      const btnA = screen.getByText('A');
+      btnA.focus();
+      fireEvent.keyDown(btnA, { key: 'ArrowRight' });
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('applies vertical column layout class when orientation="vertical"', () => {
+      render(
+        <ButtonGroup defaultValue="a" orientation="vertical">
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">B</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      expect(screen.getByRole('radiogroup')).toHaveClass('cs:flex-col');
+    });
+
+    it('rounds corners along the orientation axis', () => {
+      render(
+        <ButtonGroup defaultValue="a" orientation="vertical">
+          <ButtonGroup.Item value="a">A</ButtonGroup.Item>
+          <ButtonGroup.Item value="b">B</ButtonGroup.Item>
+        </ButtonGroup>
+      );
+      const buttons = screen.getAllByRole('radio');
+      expect(buttons[0]).toHaveClass('first:cs:rounded-t-md');
+      expect(buttons[1]).toHaveClass('last:cs:rounded-b-md');
+    });
+  });
 });

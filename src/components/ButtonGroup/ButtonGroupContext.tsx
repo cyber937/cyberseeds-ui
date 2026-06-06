@@ -7,6 +7,7 @@ export interface ButtonGroupContextType {
   scale: Scale;
   color: PresetColor | CustomColor;
   multiple: boolean;
+  orientation: "horizontal" | "vertical";
 }
 
 export const ButtonGroupContext = createContext<ButtonGroupContextType | undefined>(undefined);
