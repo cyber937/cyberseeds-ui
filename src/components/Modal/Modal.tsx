@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
-import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useState } from "react";
+import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
+import { useFocusTrap } from "../../hooks/useFocusTrap";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
 
 type ModalContextType = {
@@ -26,6 +27,9 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
   const headerId = useId();
   const prefersReducedMotion = useReducedMotion();
   useBodyScrollLock(true);
+
+  const dialogRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(dialogRef, true);
 
   const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
@@ -67,6 +71,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
   return (
     <ModalContext.Provider value={contextValue}>
       <div
+        ref={dialogRef}
         role="dialog"
         aria-modal="true"
         aria-labelledby={headerId}

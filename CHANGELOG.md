@@ -114,6 +114,15 @@
 
 - `src/components/__tests__/color-contrast.test.ts` → `.tsx` にリネーム（コンポーネントを実際に render して検証するため）。`Switch` の thumb 色切替（light/dark カラー両方） と `PillBox` の `cs-pill` 配線を検証する 11 件の test を追加。
 - `UIColorContext.test.tsx` を追加。3 件の test で (1) 親プロップが変わっても color が同じならラッパーの inline style が安定参照を保つこと、(2) `React.memo` した consumer が provider 配下で無関係な再レンダリング時にスキップされること、(3) color が実際に変わった時はちゃんと consumer が再レンダリングされること を検証。
+- `Modal.test.tsx` に 5 件追加: 初期 focus、Tab 巻き戻し、Shift+Tab 巻き戻し、focus 復帰、focusable がない時のコンテナへの fallback。
+
+### Modal Accessibility
+
+- **Modal: focus trap + 初期 / 復帰 focus** — `Modal` が open している間、`Tab` / `Shift+Tab` がモーダル内の focusable element だけを巡回するようにした (WAI-ARIA Dialog (Modal) Pattern の必須要件)。マウント時は最初の focusable element に初期 focus を移し、focusable 要素が一切ない場合は `dialog` コンテナ自身に `tabindex="-1"` を付けて focus を当てる。アンマウント時は open 直前に focus されていた要素に focus を復帰する。
+
+### New Hooks
+
+- **`useFocusTrap(containerRef, active, options)`** — 上記の focus 管理ロジックを再利用可能なフックとして `src/hooks/useFocusTrap.ts` に切り出し。今後追加予定の Drawer / Popover などからも流用可能。`initialFocus` / `restoreFocus` を個別に opt-out 可能。
 
 ## 1.4.0 (2026-03-13)
 
