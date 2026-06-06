@@ -32,6 +32,7 @@ import * as EmptyStateStories from '../EmptyState/EmptyState.stories';
 import * as SkeletonStories from '../Skeleton/Skeleton.stories';
 import * as PaginationStories from '../Pagination/Pagination.stories';
 import * as TableStories from '../Table/Table.stories';
+import * as ComboboxStories from '../Combobox/Combobox.stories';
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
@@ -65,6 +66,7 @@ const EmptyStateComposed = composeStories(EmptyStateStories);
 const SkeletonComposed = composeStories(SkeletonStories);
 const PaginationComposed = composeStories(PaginationStories);
 const TableComposed = composeStories(TableStories);
+const ComboboxComposed = composeStories(ComboboxStories);
 
 describe('Accessibility Tests', () => {
   describe('Button Component A11y', () => {
@@ -339,6 +341,16 @@ describe('Accessibility Tests', () => {
 
   describe('Table Component A11y', () => {
     Object.entries(TableComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Combobox Component A11y', () => {
+    Object.entries(ComboboxComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);
