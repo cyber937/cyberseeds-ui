@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import { useId, type Ref } from "react";
-import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
+import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
+import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -85,6 +86,8 @@ export function Switch({
     onClick?.(event);
   };
 
+  const isLightBg = isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor);
+
   return (
     <div className={clsx("cs:flex cs:gap-1 cs:items-center cs:max-md:min-h-11", className)}>
       <button
@@ -109,7 +112,8 @@ export function Switch({
       >
         <div
           className={clsx(
-            `cs:bg-white cs:rounded-full cs:shadow-md cs:transform cs:transition-transform cs:duration-300 cs:motion-reduce:transition-none ${nobScaleMap[scale]}`,
+            `cs:rounded-full cs:shadow-md cs:transform cs:transition-transform cs:duration-300 cs:motion-reduce:transition-none ${nobScaleMap[scale]}`,
+            checked && isLightBg ? "cs:bg-gray-900" : "cs:bg-white",
             checked ? checkedPositionMap[scale] : "cs:translate-x-0"
           )}
         />
