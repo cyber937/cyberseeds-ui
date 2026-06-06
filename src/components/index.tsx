@@ -27,6 +27,7 @@ export { Progress } from "./Progress/Progress";
 export { Radio } from "./Radio/Radio";
 export { RadioGroup } from "./RadioGroup/RadioGroup";
 export { Select, SelectOption } from "./Select/Select";
+export { Skeleton } from "./Skeleton/Skeleton";
 export { Spinner } from "./Spinner/Spinner";
 export { Stepper } from "./Stepper/Stepper";
 export { Switch } from "./Switch/Switch";

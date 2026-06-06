@@ -29,6 +29,7 @@ import * as StepperStories from '../Stepper/Stepper.stories';
 import * as ButtonGroupStories from '../ButtonGroup/ButtonGroup.stories';
 import * as ButtonTabsStories from '../ButtonTabs/ButtonTabs.stories';
 import * as EmptyStateStories from '../EmptyState/EmptyState.stories';
+import * as SkeletonStories from '../Skeleton/Skeleton.stories';
 
 // Extend Jest matchers
 expect.extend(toHaveNoViolations);
@@ -59,6 +60,7 @@ const StepperComposed = composeStories(StepperStories);
 const ButtonGroupComposed = composeStories(ButtonGroupStories);
 const ButtonTabsComposed = composeStories(ButtonTabsStories);
 const EmptyStateComposed = composeStories(EmptyStateStories);
+const SkeletonComposed = composeStories(SkeletonStories);
 
 describe('Accessibility Tests', () => {
   describe('Button Component A11y', () => {
@@ -303,6 +305,16 @@ describe('Accessibility Tests', () => {
 
   describe('EmptyState Component A11y', () => {
     Object.entries(EmptyStateComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Skeleton Component A11y', () => {
+    Object.entries(SkeletonComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);
