@@ -42,6 +42,26 @@
   toast.error("Network error", 0, "bottom-center");
   ```
 
+### API
+
+- **Button: `asChild` prop (Slot pattern)** — `Tabs.Trigger` で実装済みの `asChild` パターンを `Button` にも展開。`asChild` を渡すと `<button>` の代わりに渡した子要素 1 つ (`<a>`, Next.js `<Link>`, router の `<NavLink>` 等) に Button のスタイル・focus ring・color CSS vars・イベントハンドラを **マージ** してレンダリングする。Slot コンポーネントが className 結合 / イベント合成 / ref 合成を担当するので、Button 側の onClick と child の onClick が両方発火する。
+
+  ```tsx
+  // 既存の <button> 用途は無変更
+  <Button onClick={…}>Save</Button>
+
+  // 新規: 中身を <a> や Next.js Link に差し替え
+  <Button asChild>
+    <a href="/items">Items</a>
+  </Button>
+
+  <Button asChild variant="secondary">
+    <Link href="/dashboard">Dashboard</Link>
+  </Button>
+  ```
+
+  これにより、Next.js App Router で `<Button onClick={() => router.push(…)}>` と書く代わりに、ネイティブな `<Link>` を子に置いてもボタンの見た目と挙動が手に入る。
+
 ## Next
 
 ### New Components

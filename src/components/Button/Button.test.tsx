@@ -131,4 +131,52 @@ describe('Button Component', () => {
       expect(button).toHaveAttribute('type', 'submit');
     });
   });
+
+  describe('asChild (Slot polymorphism)', () => {
+    it('renders the child element instead of a <button> when asChild is true', () => {
+      render(
+        <Button asChild>
+          <a href="/items">Items</a>
+        </Button>
+      );
+      // No <button>, just the <a>.
+      expect(screen.queryByRole('button')).not.toBeInTheDocument();
+      const link = screen.getByRole('link', { name: 'Items' });
+      expect(link.tagName).toBe('A');
+      expect(link).toHaveAttribute('href', '/items');
+    });
+
+    it('merges Button styling classes onto the child', () => {
+      render(
+        <Button asChild scale="lg">
+          <a href="/x" data-testid="link">Go</a>
+        </Button>
+      );
+      const link = screen.getByTestId('link');
+      // The lg scale class should land on the <a>.
+      expect(link.className).toContain('cs:px-4');
+      // And core button affordances.
+      expect(link.className).toContain('cs:rounded-md');
+      expect(link.className).toContain('cs:font-semibold');
+    });
+
+    it('composes onClick from both Button and child', async () => {
+      const user = userEvent.setup();
+      const buttonClick = vi.fn();
+      const childClick = vi.fn((e: React.MouseEvent) => e.preventDefault());
+      render(
+        <Button asChild onClick={buttonClick}>
+          <a href="/x" onClick={childClick}>Go</a>
+        </Button>
+      );
+      await user.click(screen.getByRole('link', { name: 'Go' }));
+      expect(buttonClick).toHaveBeenCalledTimes(1);
+      expect(childClick).toHaveBeenCalledTimes(1);
+    });
+
+    it('keeps the default <button> render when asChild is false (default)', () => {
+      render(<Button>Stay a button</Button>);
+      expect(screen.getByRole('button', { name: 'Stay a button' })).toBeInTheDocument();
+    });
+  });
 });

@@ -6,6 +6,7 @@ import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
 import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, Scale, Variant } from "../DesignSystemUtils";
+import { Slot } from "../Slot/Slot";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
 type ButtonContextType = {
@@ -19,6 +20,14 @@ interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
   variant?: Variant;
   color?: Color;
   children: ReactNode;
+  /**
+   * When true, merges Button's styling and event handlers onto a single
+   * child element (typically `<a>` or a router `<Link>`) instead of
+   * rendering its own `<button>`. Mirrors the `Tabs.Trigger asChild`
+   * pattern. The child receives Button's class names, focus-ring, color
+   * styles, and any handlers / refs from Button's props.
+   */
+  asChild?: boolean;
 }
 
 const scaleMap: Record<Scale, string> = {
@@ -34,6 +43,7 @@ export function Button({
   color = "blue",
   children,
   className = "",
+  asChild = false,
   ...props
 }: ButtonProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
@@ -56,15 +66,27 @@ export function Button({
 
   const buttonContextValue = useMemo(() => ({ scale }), [scale]);
 
+  const mergedClassName = `cs:border-0 cs:shadow-none cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantClasses[variant]} cs-focus-visible ${className}`;
+
   return (
     <ButtonContext.Provider value={buttonContextValue}>
-      <button
-        style={colorStyle}
-        className={`cs:border-0 cs:shadow-none cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantClasses[variant]} cs-focus-visible ${className}`}
-        {...props}
-      >
-        {children}
-      </button>
+      {asChild ? (
+        <Slot
+          style={colorStyle}
+          className={mergedClassName}
+          {...(props as React.HTMLAttributes<HTMLElement>)}
+        >
+          {children as ReactElement}
+        </Slot>
+      ) : (
+        <button
+          style={colorStyle}
+          className={mergedClassName}
+          {...props}
+        >
+          {children}
+        </button>
+      )}
     </ButtonContext.Provider>
   );
 }

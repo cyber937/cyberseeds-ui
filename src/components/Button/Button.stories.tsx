@@ -187,3 +187,19 @@ export const Disabled: Story = {
     </Button >
   )
 }
+
+export const AsChildLink: Story = {
+  name: "asChild (render as <a>)",
+  render: () => (
+    <div className="cs:flex cs:gap-3 cs:items-center">
+      <Button asChild>
+        <a href="/items">Items page</a>
+      </Button>
+      <Button asChild variant="secondary">
+        <a href="https://example.com" target="_blank" rel="noreferrer">
+          External
+        </a>
+      </Button>
+    </div>
+  ),
+};
