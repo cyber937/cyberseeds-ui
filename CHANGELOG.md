@@ -175,6 +175,23 @@
 - **`Button.test.tsx` に新規 2 件追加**: `userEvent` を使うことで初めて書ける検証 (disabled 時に click が物理的に届かないこと、Enter/Space キー activation がネイティブ button と同じく発火すること) を実装。
 - **`CLAUDE.md` に testing convention セクションを追加** — 新規 test は `userEvent` 優先、 `fireEvent` は `transitionEnd` 等のシミュレートで止むを得ない時のみ、と運用ルールを明文化。
 
+### Build
+
+- **Subpath imports + マルチエントリービルド** — 28 個の component それぞれを `dist/<Name>.js` + `dist/<Name>.d.ts` として独立にバンドルし、`package.json#exports` から `cyberseeds-ui/<Name>` で直接 import できるようにした。共通依存（colorUtils / designTokens / hooks 等）は Rollup が `dist/chunks/` に自動 hoist する。
+
+  ```tsx
+  // 既存のバレル import — 引き続き完全に動作
+  import { Button, Modal } from 'cyberseeds-ui';
+
+  // 新規: per-component subpath
+  import { Button } from 'cyberseeds-ui/Button';
+  import { Modal } from 'cyberseeds-ui/Modal';
+  ```
+
+  両形式は同一実装を指すため自由に混在可能。subpath 経由のほうがバンドラの module graph が小さくなり、tree-shaking が効きにくい古いバンドラでも未使用 component を取り込まなくなる。
+
+- **ファイル名変更**: メインエントリーが `dist/cyberseeds-ui.js` → `dist/index.js` に変更。`package.json#main` / `module` / `exports#.` も更新済み。consumer は `from 'cyberseeds-ui'` を使う限り影響なし。`dist/cyberseeds-ui.js` を直接参照していた特殊なツール（CDN URL など）は subpath import に切り替えるか `dist/index.js` を指す必要あり。
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features

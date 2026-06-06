@@ -62,6 +62,21 @@ export default function Page() {
 }
 ```
 
+### Subpath imports (smaller bundles)
+
+Every component is also published at its own subpath, so consumers that only need
+a few components can import them directly and skip parsing the full barrel:
+
+```tsx
+import { Button } from 'cyberseeds-ui/Button';
+import { Modal } from 'cyberseeds-ui/Modal';
+import { Switch } from 'cyberseeds-ui/Switch';
+```
+
+Functionally identical to the barrel form — same components, same props, same
+types — but the bundler's module graph is smaller, which helps cold-start time
+in larger consumer apps. Both forms can be mixed freely in the same file.
+
 ## Components
 
 ### Form
