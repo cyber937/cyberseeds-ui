@@ -54,6 +54,12 @@
   - `scale` ("xs" / "sm" / "md" / "lg") でパディング / フォント調整、dark mode 対応
   - `multiple` で複数追加 (既存リストに追記)、single は置換。inventory-core admin の import ページで手書きしていたパターンを library 化
 
+### Documentation
+
+- **README: full component coverage** — Components セクションを全公開コンポーネント網羅に更新。これまで未掲載だった 14 個 (`Alert`, `Avatar`, `Breadcrumb`, `ButtonGroup`, `ButtonTabs`, `Card`, `Combobox`, `Drawer`, `EmptyState`, `NavMenu`, `Pagination`, `Skeleton`, `Stepper`, `Table`) を追加し、カテゴリを Form / Actions / Layout / Navigation / Overlay / Feedback / Data Display / Theming に再編。
+
+- **Storybook: stories for the last 3 uncovered components** — 専用ストーリーが無かった `Label` (`System/Label`)、`ThemeProvider` (`Foundations/ThemeProvider`)、`UIColorProvider` (`Foundations/UIColorProvider`) を追加。これで Slot (内部ヘルパ) を除く全コンポーネントが Storybook の autodocs ページと jest-axe アクセシビリティテストでカバーされる。
+
 ## 1.5.0 (2026-06-06)
 
 ### Improvements
