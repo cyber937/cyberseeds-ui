@@ -93,6 +93,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | `RadioGroup` | Radio group wrapper with `RadioGroup.Option` for controlled selection via context |
 | `Switch` | Toggle switch with on/off labels and animated transitions |
 | `Label` | Semantic `<label>` element with required indicator (`*`) support |
+| `FileUpload` | Drag-and-drop file picker with click-to-browse, selected-file list, and `accept` / `maxSize` validation |
 
 ### Layout
 
@@ -131,6 +132,8 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | Component | Description |
 | --- | --- |
 | `Tooltip` | Hover/focus tooltip with auto-flip positioning, delay, and `role="tooltip"` |
+| `Popover` | Anchored floating panel (`Popover.Trigger` / `Popover.Content`) with auto-flip, outside-click & Escape dismiss, controlled/uncontrolled |
+| `Menu` | Action menu built on `Popover` (`Menu.Trigger` / `Content` / `Item` / `Label` / `Separator`) with WAI-ARIA keyboard navigation |
 
 All components support `scale` (`"xs"` | `"sm"` | `"md"` | `"lg"`) and `color` props using the Tailwind v4 color palette, custom color objects, or semantic color names.
 

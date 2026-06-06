@@ -1,5 +1,59 @@
 # Changelog
 
+## Next
+
+### New Components
+
+- **`Popover` コンポーネント** — アンカー付きの浮遊パネルプリミティブ。`Popover.Trigger` + `Popover.Content` の compound で、`placement` ("top" / "bottom" / "left" / "right") と `align` ("start" / "center" / "end") を指定。スペースが足りない方向は自動でフリップし、外側クリック / Escape で閉じる。controlled (`open` / `onOpenChange`) と uncontrolled (`defaultOpen`) の両対応。`Menu` 等の上位コンポーネントの基盤になる。
+
+  ```tsx
+  <Popover placement="bottom" align="start">
+    <Popover.Trigger asChild>
+      <Button>Open</Button>
+    </Popover.Trigger>
+    <Popover.Content>…</Popover.Content>
+  </Popover>
+  ```
+
+  - `Popover.Trigger` は `asChild` で任意の要素 (Button, リンク等) をトリガーに差し替え可能 (Slot パターン)。`aria-haspopup` / `aria-expanded` / `aria-controls` を自動付与
+  - `Popover.Content` は `role="dialog"` + `aria-labelledby`、`autoFocus` で開いた時に最初のフォーカス可能要素へ移動
+  - Tooltip と同じ relative/absolute 配置方式 (portal なし) で既存挙動と一貫
+
+- **`Menu` コンポーネント** — `Popover` の上に構築したアクションメニュー。WAI-ARIA menu パターン準拠で、トリガーに `aria-haspopup="menu"`、パネルは `role="menu"`、項目は `role="menuitem"`。`Menu.Trigger` / `Menu.Content` / `Menu.Item` / `Menu.Label` / `Menu.Separator` の compound API。
+
+  ```tsx
+  <Menu>
+    <Menu.Trigger asChild><Button>Actions</Button></Menu.Trigger>
+    <Menu.Content aria-label="Row actions">
+      <Menu.Label>Manage</Menu.Label>
+      <Menu.Item icon={<EditIcon />} onSelect={onEdit}>Edit</Menu.Item>
+      <Menu.Separator />
+      <Menu.Item destructive onSelect={onDelete}>Delete</Menu.Item>
+    </Menu.Content>
+  </Menu>
+  ```
+
+  - ArrowUp / ArrowDown / Home / End で項目間をロービングフォーカス、Enter / Space で選択、Escape で閉じる
+  - `Menu.Item` は `onSelect`、`disabled`、`destructive` (赤系)、`icon` スロットをサポート
+  - 選択で自動的に閉じる (`closeOnSelect={false}` で抑制可能)、テーブル行アクション / overflow メニュー向け
+
+- **`FileUpload` コンポーネント** — ドラッグ&ドロップ + クリックでブラウズできるファイルピッカー。選択ファイルの一覧 (サイズ表示 + 削除ボタン) を内蔵し、`accept` (拡張子 / MIME / `image/*`) と `maxSize` でバリデーション。弾かれたファイルは `onReject` で通知。controlled (`value` + `onChange`) / uncontrolled の両対応。
+
+  ```tsx
+  <FileUpload
+    accept=".xlsx,.csv"
+    maxSize={50 * 1024 * 1024}
+    label="Click to choose a file or drag it here"
+    hint="Up to 50 MB"
+    onChange={(files) => setFiles(files)}
+    onReject={(rejections) => toast.error(`${rejections.length} file(s) rejected`)}
+  />
+  ```
+
+  - ドロップゾーンは `role="button"` + キーボード操作 (Enter / Space)、隠し `<input type="file">` は nested-interactive を避けるため兄弟要素として配置
+  - `scale` ("xs" / "sm" / "md" / "lg") でパディング / フォント調整、dark mode 対応
+  - `multiple` で複数追加 (既存リストに追記)、single は置換。inventory-core admin の import ページで手書きしていたパターンを library 化
+
 ## 1.5.0 (2026-06-06)
 
 ### Improvements
