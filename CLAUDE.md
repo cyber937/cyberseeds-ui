@@ -139,6 +139,46 @@ import { renderWithUIColorProvider, testColors, testScales, mockMatchMedia } fro
 | `semanticColor.test.ts` | Semantic → preset color resolution |
 | `integration.test.tsx` | Cross-component interactions |
 
+## API Conventions
+
+### Controlled inputs — `onCheckedChange(checked: boolean)`
+
+Switch / Checkbox / Radio expose a typed `onCheckedChange?: (checked: boolean) => void`
+callback in addition to the raw DOM events.
+
+```tsx
+// Preferred — typed callback, no event ceremony
+<Switch checked={x} onCheckedChange={setX} />
+<Checkbox checked={x} onCheckedChange={setX} />
+<Radio checked={x} onCheckedChange={setX} />
+
+// Still works — raw DOM event for callers that need it
+<Checkbox onChange={(e) => fn(e.target.checked)} />
+<Switch onClick={(e) => { /* analytics */ }} />
+```
+
+Why: Switch is a `<button>`, so the inherited `onChange` from `ButtonHTMLAttributes`
+**never fires** (buttons don't emit change events). Without an explicit typed callback,
+callers had to flip `!checked` manually inside `onClick`, which is easy to get wrong
+and inconsistent with how Checkbox/Radio behave. `onCheckedChange` papers over the
+DOM asymmetry while keeping the existing `onClick` / `onChange` passthroughs intact.
+
+Implementation pattern (used in `Switch.tsx`, `Checkbox.tsx`, `Radio.tsx`):
+
+```tsx
+export function Switch({ onCheckedChange, onClick, checked = false, ...props }: SwitchProps) {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    onCheckedChange?.(!checked);    // typed callback fires first
+    onClick?.(event);                // then chain to user's onClick if any
+  };
+  return <button onClick={handleClick} {...props} />;
+}
+```
+
+When adding new boolean-toggle components, follow the same naming: `onCheckedChange`,
+not `onChange`/`onToggle`/`onSelect`. Radix UI uses the same convention so callers
+already trained on Radix slot in without surprises.
+
 ## Shared Types (`src/components/DesignSystemUtils.tsx`)
 
 ```tsx

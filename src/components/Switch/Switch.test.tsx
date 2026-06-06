@@ -32,6 +32,39 @@ describe('Switch Component', () => {
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
+    it('invokes onCheckedChange with the next checked state', () => {
+      const handleCheckedChange = vi.fn();
+      render(<Switch checked={false} onCheckedChange={handleCheckedChange} />);
+
+      fireEvent.click(screen.getByRole('switch'));
+      expect(handleCheckedChange).toHaveBeenCalledTimes(1);
+      expect(handleCheckedChange).toHaveBeenCalledWith(true);
+    });
+
+    it('flips the next checked state for onCheckedChange when starting from true', () => {
+      const handleCheckedChange = vi.fn();
+      render(<Switch checked={true} onCheckedChange={handleCheckedChange} />);
+
+      fireEvent.click(screen.getByRole('switch'));
+      expect(handleCheckedChange).toHaveBeenCalledWith(false);
+    });
+
+    it('calls both onCheckedChange and onClick in order', () => {
+      const calls: string[] = [];
+      const handleCheckedChange = vi.fn(() => calls.push('onCheckedChange'));
+      const handleClick = vi.fn(() => calls.push('onClick'));
+      render(
+        <Switch
+          checked={false}
+          onCheckedChange={handleCheckedChange}
+          onClick={handleClick}
+        />
+      );
+
+      fireEvent.click(screen.getByRole('switch'));
+      expect(calls).toEqual(['onCheckedChange', 'onClick']);
+    });
+
     it('toggles checked state', () => {
       render(<Switch />);
       const switchElement = screen.getByRole('switch');

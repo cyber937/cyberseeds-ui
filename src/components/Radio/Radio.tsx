@@ -9,6 +9,13 @@ interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "
   label?: string;
   scale?: Scale;
   color?: Color;
+  /**
+   * Typed callback that fires with the next checked state whenever the radio
+   * is selected. The raw `onChange(event)` still fires alongside it.
+   *
+   * Symmetrical with {@link Checkbox} and {@link Switch}.
+   */
+  onCheckedChange?: (checked: boolean) => void;
 }
 
 const gapScaleMap: Record<Scale, string> = {
@@ -37,6 +44,8 @@ export const Radio = memo(function Radio({
   scale = "md",
   color = "blue",
   id: externalId,
+  onCheckedChange,
+  onChange,
   ...props
 }: RadioProps) {
   const generatedId = useId();
@@ -48,6 +57,11 @@ export const Radio = memo(function Radio({
 
   const colorStyle = colorToCSSVars(finalUIColor);
 
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    onCheckedChange?.(event.target.checked);
+    onChange?.(event);
+  };
+
   return (
     <div className={`cs:flex cs:items-center cs:max-md:min-h-11 ${gapScaleMap[scale]}`}>
       <input
@@ -55,6 +69,7 @@ export const Radio = memo(function Radio({
         type="radio"
         style={colorStyle}
         className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-200 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 ${isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor) ? "cs:before:bg-gray-900" : "cs:before:bg-white"} cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${TRANSITION_SLOW} ${radioScaleMap[scale]} cs-checked`}
+        onChange={handleChange}
         {...props}
       />
       {label && (

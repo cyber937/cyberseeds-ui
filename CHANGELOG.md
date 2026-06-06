@@ -1,5 +1,21 @@
 # Changelog
 
+## Unreleased
+
+### New Features
+
+- **`onCheckedChange(checked: boolean)` on Switch / Checkbox / Radio** — 型付きの真偽値コールバックを 3 コンポーネントに追加。
+  - Switch は内部的に `<button>` 要素なので、これまで `onChange` は型上の存在のみで実際には発火せず、消費側で `onClick={() => setX(!x)}` を書く必要があった。`onCheckedChange={setX}` で済むようになる。
+  - Checkbox / Radio は `<input>` ベースなので native `onChange` は動くが、`onChange={(e) => fn(e.target.checked)}` のセレモニーが不要になる。
+  - 既存の `onChange` / `onClick` は引き続き機能（後方互換）。両方指定された場合は `onCheckedChange` が先、続いて `onChange` / `onClick` の順で呼ばれる。
+
+  ```tsx
+  // 推奨
+  <Switch checked={x} onCheckedChange={setX} />
+  <Checkbox checked={x} onCheckedChange={setX} />
+  <Radio checked={x} onCheckedChange={setX} />
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
