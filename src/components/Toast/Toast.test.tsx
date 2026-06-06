@@ -248,4 +248,60 @@ describe("ToastProvider", () => {
     }).toThrow("useToast must be used within a ToastProvider");
     consoleSpy.mockRestore();
   });
+
+  describe("Per-instance position override", () => {
+    function PositionConsumer() {
+      const { success, error } = useToast();
+      return (
+        <div>
+          <button onClick={() => success("Default position")}>Default</button>
+          <button onClick={() => success("Top center", 5000, "top-center")}>TopCenter</button>
+          <button onClick={() => error("Bottom right", 0, "bottom-right")}>BottomRight</button>
+        </div>
+      );
+    }
+
+    it("renders a toast in the provider's default position when no override is given", () => {
+      render(
+        <ToastProvider position="top-right">
+          <PositionConsumer />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByText("Default"));
+      const toast = screen.getByText("Default position");
+      // Walk up to the fixed container.
+      const container = toast.closest('.cs\\:fixed') as HTMLElement;
+      expect(container.className).toContain("cs:top-4");
+      expect(container.className).toContain("cs:right-4");
+    });
+
+    it("renders a per-instance toast in its overridden position", () => {
+      render(
+        <ToastProvider position="top-right">
+          <PositionConsumer />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByText("TopCenter"));
+      const toast = screen.getByText("Top center");
+      const container = toast.closest('.cs\\:fixed') as HTMLElement;
+      expect(container.className).toContain("cs:top-4");
+      expect(container.className).toContain("cs:left-1/2");
+      // Should NOT be in the default top-right container.
+      expect(container.className).not.toContain("cs:right-4");
+    });
+
+    it("groups toasts with the same effective position into one container", () => {
+      const { container } = render(
+        <ToastProvider position="top-right">
+          <PositionConsumer />
+        </ToastProvider>,
+      );
+      fireEvent.click(screen.getByText("Default"));
+      fireEvent.click(screen.getByText("BottomRight"));
+      fireEvent.click(screen.getByText("TopCenter"));
+      // 3 distinct containers should exist (top-right, bottom-right, top-center).
+      const fixedContainers = container.querySelectorAll('.cs\\:fixed');
+      expect(fixedContainers).toHaveLength(3);
+    });
+  });
 });

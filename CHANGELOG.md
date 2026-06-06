@@ -29,6 +29,19 @@
 
   各 key (`base`/`sm`/`md`/`lg`/`xl`) は Tailwind 標準の breakpoint と対応 (`base` は prefix なし)。指定しなかった breakpoint はクラスに含まれないので、不要な CSS を吐かない。
 
+- **Toast: per-instance position override** — `useToast()` の `success` / `error` / `warning` / `info` 4 メソッドに optional な 3rd 引数 `position?: ToastPosition` を追加。指定があれば、その toast 1 件だけ `ToastProvider` のデフォルト position を上書きして表示される。同じ position に振られた複数 toast は同じ fixed コンテナにスタックされ、別 position の toast は別コンテナにレンダリングされる。既存の 2-arg 呼び出し (`success(msg)`、`success(msg, 3000)`) は完全に後方互換。
+
+  ```tsx
+  // Provider default は top-right
+  <ToastProvider position="top-right">…</ToastProvider>
+
+  // 通常: top-right
+  toast.success("Saved!");
+
+  // この 1 件だけ bottom-center
+  toast.error("Network error", 0, "bottom-center");
+  ```
+
 ## Next
 
 ### New Components
