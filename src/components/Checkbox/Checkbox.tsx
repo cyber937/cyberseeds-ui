@@ -1,4 +1,5 @@
-import { useId } from "react";
+import clsx from "clsx";
+import { useId, type Ref } from "react";
 import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
 import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
@@ -17,6 +18,10 @@ interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>
    * fires for callers that need the original event.
    */
   onCheckedChange?: (checked: boolean) => void;
+  /** Extra class names applied to the outer wrapper. */
+  className?: string;
+  /** Forwarded to the inner `<input type="checkbox">`. */
+  ref?: Ref<HTMLInputElement>;
 }
 
 const gapScaleMap: Record<Scale, string> = {
@@ -54,6 +59,8 @@ export function Checkbox({
   id: externalId,
   onCheckedChange,
   onChange,
+  className,
+  ref,
   ...props
 }: CheckboxProps) {
   const generatedId = useId();
@@ -71,12 +78,13 @@ export function Checkbox({
   };
 
   return (
-    <div className={`cs:flex cs:max-md:min-h-11 cs:max-md:items-center ${gapScaleMap[scale]}`}>
+    <div className={clsx(`cs:flex cs:max-md:min-h-11 cs:max-md:items-center ${gapScaleMap[scale]}`, className)}>
       <div className="cs:flex cs:h-6 cs:shrink-0 cs:items-center">
         <div
           className={`cs:group cs:grid cs:grid-cols-1 ${checkBoxScaleMap[scale]}`}
         >
           <input
+            ref={ref}
             id={id}
             type="checkbox"
             style={colorStyle}

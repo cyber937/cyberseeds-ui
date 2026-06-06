@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
@@ -114,6 +115,28 @@ describe('Checkbox Component', () => {
       render(<Checkbox aria-label="Custom checkbox" />);
       const checkbox = screen.getByRole('checkbox');
       expect(checkbox).toHaveAttribute('aria-label', 'Custom checkbox');
+    });
+  });
+
+  describe('API consistency', () => {
+    it('forwards ref to the inner input', () => {
+      const ref = createRef<HTMLInputElement>();
+      render(<Checkbox ref={ref} />);
+      expect(ref.current).not.toBeNull();
+      expect(ref.current?.tagName).toBe('INPUT');
+      expect(ref.current?.type).toBe('checkbox');
+    });
+
+    it('applies className to the outer wrapper', () => {
+      const { container } = render(<Checkbox className="my-checkbox" />);
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.className).toContain('my-checkbox');
+    });
+
+    it('does not leak className onto the inner input', () => {
+      render(<Checkbox className="my-checkbox" />);
+      const input = screen.getByRole('checkbox');
+      expect(input.className).not.toContain('my-checkbox');
     });
   });
 });
