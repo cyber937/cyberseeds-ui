@@ -114,6 +114,11 @@
       "import": "./dist/Modal.js",
       "default": "./dist/Modal.js"
     },
+    "./NavMenu": {
+      "types": "./dist/NavMenu.d.ts",
+      "import": "./dist/NavMenu.js",
+      "default": "./dist/NavMenu.js"
+    },
     "./Pagination": {
       "types": "./dist/Pagination.d.ts",
       "import": "./dist/Pagination.js",

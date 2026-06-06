@@ -30,6 +30,7 @@ export { GroupBox } from "./GroupBox/GroupBox";
 export { Input } from "./Input/Input";
 export { Label } from "./Label/Label";
 export { Modal } from "./Modal/Modal";
+export { NavMenu } from "./NavMenu/NavMenu";
 export { Pagination } from "./Pagination/Pagination";
 export { PhoneInput } from "./PhoneInput/PhoneInput";
 export { PillBox as Pillbox } from "./PillBox/PillBox";

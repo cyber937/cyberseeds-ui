@@ -31,6 +31,7 @@ const componentEntries = {
   Input: "src/components/Input/Input.tsx",
   Label: "src/components/Label/Label.tsx",
   Modal: "src/components/Modal/Modal.tsx",
+  NavMenu: "src/components/NavMenu/NavMenu.tsx",
   Pagination: "src/components/Pagination/Pagination.tsx",
   PhoneInput: "src/components/PhoneInput/PhoneInput.tsx",
   PillBox: "src/components/PillBox/PillBox.tsx",
