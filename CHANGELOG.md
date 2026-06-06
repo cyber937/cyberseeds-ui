@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 1.5.0 (2026-06-06)
 
 ### Improvements
 
@@ -61,8 +61,6 @@
   ```
 
   これにより、Next.js App Router で `<Button onClick={() => router.push(…)}>` と書く代わりに、ネイティブな `<Link>` を子に置いてもボタンの見た目と挙動が手に入る。
-
-## Next
 
 ### New Components
 
@@ -134,9 +132,9 @@
   - `icon` / `trailing` (badge / kbd など) スロット、`disabled` 状態 (a11y: `aria-disabled` + tabIndex=-1) もサポート
   - root は `<nav aria-label="Main navigation">` (ariaLabel prop で変更可) で WAI-ARIA landmark を提供
 
-## Unreleased
+### Earlier Improvements (Tier 1–2)
 
-### New Features
+#### New Features
 
 - **`onCheckedChange(checked: boolean)` on Switch / Checkbox / Radio** — 型付きの真偽値コールバックを 3 コンポーネントに追加。
   - Switch は内部的に `<button>` 要素なので、これまで `onChange` は型上の存在のみで実際には発火せず、消費側で `onClick={() => setX(!x)}` を書く必要があった。`onCheckedChange={setX}` で済むようになる。
