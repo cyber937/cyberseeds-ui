@@ -1,4 +1,5 @@
-import { memo, useId } from "react";
+import clsx from "clsx";
+import { memo, useId, type Ref } from "react";
 import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
 import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import { TRANSITION_SLOW } from "../Constants/designTokens";
@@ -16,6 +17,10 @@ interface RadioProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "
    * Symmetrical with {@link Checkbox} and {@link Switch}.
    */
   onCheckedChange?: (checked: boolean) => void;
+  /** Extra class names applied to the outer wrapper. */
+  className?: string;
+  /** Forwarded to the inner `<input type="radio">`. */
+  ref?: Ref<HTMLInputElement>;
 }
 
 const gapScaleMap: Record<Scale, string> = {
@@ -46,6 +51,8 @@ export const Radio = memo(function Radio({
   id: externalId,
   onCheckedChange,
   onChange,
+  className,
+  ref,
   ...props
 }: RadioProps) {
   const generatedId = useId();
@@ -63,8 +70,9 @@ export const Radio = memo(function Radio({
   };
 
   return (
-    <div className={`cs:flex cs:items-center cs:max-md:min-h-11 ${gapScaleMap[scale]}`}>
+    <div className={clsx(`cs:flex cs:items-center cs:max-md:min-h-11 ${gapScaleMap[scale]}`, className)}>
       <input
+        ref={ref}
         id={id}
         type="radio"
         style={colorStyle}

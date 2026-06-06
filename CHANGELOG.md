@@ -89,6 +89,18 @@
 
   **v1 のスコープ外**（将来 PR で追加検討）: 複数選択、非同期/サーバ駆動オプション、フリーテキスト入力、option グルーピング、仮想化、Floating UI による表示位置フリップ。
 
+### Improvements
+
+- **API consistency: Switch / Checkbox / Radio に `className` + `ref` を追加** — 3 つの form control に
+  - `className?: string`: 外側ラッパーに適用（インナーの button / input には漏らさない）
+  - `ref?: Ref<...>`: インナーの button / input にフォワード
+  既存 props は影響なし。React 19 の ref-as-prop 形式で実装。
+
+  ```tsx
+  const ref = useRef<HTMLInputElement>(null);
+  <Checkbox ref={ref} className="self-end" />
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features

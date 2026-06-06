@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { composeStories } from '@storybook/react';
@@ -164,6 +165,28 @@ describe('Switch Component', () => {
       render(<Switch aria-describedby="switch-description" />);
       const switchElement = screen.getByRole('switch');
       expect(switchElement).toHaveAttribute('aria-describedby', 'switch-description');
+    });
+  });
+
+  describe('API consistency', () => {
+    it('forwards ref to the inner button', () => {
+      const ref = createRef<HTMLButtonElement>();
+      render(<Switch ref={ref} />);
+      expect(ref.current).not.toBeNull();
+      expect(ref.current?.tagName).toBe('BUTTON');
+      expect(ref.current?.getAttribute('role')).toBe('switch');
+    });
+
+    it('applies className to the outer wrapper', () => {
+      const { container } = render(<Switch className="my-switch" />);
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.className).toContain('my-switch');
+    });
+
+    it('does not leak className onto the inner button', () => {
+      render(<Switch className="my-switch" />);
+      const button = screen.getByRole('switch');
+      expect(button.className).not.toContain('my-switch');
     });
   });
 });

@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { useId } from "react";
+import { useId, type Ref } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
@@ -21,6 +21,10 @@ interface SwitchProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
   onLabel?: string;
   offLabel?: string;
   disabled?: boolean;
+  /** Extra class names applied to the outer wrapper. */
+  className?: string;
+  /** Forwarded to the inner `<button role="switch">`. */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const scaleMap: Record<Scale, string> = {
@@ -61,6 +65,8 @@ export function Switch({
   disabled = false,
   id: externalId,
   onClick,
+  className,
+  ref,
   ...props
 }: SwitchProps) {
   const generatedId = useId();
@@ -80,8 +86,9 @@ export function Switch({
   };
 
   return (
-    <div className="cs:flex cs:gap-1 cs:items-center cs:max-md:min-h-11">
+    <div className={clsx("cs:flex cs:gap-1 cs:items-center cs:max-md:min-h-11", className)}>
       <button
+        ref={ref}
         id={id}
         type="button"
         role="switch"
