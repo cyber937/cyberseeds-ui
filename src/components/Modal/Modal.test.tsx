@@ -261,4 +261,44 @@ describe('Modal Component', () => {
       expect(dialog).toHaveAttribute('tabindex', '-1');
     });
   });
+
+  describe('Responsive width', () => {
+    function panelOf(dialog: HTMLElement): HTMLElement {
+      return dialog.querySelector('div')!;
+    }
+
+    it('applies the single string width as a sm: class (legacy)', () => {
+      render(
+        <Modal width="lg">
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      const panel = panelOf(screen.getByRole('dialog', { hidden: true }));
+      expect(panel.className).toContain('cs:sm:w-2xl');
+    });
+
+    it('applies an object width as per-breakpoint classes', () => {
+      render(
+        <Modal width={{ base: "sm", md: "md", lg: "lg" }}>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      const panel = panelOf(screen.getByRole('dialog', { hidden: true }));
+      expect(panel.className).toContain('cs:w-2xs');
+      expect(panel.className).toContain('cs:md:w-md');
+      expect(panel.className).toContain('cs:lg:w-2xl');
+    });
+
+    it('omits unspecified breakpoints from the class list', () => {
+      render(
+        <Modal width={{ md: "lg" }}>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      const panel = panelOf(screen.getByRole('dialog', { hidden: true }));
+      expect(panel.className).toContain('cs:md:w-2xl');
+      expect(panel.className).not.toContain('cs:lg:');
+      expect(panel.className).not.toContain('cs:xl:');
+    });
+  });
 });

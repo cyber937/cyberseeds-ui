@@ -57,3 +57,21 @@ export const Mobile: Story = {
     </Modal>
   ),
 };
+
+export const ResponsiveWidth: Story = {
+  name: "Responsive width (per-breakpoint object)",
+  render: () => (
+    <Modal width={{ base: "sm", md: "md", lg: "lg" }}>
+      <Modal.Header>Responsive Modal</Modal.Header>
+      <Modal.Body>
+        Pass <code>width</code> as an object to map Tailwind breakpoints to
+        named sizes. This modal is <strong>sm</strong> on mobile,{" "}
+        <strong>md</strong> at md+ (≥ 768 px), and <strong>lg</strong> at lg+
+        (≥ 1024 px). Try resizing the viewport.
+      </Modal.Body>
+      <Modal.Footer>
+        <Button>OK</Button>
+      </Modal.Footer>
+    </Modal>
+  ),
+};
