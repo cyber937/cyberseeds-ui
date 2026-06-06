@@ -87,6 +87,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | `Input` | Text input with label integration, validation styling, and auto-generated id |
 | `TextArea` | Multiline text input with label integration and validation styling |
 | `Select` / `SelectOption` | Styled select dropdown with custom chevron icon |
+| `Combobox` | Searchable select with type-to-filter, keyboard navigation, and custom rendering |
 | `PhoneInput` | Formatted 10-digit US phone number input with cursor-aware formatting |
 | `Checkbox` | Accessible checkbox with custom SVG checkmark and indeterminate state support |
 | `Radio` | Single radio input with label association |
@@ -94,14 +95,59 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | `Switch` | Toggle switch with on/off labels and animated transitions |
 | `Label` | Semantic `<label>` element with required indicator (`*`) support |
 
+### Actions
+
+| Component | Description |
+| --- | --- |
+| `Button` | Versatile button with `primary` / `secondary` variants, `Button.Icon`, and `asChild` (Slot) support |
+| `ButtonGroup` | Segmented control with `ButtonGroup.Item`, single/multi select, horizontal/vertical orientation |
+| `ButtonTabs` | Button-style tabs (`ButtonTabs.List` / `Trigger` / `Content`), WAI-ARIA keyboard navigation, `fullWidth` |
+
 ### Layout
 
 | Component | Description |
 | --- | --- |
+| `Card` | Container with `Card.Header`, `Card.Body`, `Card.Footer`, `Card.Stat`, shadow/bordered options |
 | `Accordion` / `AccordionItem` | Collapsible content panels with smooth animations and ARIA support |
 | `GroupBox` | Labeled container to group related form inputs |
-| `Modal` | Dialog with `Modal.Header`, `Modal.Body`, `Modal.Footer` compound components |
+
+### Navigation
+
+| Component | Description |
+| --- | --- |
 | `Tabs` | Tab navigation with `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, WAI-ARIA keyboard navigation |
+| `Breadcrumb` | Breadcrumb trail with `Breadcrumb.Item` and `current` state |
+| `NavMenu` | Sidebar navigation compound component with `NavMenu.Section` and `NavMenu.Item` |
+| `Pagination` | Page navigation control with offset/limit/total props and accessible page buttons |
+| `Stepper` | Step progress indicator with completed / active / pending states and connectors |
+
+### Overlay
+
+| Component | Description |
+| --- | --- |
+| `Modal` | Dialog with `Modal.Header`, `Modal.Body`, `Modal.Footer`; responsive `width` and mobile full-screen |
+| `Drawer` | Slide-in panel for filters / settings with `Drawer.Header`, `Drawer.Body`, `Drawer.Footer` |
+| `Tooltip` | Hover/focus tooltip with auto-flip positioning, delay, and `role="tooltip"` |
+
+### Feedback
+
+| Component | Description |
+| --- | --- |
+| `Alert` | Static feedback banner with `info` / `success` / `warning` / `error` variants, title, icon, closable |
+| `Toast` | Notification toasts with 4 variants (`success` / `error` / `warning` / `info`), auto-dismiss, per-instance position |
+| `Spinner` | SVG-based loading indicator with `role="status"` |
+| `Progress` | Progress bar with optional value display and stripe animation |
+| `Skeleton` | Loading placeholder for content that is still fetching |
+
+### Data Display
+
+| Component | Description |
+| --- | --- |
+| `Table` | Data table with `Table.Head`, `Table.Body`, `Table.Row`, `Table.HeaderCell`, `Table.Cell` |
+| `Avatar` | Profile image with initials fallback, custom fallback, and `circle` / `square` shapes |
+| `Badge` | Notification count / status with `solid` / `outline` / `dot` variants and `Badge.Wrapper` |
+| `PillBox` | Capsule-style tag/badge component |
+| `EmptyState` | Placeholder for empty data with icon, title, description, and optional action |
 
 ### Theming
 
@@ -109,28 +155,6 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | --- | --- |
 | `UIColorProvider` | Global color context for all child components, supports preset/custom/semantic colors |
 | `ThemeProvider` | Dark mode management with `"light"` / `"dark"` / `"system"` modes |
-
-### Feedback
-
-| Component | Description |
-| --- | --- |
-| `Toast` | Notification toasts with 4 variants (`success` / `error` / `warning` / `info`), auto-dismiss |
-| `Spinner` | SVG-based loading indicator with `role="status"` |
-| `Progress` | Progress bar with percentage display and stripe animation |
-
-### Data Display
-
-| Component | Description |
-| --- | --- |
-| `Badge` | Notification count / status with `solid` / `outline` / `dot` variants and `Badge.Wrapper` |
-| `Pillbox` | Capsule-style tag/badge component |
-| `Button` | Versatile button with `primary` / `secondary` variants and `Button.Icon` compound component |
-
-### Overlay
-
-| Component | Description |
-| --- | --- |
-| `Tooltip` | Hover/focus tooltip with auto-flip positioning, delay, and `role="tooltip"` |
 
 All components support `scale` (`"xs"` | `"sm"` | `"md"` | `"lg"`) and `color` props using the Tailwind v4 color palette, custom color objects, or semantic color names.
 
