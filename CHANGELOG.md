@@ -15,6 +15,20 @@
   </ButtonGroup>
   ```
 
+- **Modal: `width` prop が responsive object 形式を受け付けるように** — これまでは `width="sm" | "md" | "lg"` で固定幅を 1 つ指定する形だったが、`{ base?, sm?, md?, lg?, xl? }` の breakpoint オブジェクトも受け付けるように拡張。Tailwind の各 breakpoint で別々のサイズを指定でき、mobile では narrow、desktop では wide といったレスポンシブ Modal を 1 prop で組める。既存の文字列形式の挙動は完全に保持。
+
+  ```tsx
+  // 従来 (既存挙動、変更なし)
+  <Modal width="md">…</Modal>
+
+  // 新規: responsive object
+  <Modal width={{ base: "sm", md: "md", lg: "lg" }}>
+    {/* mobile では small、md+ で medium、lg+ で large */}
+  </Modal>
+  ```
+
+  各 key (`base`/`sm`/`md`/`lg`/`xl`) は Tailwind 標準の breakpoint と対応 (`base` は prefix なし)。指定しなかった breakpoint はクラスに含まれないので、不要な CSS を吐かない。
+
 ## Next
 
 ### New Components

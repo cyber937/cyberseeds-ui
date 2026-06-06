@@ -11,17 +11,51 @@ type ModalContextType = {
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
+type ModalWidth = "sm" | "md" | "lg";
+
+/**
+ * Responsive width: a single named size, or an object mapping Tailwind
+ * breakpoints to sizes so the modal can grow/shrink as the viewport changes.
+ *
+ * Example: `{ base: "sm", md: "md", lg: "lg" }` is small on mobile, medium
+ * on tablet (>= md), and large on desktop (>= lg).
+ */
+type ResponsiveModalWidth =
+  | ModalWidth
+  | Partial<Record<"base" | "sm" | "md" | "lg" | "xl", ModalWidth>>;
+
 type ModalProps = {
-  width?: "sm" | "md" | "lg";
+  width?: ResponsiveModalWidth;
   children: ReactNode;
   onClose?: () => void;
 };
 
-const widthMap = {
+// Each entry is the class to use at that breakpoint's MIN width. We use
+// the `sm:` prefix on the smallest (md/sm/lg) row of the legacy single-value
+// form so that on mobile the modal still goes full-screen via `max-md:w-full`.
+const baseWidthMap = {
   sm: "cs:sm:w-2xs",
   md: "cs:sm:w-md",
   lg: "cs:sm:w-2xl",
 } as const;
+
+// For the responsive object form, each breakpoint key prefixes the class.
+// `base` has no prefix (applies on all sizes); the rest use the standard
+// Tailwind responsive prefixes.
+const breakpointWidthClasses = {
+  sm: { sm: "cs:sm:w-2xs", md: "cs:sm:w-md", lg: "cs:sm:w-2xl" },
+  md: { sm: "cs:md:w-2xs", md: "cs:md:w-md", lg: "cs:md:w-2xl" },
+  lg: { sm: "cs:lg:w-2xs", md: "cs:lg:w-md", lg: "cs:lg:w-2xl" },
+  xl: { sm: "cs:xl:w-2xs", md: "cs:xl:w-md", lg: "cs:xl:w-2xl" },
+  base: { sm: "cs:w-2xs", md: "cs:w-md", lg: "cs:w-2xl" },
+} as const;
+
+function resolveWidthClasses(width: ResponsiveModalWidth): string {
+  if (typeof width === "string") return baseWidthMap[width];
+  return (Object.entries(width) as Array<[keyof typeof breakpointWidthClasses, ModalWidth]>)
+    .map(([bp, size]) => breakpointWidthClasses[bp][size])
+    .join(" ");
+}
 
 export function Modal({ width = "md", children, onClose }: ModalProps) {
   const headerId = useId();
@@ -85,7 +119,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
             isVisible
               ? "cs:opacity-100 cs:scale-100"
               : "cs:opacity-0 cs:scale-95"
-          } ${widthMap[width]}`}
+          } ${resolveWidthClasses(width)}`}
         >
           {children}
         </div>
