@@ -15,6 +15,7 @@ const componentEntries = {
   index: "src/components/index.tsx",
   Accordion: "src/components/Accordion/Accordion.tsx",
   Alert: "src/components/Alert/Alert.tsx",
+  Avatar: "src/components/Avatar/Avatar.tsx",
   Badge: "src/components/Badge/Badge.tsx",
   Button: "src/components/Button/Button.tsx",
   ButtonGroup: "src/components/ButtonGroup/index.tsx",
