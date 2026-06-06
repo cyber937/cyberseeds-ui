@@ -32,6 +32,15 @@
   />
   ```
 
+- **`Skeleton` コンポーネント** — ロード中のプレースホルダ。3 つの variant：`text`（行サイズに合わせた幅広バー）/ `circular`（アバター用の円形）/ `rectangular`（カード・画像の矩形）。`lines` プロップを渡すと複数行スタック（最終行のみ 60% 幅にしてパラグラフ末を表現）。`prefers-reduced-motion: reduce` を尊重してパルスアニメーションを抑制。`role="status" aria-busy aria-live="polite"` でアクセシビリティ対応。
+
+  ```tsx
+  <Skeleton width="60%" />
+  <Skeleton variant="circular" width={40} height={40} />
+  <Skeleton variant="rectangular" width="100%" height={120} />
+  <Skeleton lines={3} />
+  ```
+
 ## 1.4.0 (2026-03-13)
 
 ### New Features
