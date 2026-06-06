@@ -24,6 +24,7 @@ import * as TabsStories from '../Tabs/Tabs.stories';
 import * as ToastStories from '../Toast/Toast.stories';
 import * as TooltipStories from '../Tooltip/Tooltip.stories';
 import * as AlertStories from '../Alert/Alert.stories';
+import * as AvatarStories from '../Avatar/Avatar.stories';
 import * as CardStories from '../Card/Card.stories';
 import * as StepperStories from '../Stepper/Stepper.stories';
 import * as ButtonGroupStories from '../ButtonGroup/ButtonGroup.stories';
@@ -58,6 +59,7 @@ const TabsComposed = composeStories(TabsStories);
 const ToastComposed = composeStories(ToastStories);
 const TooltipComposed = composeStories(TooltipStories);
 const AlertComposed = composeStories(AlertStories);
+const AvatarComposed = composeStories(AvatarStories);
 const CardComposed = composeStories(CardStories);
 const StepperComposed = composeStories(StepperStories);
 const ButtonGroupComposed = composeStories(ButtonGroupStories);
@@ -261,6 +263,16 @@ describe('Accessibility Tests', () => {
 
   describe('Alert Component A11y', () => {
     Object.entries(AlertComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Avatar Component A11y', () => {
+    Object.entries(AvatarComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);

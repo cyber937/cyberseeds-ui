@@ -34,6 +34,11 @@
       "import": "./dist/Alert.js",
       "default": "./dist/Alert.js"
     },
+    "./Avatar": {
+      "types": "./dist/Avatar.d.ts",
+      "import": "./dist/Avatar.js",
+      "default": "./dist/Avatar.js"
+    },
     "./Badge": {
       "types": "./dist/Badge.d.ts",
       "import": "./dist/Badge.js",

@@ -1,6 +1,7 @@
 export { Accordion, AccordionItem } from "./Accordion/Accordion";
 export { Alert } from "./Alert/Alert";
 export type { AlertVariant } from "./Alert/Alert";
+export { Avatar } from "./Avatar/Avatar";
 export { Badge } from "./Badge/Badge";
 export type { BadgeVariant } from "./Badge/Badge";
 export { Button } from "./Button/Button";

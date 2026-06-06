@@ -1,5 +1,21 @@
 # Changelog
 
+## Next
+
+### New Components
+
+- **`Avatar` コンポーネント** — ユーザープロフィール / KPI カード / activity feed 用のコンパクトな avatar。`src` 画像を読み込み、`onerror` で broken → 自動的に `name` の頭文字 (例: "Kiyoshi Nagahama" → "KN") にフォールバック、さらにカスタム `fallback` で絵文字やアイコンも置ける。`scale` (xs / sm / md / lg), `color`, `shape` ("circle" / "square") をサポート。
+
+  ```tsx
+  <Avatar src="https://i.pravatar.cc/150" alt="Sam" />
+  <Avatar name="Kiyoshi Nagahama" color="blue" />
+  <Avatar fallback="🦊" color="amber" />
+  ```
+
+  - 画像表示時は `<img>` の `alt` がそのまま使われ、wrapper の余分な `role="img"` は省略される (重複 a11y 名対策)
+  - フォールバック時は wrapper に `role="img"` + `aria-label={alt ?? name ?? "Avatar"}` を付与
+  - Tailwind の `cs:ring-2 cs:-space-x-2` などで avatar スタックを組める (Story 参照)
+
 ## Unreleased
 
 ### New Features
