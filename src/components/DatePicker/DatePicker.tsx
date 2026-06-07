@@ -1,11 +1,12 @@
 "use client";
 
 import clsx from "clsx";
-import { useId, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 import { Popover } from "../Popover/Popover";
+import { Select, SelectOption } from "../Select/Select";
 
 interface DatePickerProps {
   /** Controlled selected date. */
@@ -82,7 +83,6 @@ export function DatePicker({
   placeholder = "Select a date",
   className,
 }: DatePickerProps) {
-  const labelId = useId();
   const { color: contextColor } = useUIColor() ?? { color: undefined };
   const colorStyle = colorToCSSVars(resolveColor(contextColor ?? color));
 
@@ -97,6 +97,18 @@ export function DatePicker({
 
   const weeks = useMemo(() => buildGrid(viewMonth), [viewMonth]);
   const today = startOfDay(new Date());
+
+  // Year options for the dropdown: min..max when bounded, otherwise a window
+  // around today, always widened to include the month being viewed.
+  const viewYear = viewMonth.getFullYear();
+  const years = useMemo(() => {
+    const todayYear = new Date().getFullYear();
+    const lo = Math.min(min ? min.getFullYear() : todayYear - 10, viewYear);
+    const hi = Math.max(max ? max.getFullYear() : todayYear + 10, viewYear);
+    const list: number[] = [];
+    for (let y = lo; y <= hi; y++) list.push(y);
+    return list;
+  }, [min, max, viewYear]);
 
   function isDisabledDay(day: Date): boolean {
     if (min && startOfDay(day) < startOfDay(min)) return true;
@@ -158,7 +170,7 @@ export function DatePicker({
 
       <Popover.Content aria-label="Choose date" className="cs:p-3">
         <div style={colorStyle}>
-          <div className="cs:mb-2 cs:flex cs:items-center cs:justify-between cs:gap-2">
+          <div className="cs:mb-2 cs:flex cs:items-center cs:gap-1.5">
             <button
               type="button"
               aria-label="Previous month"
@@ -167,13 +179,32 @@ export function DatePicker({
             >
               ‹
             </button>
-            <span
-              id={labelId}
-              className="cs:text-sm cs:font-semibold cs:text-gray-900 cs:dark:text-gray-200"
-              aria-live="polite"
-            >
-              {MONTHS[viewMonth.getMonth()]} {viewMonth.getFullYear()}
-            </span>
+            <div className="cs:flex cs:flex-1 cs:gap-1.5">
+              <Select
+                scale="sm"
+                aria-label="Month"
+                value={String(viewMonth.getMonth())}
+                onChange={(e) =>
+                  setViewMonth(new Date(viewMonth.getFullYear(), Number(e.target.value), 1))
+                }
+              >
+                {MONTHS.map((m, i) => (
+                  <SelectOption key={m} value={String(i)} label={m} />
+                ))}
+              </Select>
+              <Select
+                scale="sm"
+                aria-label="Year"
+                value={String(viewMonth.getFullYear())}
+                onChange={(e) =>
+                  setViewMonth(new Date(Number(e.target.value), viewMonth.getMonth(), 1))
+                }
+              >
+                {years.map((y) => (
+                  <SelectOption key={y} value={String(y)} label={String(y)} />
+                ))}
+              </Select>
+            </div>
             <button
               type="button"
               aria-label="Next month"
@@ -184,7 +215,11 @@ export function DatePicker({
             </button>
           </div>
 
-          <table role="grid" aria-labelledby={labelId} className="cs:border-collapse">
+          <table
+            role="grid"
+            aria-label={`${MONTHS[viewMonth.getMonth()]} ${viewMonth.getFullYear()}`}
+            className="cs:border-collapse"
+          >
             <thead>
               <tr>
                 {WEEKDAYS.map((wd) => (

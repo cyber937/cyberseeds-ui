@@ -1,5 +1,15 @@
 # Changelog
 
+## Next
+
+### Improvements
+
+- **DatePicker: 月・年をドロップダウンで直接選択** — カレンダーヘッダの「Month Year」テキストを、**月セレクト + 年セレクト**に置き換え（prev/next の矢印も併存）。何ヶ月も矢印を連打せずに任意の月・年へジャンプできる。年の選択肢は `min`/`max` があればその範囲、無ければ「今年 ±10年」を表示し、表示中の月を常に含むよう自動拡張。各セレクトには `aria-label`（Month / Year）を付与。
+
+  ```tsx
+  <DatePicker value={date} onChange={setDate} min={new Date(2000,0,1)} max={new Date()} />
+  ```
+
 ## 1.8.0 (2026-06-07)
 
 ### New Components

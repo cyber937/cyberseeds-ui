@@ -35,15 +35,32 @@ describe("DatePicker", () => {
     expect(screen.queryByRole("grid")).not.toBeInTheDocument();
   });
 
-  it("navigates months", () => {
+  it("navigates months with the arrows", () => {
     render(<DatePicker defaultValue={new Date(2026, 5, 10)} />);
     fireEvent.click(screen.getByRole("button", { name: "Jun 10, 2026" }));
-    expect(screen.getByText("June 2026")).toBeInTheDocument();
+    const month = () => screen.getByLabelText("Month") as HTMLSelectElement;
+    expect(month().value).toBe("5"); // June
     fireEvent.click(screen.getByRole("button", { name: "Next month" }));
-    expect(screen.getByText("July 2026")).toBeInTheDocument();
+    expect(month().value).toBe("6"); // July
     fireEvent.click(screen.getByRole("button", { name: "Previous month" }));
     fireEvent.click(screen.getByRole("button", { name: "Previous month" }));
-    expect(screen.getByText("May 2026")).toBeInTheDocument();
+    expect(month().value).toBe("4"); // May
+  });
+
+  it("jumps to a month and year via the dropdowns", () => {
+    render(<DatePicker defaultValue={new Date(2026, 5, 10)} />);
+    fireEvent.click(screen.getByRole("button", { name: "Jun 10, 2026" }));
+    const targetYear = String(new Date().getFullYear() + 2);
+
+    fireEvent.change(screen.getByLabelText("Month"), { target: { value: "0" } });
+    fireEvent.change(screen.getByLabelText("Year"), { target: { value: targetYear } });
+
+    expect((screen.getByLabelText("Month") as HTMLSelectElement).value).toBe("0");
+    expect((screen.getByLabelText("Year") as HTMLSelectElement).value).toBe(targetYear);
+    // January of the target year is now in view.
+    expect(
+      screen.getByRole("grid", { name: `January ${targetYear}` }),
+    ).toBeInTheDocument();
   });
 
   it("clears the selection", () => {
