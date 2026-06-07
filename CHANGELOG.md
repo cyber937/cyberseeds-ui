@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 1.8.0 (2026-06-07)
 
 ### New Components
 
