@@ -82,6 +82,33 @@ export const WithGroupsAndDestructive: Story = {
   ),
 };
 
+export const WithSubmenu: Story = {
+  render: () => (
+    <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>
+      <Menu>
+        <Menu.Trigger asChild>
+          <Button>Actions</Button>
+        </Menu.Trigger>
+        <Menu.Content aria-label="Item actions">
+          <Menu.Item onSelect={() => {}}>Edit</Menu.Item>
+          <Menu.Sub label="Move to">
+            <Menu.Item onSelect={() => {}}>Warehouse A</Menu.Item>
+            <Menu.Item onSelect={() => {}}>Warehouse B</Menu.Item>
+            <Menu.Sub label="Regions">
+              <Menu.Item onSelect={() => {}}>West</Menu.Item>
+              <Menu.Item onSelect={() => {}}>East</Menu.Item>
+            </Menu.Sub>
+          </Menu.Sub>
+          <Menu.Separator />
+          <Menu.Item destructive onSelect={() => {}}>
+            Delete
+          </Menu.Item>
+        </Menu.Content>
+      </Menu>
+    </div>
+  ),
+};
+
 export const StartsOpen: Story = {
   render: () => (
     <div style={{ display: "flex", justifyContent: "center", padding: "3rem" }}>

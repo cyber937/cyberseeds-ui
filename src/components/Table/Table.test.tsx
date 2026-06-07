@@ -142,4 +142,55 @@ describe("Table Component", () => {
       expect(screen.getByRole("columnheader")).toHaveAttribute("scope", "col");
     });
   });
+
+  describe("Sorting & selection", () => {
+    it("renders a sortable header with aria-sort and fires onSort", () => {
+      const onSort = vi.fn();
+      render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell sortable sortDirection="asc" onSort={onSort}>
+                SKU
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+        </Table>,
+      );
+      expect(screen.getByRole("columnheader")).toHaveAttribute(
+        "aria-sort",
+        "ascending",
+      );
+      fireEvent.click(screen.getByRole("button", { name: /SKU/ }));
+      expect(onSort).toHaveBeenCalledTimes(1);
+    });
+
+    it("reports an unsorted sortable column as aria-sort=none", () => {
+      render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell sortable onSort={() => {}}>
+                SKU
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+        </Table>,
+      );
+      expect(screen.getByRole("columnheader")).toHaveAttribute("aria-sort", "none");
+    });
+
+    it("marks a selected row with aria-selected", () => {
+      render(
+        <Table>
+          <Table.Body>
+            <Table.Row selected>
+              <Table.Cell>X</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      expect(screen.getByRole("row")).toHaveAttribute("aria-selected", "true");
+    });
+  });
 });

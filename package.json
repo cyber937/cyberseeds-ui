@@ -79,6 +79,11 @@
       "import": "./dist/Combobox.js",
       "default": "./dist/Combobox.js"
     },
+    "./DatePicker": {
+      "types": "./dist/DatePicker.d.ts",
+      "import": "./dist/DatePicker.js",
+      "default": "./dist/DatePicker.js"
+    },
     "./Drawer": {
       "types": "./dist/Drawer.d.ts",
       "import": "./dist/Drawer.js",
@@ -174,6 +179,11 @@
       "import": "./dist/Skeleton.js",
       "default": "./dist/Skeleton.js"
     },
+    "./Slider": {
+      "types": "./dist/Slider.d.ts",
+      "import": "./dist/Slider.js",
+      "default": "./dist/Slider.js"
+    },
     "./Spinner": {
       "types": "./dist/Spinner.d.ts",
       "import": "./dist/Spinner.js",
@@ -198,6 +208,11 @@
       "types": "./dist/Tabs.d.ts",
       "import": "./dist/Tabs.js",
       "default": "./dist/Tabs.js"
+    },
+    "./TagInput": {
+      "types": "./dist/TagInput.d.ts",
+      "import": "./dist/TagInput.js",
+      "default": "./dist/TagInput.js"
     },
     "./TextArea": {
       "types": "./dist/TextArea.d.ts",

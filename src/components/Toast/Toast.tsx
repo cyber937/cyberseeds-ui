@@ -21,6 +21,8 @@ interface ToastProps {
   scale?: Scale;
   duration?: number;
   onClose?: () => void;
+  /** Optional action button (e.g. "Undo"); dismisses the toast after firing. */
+  action?: { label: string; onClick: () => void };
   className?: string;
 }
 
@@ -153,6 +155,7 @@ export function Toast({
   scale = "md",
   duration = 5000,
   onClose,
+  action,
   className,
 }: ToastProps) {
   const prefersReducedMotion = useReducedMotion();
@@ -219,6 +222,21 @@ export function Toast({
     >
       <Icon className={clsx("cs:shrink-0", iconScaleMap[scale], styles.iconColor)} />
       <div className="cs:flex-1">{children}</div>
+      {action && (
+        <button
+          type="button"
+          onClick={() => {
+            action.onClick();
+            handleClose();
+          }}
+          className={clsx(
+            `cs:border-0 cs:shadow-none cs:shrink-0 cs:rounded-md cs:px-2 cs:py-0.5 cs:font-semibold cs:underline cs:transition-opacity cs:hover:opacity-70 cs:cursor-pointer ${FOCUS_RING}`,
+            styles.text,
+          )}
+        >
+          {action.label}
+        </button>
+      )}
       {onClose && (
         <button
           type="button"
