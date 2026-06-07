@@ -92,4 +92,28 @@ describe("Menu", () => {
     fireEvent.keyDown(menu, { key: "Home" });
     expect(items[0]).toHaveFocus();
   });
+
+  it("opens a submenu and selecting a nested item closes the whole menu", () => {
+    const onMove = vi.fn();
+    render(
+      <Menu defaultOpen>
+        <Menu.Trigger>Actions</Menu.Trigger>
+        <Menu.Content aria-label="Item actions">
+          <Menu.Sub label="Move to">
+            <Menu.Item onSelect={onMove}>Warehouse A</Menu.Item>
+          </Menu.Sub>
+        </Menu.Content>
+      </Menu>,
+    );
+
+    const subTrigger = screen.getByRole("menuitem", { name: "Move to" });
+    expect(subTrigger).toHaveAttribute("aria-haspopup", "menu");
+
+    fireEvent.click(subTrigger);
+    const nested = screen.getByRole("menuitem", { name: "Warehouse A" });
+    fireEvent.click(nested);
+
+    expect(onMove).toHaveBeenCalledTimes(1);
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
 });

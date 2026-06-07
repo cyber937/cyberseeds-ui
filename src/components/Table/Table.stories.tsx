@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useMemo, useState } from "react";
 
 import { Badge } from "../Badge/Badge";
+import { Checkbox } from "../Checkbox/Checkbox";
 import { Table } from "./Table";
 
 const meta: Meta<typeof Table> = {
@@ -143,4 +145,85 @@ export const Scales: Story = {
       ))}
     </div>
   ),
+};
+
+export const SortableAndSelectable: Story = {
+  render: () => {
+    const [sortKey, setSortKey] = useState<"sku" | "on_hand">("sku");
+    const [dir, setDir] = useState<"asc" | "desc">("asc");
+    const [selected, setSelected] = useState<Record<string, boolean>>({});
+
+    const sorted = useMemo(() => {
+      const copy = [...rows];
+      copy.sort((a, b) => {
+        const av = a[sortKey];
+        const bv = b[sortKey];
+        const cmp = av < bv ? -1 : av > bv ? 1 : 0;
+        return dir === "asc" ? cmp : -cmp;
+      });
+      return copy;
+    }, [sortKey, dir]);
+
+    function toggleSort(key: "sku" | "on_hand") {
+      if (sortKey === key) setDir((d) => (d === "asc" ? "desc" : "asc"));
+      else {
+        setSortKey(key);
+        setDir("asc");
+      }
+    }
+
+    const allSelected = sorted.every((r) => selected[r.sku]);
+
+    return (
+      <Table>
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell>
+              <Checkbox
+                aria-label="Select all"
+                checked={allSelected}
+                onCheckedChange={(c) =>
+                  setSelected(
+                    c ? Object.fromEntries(sorted.map((r) => [r.sku, true])) : {},
+                  )
+                }
+              />
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              sortable
+              sortDirection={sortKey === "sku" ? dir : false}
+              onSort={() => toggleSort("sku")}
+            >
+              SKU
+            </Table.HeaderCell>
+            <Table.HeaderCell
+              align="right"
+              sortable
+              sortDirection={sortKey === "on_hand" ? dir : false}
+              onSort={() => toggleSort("on_hand")}
+            >
+              On hand
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+        <Table.Body>
+          {sorted.map((r) => (
+            <Table.Row key={r.sku} selected={!!selected[r.sku]}>
+              <Table.Cell>
+                <Checkbox
+                  aria-label={`Select ${r.sku}`}
+                  checked={!!selected[r.sku]}
+                  onCheckedChange={(c) =>
+                    setSelected((s) => ({ ...s, [r.sku]: c }))
+                  }
+                />
+              </Table.Cell>
+              <Table.Cell>{r.sku}</Table.Cell>
+              <Table.Cell align="right" numeric>{r.on_hand}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    );
+  },
 };

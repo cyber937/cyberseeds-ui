@@ -20,6 +20,12 @@ export type ToastPosition =
   | "top-center"
   | "bottom-center";
 
+/** Optional actionable button rendered inside the toast (e.g. "Undo"). */
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
 export interface ToastState {
   id: string;
   message: ReactNode;
@@ -27,14 +33,22 @@ export interface ToastState {
   duration: number;
   /** Per-instance position override; falls back to the provider's `position`. */
   position?: ToastPosition;
+  action?: ToastAction;
 }
+
+type ToastMethod = (
+  message: ReactNode,
+  duration?: number,
+  position?: ToastPosition,
+  action?: ToastAction,
+) => void;
 
 interface ToastContextType {
   toasts: ToastState[];
-  success: (message: ReactNode, duration?: number, position?: ToastPosition) => void;
-  error: (message: ReactNode, duration?: number, position?: ToastPosition) => void;
-  warning: (message: ReactNode, duration?: number, position?: ToastPosition) => void;
-  info: (message: ReactNode, duration?: number, position?: ToastPosition) => void;
+  success: ToastMethod;
+  error: ToastMethod;
+  warning: ToastMethod;
+  info: ToastMethod;
   remove: (id: string) => void;
 }
 
@@ -64,35 +78,41 @@ export function ToastProvider({
   }, []);
 
   const add = useCallback(
-    (variant: ToastVariant, message: ReactNode, duration?: number, position?: ToastPosition) => {
+    (
+      variant: ToastVariant,
+      message: ReactNode,
+      duration?: number,
+      position?: ToastPosition,
+      action?: ToastAction,
+    ) => {
       const id = `toast-${++toastCounter}`;
       const finalDuration = duration ?? (variant === "error" ? 0 : 5000);
       setToasts((prev) => [
         ...prev,
-        { id, message, variant, duration: finalDuration, position },
+        { id, message, variant, duration: finalDuration, position, action },
       ]);
     },
     [],
   );
 
-  const success = useCallback(
-    (message: ReactNode, duration?: number, position?: ToastPosition) =>
-      add("success", message, duration, position),
+  const success: ToastMethod = useCallback(
+    (message, duration, position, action) =>
+      add("success", message, duration, position, action),
     [add],
   );
-  const error = useCallback(
-    (message: ReactNode, duration?: number, position?: ToastPosition) =>
-      add("error", message, duration, position),
+  const error: ToastMethod = useCallback(
+    (message, duration, position, action) =>
+      add("error", message, duration, position, action),
     [add],
   );
-  const warning = useCallback(
-    (message: ReactNode, duration?: number, position?: ToastPosition) =>
-      add("warning", message, duration, position),
+  const warning: ToastMethod = useCallback(
+    (message, duration, position, action) =>
+      add("warning", message, duration, position, action),
     [add],
   );
-  const info = useCallback(
-    (message: ReactNode, duration?: number, position?: ToastPosition) =>
-      add("info", message, duration, position),
+  const info: ToastMethod = useCallback(
+    (message, duration, position, action) =>
+      add("info", message, duration, position, action),
     [add],
   );
 
@@ -135,6 +155,7 @@ export function ToastProvider({
                 key={toast.id}
                 variant={toast.variant}
                 duration={toast.duration}
+                action={toast.action}
                 onClose={() => remove(toast.id)}
               >
                 {toast.message}

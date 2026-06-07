@@ -7,6 +7,7 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import { Popover, type PopoverAlign, type PopoverPlacement } from "../Popover/Popover";
@@ -211,6 +212,84 @@ function MenuItem({
   );
 }
 
+// ----------------------------------------------------------------- Sub
+// A nested submenu: a menuitem that opens a second Popover to the side on
+// hover (with a small close delay to bridge the gap) or click. Items inside
+// share the root MenuContext, so selecting one closes the whole menu.
+
+interface MenuSubProps {
+  label: ReactNode;
+  children: ReactNode;
+  icon?: ReactNode;
+  disabled?: boolean;
+  className?: string;
+}
+
+function MenuSub({ label, children, icon, disabled = false, className }: MenuSubProps) {
+  const [open, setOpen] = useState(false);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelClose = useCallback(() => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  }, []);
+
+  const scheduleClose = useCallback(() => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpen(false), 180);
+  }, [cancelClose]);
+
+  return (
+    <div
+      onMouseEnter={() => {
+        if (!disabled) {
+          cancelClose();
+          setOpen(true);
+        }
+      }}
+      onMouseLeave={scheduleClose}
+    >
+      <Popover open={open} onOpenChange={setOpen} placement="right" align="start">
+        <Popover.Trigger asChild haspopup="menu">
+          <button
+            type="button"
+            role="menuitem"
+            tabIndex={-1}
+            disabled={disabled}
+            aria-disabled={disabled || undefined}
+            className={clsx(
+              "cs:flex cs:w-full cs:items-center cs:gap-2 cs:rounded-sm cs:px-2 cs:py-1.5",
+              "cs:text-left cs:text-sm cs:font-sans cs:cursor-pointer",
+              "cs:border-0 cs:bg-transparent cs:outline-none",
+              "cs:text-gray-900 cs:dark:text-gray-200",
+              "cs:focus-visible:bg-gray-100 cs:dark:focus-visible:bg-gray-700",
+              "cs:hover:bg-gray-100 cs:dark:hover:bg-gray-700",
+              open && "cs:bg-gray-100 cs:dark:bg-gray-700",
+              disabled && "cs:opacity-50 cs:cursor-not-allowed cs:pointer-events-none",
+              className,
+            )}
+          >
+            {icon && <span className="cs:shrink-0 cs:inline-flex">{icon}</span>}
+            <span className="cs:flex-1">{label}</span>
+            <span aria-hidden className="cs:text-gray-400">
+              ›
+            </span>
+          </button>
+        </Popover.Trigger>
+        <Popover.Content
+          role="menu"
+          onKeyDown={handleMenuKeyDown}
+          className="cs:py-1"
+        >
+          {children}
+        </Popover.Content>
+      </Popover>
+    </div>
+  );
+}
+
 // ----------------------------------------------------------------- Label / Separator
 
 function MenuLabel({ children, className }: { children: ReactNode; className?: string }) {
@@ -242,5 +321,6 @@ function MenuSeparator({ className }: { className?: string }) {
 Menu.Trigger = MenuTrigger;
 Menu.Content = MenuContent;
 Menu.Item = MenuItem;
+Menu.Sub = MenuSub;
 Menu.Label = MenuLabel;
 Menu.Separator = MenuSeparator;

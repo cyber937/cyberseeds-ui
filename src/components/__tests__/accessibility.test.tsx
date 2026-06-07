@@ -40,6 +40,9 @@ import * as DrawerStories from '../Drawer/Drawer.stories';
 import * as PopoverStories from '../Popover/Popover.stories';
 import * as MenuStories from '../Menu/Menu.stories';
 import * as FileUploadStories from '../FileUpload/FileUpload.stories';
+import * as DatePickerStories from '../DatePicker/DatePicker.stories';
+import * as SliderStories from '../Slider/Slider.stories';
+import * as TagInputStories from '../TagInput/TagInput.stories';
 import * as LabelStories from '../Label/Label.stories';
 import * as ThemeProviderStories from '../ThemeProvider/ThemeProvider.stories';
 import * as UIColorProviderStories from '../UIColorProvider/UIColorProvider.stories';
@@ -84,6 +87,9 @@ const DrawerComposed = composeStories(DrawerStories);
 const PopoverComposed = composeStories(PopoverStories);
 const MenuComposed = composeStories(MenuStories);
 const FileUploadComposed = composeStories(FileUploadStories);
+const DatePickerComposed = composeStories(DatePickerStories);
+const SliderComposed = composeStories(SliderStories);
+const TagInputComposed = composeStories(TagInputStories);
 const LabelComposed = composeStories(LabelStories);
 const ThemeProviderComposed = composeStories(ThemeProviderStories);
 const UIColorProviderComposed = composeStories(UIColorProviderStories);
@@ -538,6 +544,36 @@ describe('Accessibility Tests', () => {
 
   describe('UIColorProvider Component A11y', () => {
     Object.entries(UIColorProviderComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('DatePicker Component A11y', () => {
+    Object.entries(DatePickerComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('Slider Component A11y', () => {
+    Object.entries(SliderComposed).forEach(([storyName, Story]) => {
+      it(`${storyName} should have no accessibility violations`, async () => {
+        const { container } = render(<Story />);
+        const results = await axe(container);
+        expect(results).toHaveNoViolations();
+      });
+    });
+  });
+
+  describe('TagInput Component A11y', () => {
+    Object.entries(TagInputComposed).forEach(([storyName, Story]) => {
       it(`${storyName} should have no accessibility violations`, async () => {
         const { container } = render(<Story />);
         const results = await axe(container);

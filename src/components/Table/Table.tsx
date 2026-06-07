@@ -25,10 +25,20 @@ interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
    * click handler comes from `onClick` (standard prop).
    */
   interactive?: boolean;
+  /** Highlight the row as selected and set `aria-selected`. */
+  selected?: boolean;
 }
+
+type SortDirection = "asc" | "desc" | false;
 
 interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   align?: Align;
+  /** Render the header as a sort toggle (a button + direction arrows). */
+  sortable?: boolean;
+  /** Current sort direction for this column (`false` = unsorted). */
+  sortDirection?: SortDirection;
+  /** Called when a sortable header is activated. */
+  onSort?: () => void;
 }
 
 interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
@@ -163,6 +173,7 @@ function TableBody({
 
 function TableRow({
   interactive,
+  selected,
   className,
   children,
   ...props
@@ -171,11 +182,13 @@ function TableRow({
     <tr
       {...props}
       data-interactive={interactive ? "true" : undefined}
+      aria-selected={selected || undefined}
       className={clsx(
         "cs:transition-colors",
         interactive
           ? "cs:cursor-pointer cs:hover:bg-gray-50 cs:dark:hover:bg-gray-700/40"
           : "cs:hover:bg-gray-50 cs:dark:hover:bg-gray-700/20",
+        selected && "cs:bg-gray-100 cs:dark:bg-gray-700/50",
         className,
       )}
     >
@@ -184,8 +197,30 @@ function TableRow({
   );
 }
 
+const ariaSortMap: Record<"asc" | "desc" | "none", "ascending" | "descending" | "none"> = {
+  asc: "ascending",
+  desc: "descending",
+  none: "none",
+};
+
+function SortArrows({ direction }: { direction: SortDirection }) {
+  return (
+    <span className="cs:inline-flex cs:flex-col cs:leading-[0.5]" aria-hidden="true">
+      <span className={clsx("cs:text-[0.6em]", direction === "asc" ? "cs:opacity-100" : "cs:opacity-30")}>
+        ▲
+      </span>
+      <span className={clsx("cs:text-[0.6em]", direction === "desc" ? "cs:opacity-100" : "cs:opacity-30")}>
+        ▼
+      </span>
+    </span>
+  );
+}
+
 function TableHeaderCell({
   align = "left",
+  sortable,
+  sortDirection = false,
+  onSort,
   className,
   children,
   ...props
@@ -195,6 +230,7 @@ function TableHeaderCell({
     <th
       scope="col"
       {...props}
+      aria-sort={sortable ? ariaSortMap[sortDirection || "none"] : undefined}
       className={clsx(
         "cs:font-semibold",
         headCellScaleMap[scale],
@@ -202,7 +238,23 @@ function TableHeaderCell({
         className,
       )}
     >
-      {children}
+      {sortable ? (
+        <button
+          type="button"
+          onClick={onSort}
+          className={clsx(
+            "cs:inline-flex cs:items-center cs:gap-1.5 cs:cursor-pointer cs:select-none",
+            "cs:font-semibold cs:uppercase cs:tracking-wide",
+            "cs:hover:text-gray-900 cs:dark:hover:text-gray-100",
+            align === "right" && "cs:flex-row-reverse",
+          )}
+        >
+          {children}
+          <SortArrows direction={sortDirection} />
+        </button>
+      ) : (
+        children
+      )}
     </th>
   );
 }

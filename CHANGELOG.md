@@ -1,5 +1,48 @@
 # Changelog
 
+## Next
+
+### New Components
+
+- **`DatePicker`** — 単一日付ピッカー。フィールドをクリックすると `Popover` 上に月カレンダーが開く（fixed 配置なので overflow にクリップされず、端で自動補正）。controlled (`value`+`onChange`) / uncontrolled (`defaultValue`)、`min`/`max`、Today/Clear ショートカット対応。
+
+  ```tsx
+  <DatePicker value={date} onChange={setDate} min={new Date()} />
+  ```
+
+- **`Slider`** — UI カラーで着色する range 入力。controlled/uncontrolled、`showValue` と `formatValue`（例: `(v) => `$${v}``）、`label`、`scale` 対応。
+
+  ```tsx
+  <Slider value={v} onChange={setV} min={0} max={100} showValue label="Volume" />
+  ```
+
+- **`TagInput`** — 複数値のチップ入力。Enter / カンマで追加、空欄での Backspace または × で削除。controlled/uncontrolled、`dedupe`（大文字小文字無視）、`maxTags` 対応。
+
+  ```tsx
+  <TagInput value={tags} onChange={setTags} maxTags={5} />
+  ```
+
+### Improvements
+
+- **`Menu`: ネストしたサブメニュー (`Menu.Sub`)** — `Menu.Sub label="…"` で入れ子のメニューを追加。ホバー（gap をまたぐための close ディレイ付き）またはクリックで側方に開く。中の `Menu.Item` を選ぶと**メニュー全体が閉じる**。多階層ネストも可。
+
+  ```tsx
+  <Menu.Content>
+    <Menu.Item onSelect={edit}>Edit</Menu.Item>
+    <Menu.Sub label="Move to">
+      <Menu.Item onSelect={…}>Warehouse A</Menu.Item>
+    </Menu.Sub>
+  </Menu.Content>
+  ```
+
+- **`Toast`: action ボタン** — `success`/`error`/`warning`/`info` の 4th 引数に `action?: { label, onClick }` を追加。トースト内にアクション（例: 「Undo」）を表示し、押すと `onClick` 実行後にトーストを閉じる。既存の呼び出しは後方互換。
+
+  ```tsx
+  toast.success("Item deleted", 5000, undefined, { label: "Undo", onClick: restore });
+  ```
+
+- **`Table`: ソート可能ヘッダ + 行選択** — `Table.HeaderCell` に `sortable` / `sortDirection` (`"asc"|"desc"|false`) / `onSort` を追加（ソートボタン + ▲▼ インジケータ + `aria-sort`）。`Table.Row` に `selected` を追加（ハイライト + `aria-selected`）。ソート/選択の状態管理は利用側（presentational）。
+
 ## 1.7.0 (2026-06-07)
 
 ### Improvements

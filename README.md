@@ -95,6 +95,9 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | `Switch` | Toggle switch with on/off labels and animated transitions |
 | `Label` | Semantic `<label>` element with required indicator (`*`) support |
 | `FileUpload` | Drag-and-drop file picker with click-to-browse, selected-file list, and `accept` / `maxSize` validation |
+| `DatePicker` | Single-date picker — a field that opens a month calendar in a `Popover`; `min`/`max`, Today/Clear |
+| `Slider` | Range input tinted with the UI color, optional value display and `formatValue` |
+| `TagInput` | Multi-value chip input (Enter / comma to add, Backspace / × to remove) with `dedupe` and `maxTags` |
 
 ### Actions
 
@@ -129,7 +132,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | `Modal` | Dialog with `Modal.Header`, `Modal.Body`, `Modal.Footer`; responsive `width` and mobile full-screen |
 | `Drawer` | Slide-in panel for filters / settings with `Drawer.Header`, `Drawer.Body`, `Drawer.Footer` |
 | `Popover` | Anchored floating panel (`Popover.Trigger` / `Popover.Content`) with auto-flip, outside-click & Escape dismiss, controlled/uncontrolled |
-| `Menu` | Action menu built on `Popover` (`Menu.Trigger` / `Content` / `Item` / `Label` / `Separator`) with WAI-ARIA keyboard navigation |
+| `Menu` | Action menu built on `Popover` (`Menu.Trigger` / `Content` / `Item` / `Sub` / `Label` / `Separator`) with nested submenus and WAI-ARIA keyboard navigation |
 | `Tooltip` | Hover/focus tooltip with auto-flip positioning, delay, and `role="tooltip"` |
 
 ### Feedback
@@ -137,7 +140,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | Component | Description |
 | --- | --- |
 | `Alert` | Static feedback banner with `info` / `success` / `warning` / `error` variants, title, icon, closable |
-| `Toast` | Notification toasts with 4 variants (`success` / `error` / `warning` / `info`), auto-dismiss, per-instance position |
+| `Toast` | Notification toasts with 4 variants (`success` / `error` / `warning` / `info`), auto-dismiss, per-instance position, and an optional action button (e.g. Undo) |
 | `Spinner` | SVG-based loading indicator with `role="status"` |
 | `Progress` | Progress bar with optional value display and stripe animation |
 | `Skeleton` | Loading placeholder for content that is still fetching |
@@ -146,7 +149,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 
 | Component | Description |
 | --- | --- |
-| `Table` | Data table with `Table.Head`, `Table.Body`, `Table.Row`, `Table.HeaderCell`, `Table.Cell` |
+| `Table` | Data table with `Table.Head`, `Table.Body`, `Table.Row`, `Table.HeaderCell`, `Table.Cell`; sortable headers (`sortable`/`sortDirection`/`onSort`) and `selected` rows |
 | `Avatar` | Profile image with initials fallback, custom fallback, and `circle` / `square` shapes |
 | `Badge` | Notification count / status with `solid` / `outline` / `dot` variants and `Badge.Wrapper` |
 | `PillBox` | Capsule-style tag/badge component |

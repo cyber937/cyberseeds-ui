@@ -32,6 +32,15 @@ export const Default: Story = {
   },
 };
 
+export const WithAction: Story = {
+  args: {
+    variant: "info",
+    children: "Item deleted.",
+    action: { label: "Undo", onClick: () => {} },
+    onClose: () => {},
+  },
+};
+
 export const Variants: Story = {
   render: () => (
     <div className="cs:flex cs:flex-col cs:gap-3 cs:max-w-sm">
