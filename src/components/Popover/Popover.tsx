@@ -207,58 +207,84 @@ const opposite: Record<PopoverPlacement, PopoverPlacement> = {
   right: "left",
 };
 
-// Main-axis offset: which trigger edge the panel sits against, plus a gap.
-const placementClasses: Record<PopoverPlacement, string> = {
-  top: "cs:bottom-full cs:mb-2",
-  bottom: "cs:top-full cs:mt-2",
-  left: "cs:right-full cs:mr-2",
-  right: "cs:left-full cs:ml-2",
-};
+const GAP = 8; // space between the trigger and the panel
+const MARGIN = 8; // min space the panel keeps from the viewport edge
 
-// Cross-axis alignment for top/bottom placements (horizontal).
-const horizontalAlignClasses: Record<PopoverAlign, string> = {
-  start: "cs:left-0",
-  center: "cs:left-1/2 cs:-translate-x-1/2",
-  end: "cs:right-0",
-};
-
-// Cross-axis alignment for left/right placements (vertical).
-const verticalAlignClasses: Record<PopoverAlign, string> = {
-  start: "cs:top-0",
-  center: "cs:top-1/2 cs:-translate-y-1/2",
-  end: "cs:bottom-0",
-};
-
-function alignClassesFor(placement: PopoverPlacement, align: PopoverAlign): string {
-  return placement === "top" || placement === "bottom"
-    ? horizontalAlignClasses[align]
-    : verticalAlignClasses[align];
+interface Coords {
+  top: number;
+  left: number;
+  placement: PopoverPlacement;
 }
 
-function resolvePlacement(
-  triggerEl: HTMLElement,
+const clamp = (value: number, lo: number, hi: number): number =>
+  Math.min(Math.max(value, lo), hi);
+
+/**
+ * Viewport-aware position for the panel, expressed as fixed coordinates.
+ *
+ * `position: fixed` is used (not absolute) so the panel escapes any
+ * `overflow` ancestor — e.g. a scrollable table — instead of being clipped.
+ * It flips to the side with room when the preferred side overflows, then
+ * shifts/clamps along both axes so no edge leaves the viewport.
+ */
+function computePosition(
+  triggerRect: DOMRect,
+  contentW: number,
+  contentH: number,
   preferred: PopoverPlacement,
-  contentEl: HTMLElement | null,
-): PopoverPlacement {
-  const rect = triggerEl.getBoundingClientRect();
-  const contentRect = contentEl?.getBoundingClientRect();
-  const contentH = contentRect?.height ?? 200;
-  const contentW = contentRect?.width ?? 240;
-  const gap = 8;
+  align: PopoverAlign,
+): Coords {
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const t = triggerRect;
 
-  const hasSpace: Record<PopoverPlacement, boolean> = {
-    top: rect.top >= contentH + gap,
-    bottom: window.innerHeight - rect.bottom >= contentH + gap,
-    left: rect.left >= contentW + gap,
-    right: window.innerWidth - rect.right >= contentW + gap,
+  const space: Record<PopoverPlacement, number> = {
+    top: t.top - GAP,
+    bottom: vh - t.bottom - GAP,
+    left: t.left - GAP,
+    right: vw - t.right - GAP,
   };
+  const need = (p: PopoverPlacement) =>
+    p === "top" || p === "bottom" ? contentH : contentW;
 
-  if (hasSpace[preferred]) return preferred;
-  if (hasSpace[opposite[preferred]]) return opposite[preferred];
-  for (const dir of ["bottom", "top", "right", "left"] as const) {
-    if (hasSpace[dir]) return dir;
+  // Flip: keep the preferred side if it fits, else the opposite if it fits,
+  // else whichever side has the most room.
+  let placement = preferred;
+  if (space[placement] < need(placement)) {
+    const opp = opposite[placement];
+    placement =
+      space[opp] >= need(placement)
+        ? opp
+        : (Object.keys(space) as PopoverPlacement[]).reduce((a, b) =>
+            space[b] > space[a] ? b : a,
+          );
   }
-  return preferred;
+
+  let top = 0;
+  let left = 0;
+
+  // Main axis (which trigger edge the panel sits against).
+  if (placement === "top") top = t.top - GAP - contentH;
+  else if (placement === "bottom") top = t.bottom + GAP;
+  else if (placement === "left") left = t.left - GAP - contentW;
+  else left = t.right + GAP;
+
+  // Cross axis (alignment relative to the trigger).
+  if (placement === "top" || placement === "bottom") {
+    if (align === "start") left = t.left;
+    else if (align === "center") left = t.left + t.width / 2 - contentW / 2;
+    else left = t.right - contentW;
+  } else {
+    if (align === "start") top = t.top;
+    else if (align === "center") top = t.top + t.height / 2 - contentH / 2;
+    else top = t.bottom - contentH;
+  }
+
+  // Shift so neither edge leaves the viewport (clamp within the margins).
+  left = clamp(left, MARGIN, Math.max(MARGIN, vw - contentW - MARGIN));
+  top = clamp(top, MARGIN, Math.max(MARGIN, vh - contentH - MARGIN));
+
+  return { top, left, placement };
 }
 
 interface PopoverContentProps {
@@ -290,20 +316,45 @@ function PopoverContent({
     triggerId,
     placement,
     align,
-    resolvedPlacement,
     setResolvedPlacement,
     triggerRef,
     contentRef,
   } = usePopoverContext("Popover.Content");
 
-  // Flip to a side with room before paint, once the panel is measurable.
+  const [coords, setCoords] = useState<Coords | null>(null);
+
+  const reposition = useCallback(() => {
+    const trigger = triggerRef.current;
+    const content = contentRef.current;
+    if (!trigger || !content) return;
+    const next = computePosition(
+      trigger.getBoundingClientRect(),
+      content.offsetWidth,
+      content.offsetHeight,
+      placement,
+      align,
+    );
+    setCoords(next);
+    setResolvedPlacement(next.placement);
+  }, [placement, align, triggerRef, contentRef, setResolvedPlacement]);
+
+  // Position before paint so there's no visible jump from a default spot.
   useLayoutEffect(() => {
-    if (open && triggerRef.current) {
-      setResolvedPlacement(
-        resolvePlacement(triggerRef.current, placement, contentRef.current),
-      );
-    }
-  }, [open, placement, setResolvedPlacement, triggerRef, contentRef]);
+    if (open) reposition();
+  }, [open, reposition]);
+
+  // Keep the panel anchored while scrolling/resizing (fixed coords are
+  // viewport-relative, so the trigger moves under them otherwise).
+  useEffect(() => {
+    if (!open) return;
+    reposition();
+    window.addEventListener("scroll", reposition, true);
+    window.addEventListener("resize", reposition);
+    return () => {
+      window.removeEventListener("scroll", reposition, true);
+      window.removeEventListener("resize", reposition);
+    };
+  }, [open, reposition]);
 
   // Optionally move focus into the panel when it opens (used by Menu).
   useEffect(() => {
@@ -325,13 +376,18 @@ function PopoverContent({
       aria-labelledby={role === "dialog" ? triggerId : undefined}
       aria-label={ariaLabel}
       onKeyDown={onKeyDown}
+      style={{
+        position: "fixed",
+        top: coords?.top ?? 0,
+        left: coords?.left ?? 0,
+        // Hidden until measured so the first paint doesn't flash at (0,0).
+        visibility: coords ? "visible" : "hidden",
+      }}
       className={clsx(
-        "cs:absolute cs:z-40 cs:min-w-[8rem] cs:rounded-md cs:font-sans",
+        "cs:z-40 cs:min-w-[8rem] cs:rounded-md cs:font-sans",
         "cs:border cs:border-gray-200 cs:dark:border-gray-700",
         "cs:bg-white cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200",
         "cs:shadow-lg cs:p-2",
-        placementClasses[resolvedPlacement],
-        alignClassesFor(resolvedPlacement, align),
         className,
       )}
     >

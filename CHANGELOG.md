@@ -1,6 +1,14 @@
 # Changelog
 
-## 1.6.0 (2026-06-06)
+## Next
+
+### Improvements
+
+- **Popover / Menu: viewport-aware fixed positioning** — パネルの配置を `position: absolute`（親基準・Tailwind クラス）から **`position: fixed` + 実測ベースの衝突回避**に作り変えた。これにより:
+  - **overflow 祖先にクリップされない** — スクロール可能なテーブル (`overflow-x-auto` 等) の中で開いても、`fixed` はその overflow にクリップされないので、最下部の行のメニューでも見切れない。
+  - **端で自動補正 (flip + shift)** — 指定した `placement` 側に収まらなければ反対側へ flip、さらに各辺がビューポートを超えそうなら margin を保って内側に shift/clamp。どの辺もはみ出さない「ちょうどいい位置」に配置される。
+  - **スクロール / リサイズ追従** — 開いている間は `scroll`(capture) / `resize` で再計算してトリガーに追従。
+  - 初回描画は実測まで `visibility: hidden` にして (0,0) へのちらつきを防止。`placement` / `align` の API は不変で後方互換。
 
 ### New Components
 
