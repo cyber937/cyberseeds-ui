@@ -1,5 +1,15 @@
 # Changelog
 
+## Next
+
+### API / DX
+
+- **Select: `color` prop** — `Select` now accepts a `color` (preset / custom / semantic, or inherited from `UIColorProvider`) that tints its focus ring, matching `Input`.
+
+### Tooling
+
+- **Lint is clean (0 warnings)** — the `react-refresh/only-export-components` rule is disabled for barrels (`**/index.tsx`), context providers (`*Context.tsx`), and Storybook config, which legitimately co-locate non-component exports. (No runtime change.)
+
 ## 1.10.0 (2026-06-07)
 
 ### Performance

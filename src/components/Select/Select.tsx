@@ -1,13 +1,17 @@
 import clsx from "clsx";
 import type { ReactNode, Ref } from "react";
 import React, { useId } from "react";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING_INSET } from "../Constants/designTokens";
-import type { Scale } from "../DesignSystemUtils";
+import type { Color, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
-interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "color"> {
   id?: string;
   scale?: Scale;
+  /** Focus-ring color (preset / custom / semantic, or inherited from context). */
+  color?: Color;
   isInvalid?: boolean;
   children: ReactNode;
   /** Forwarded to the underlying `<select>`. */
@@ -28,8 +32,10 @@ const iconScaleMap: Record<Scale, string> = {
   lg: "cs:size-5 cs:right-3.5 cs:top-1/2 cs:-translate-y-1/2",
 };
 
-export function Select({ scale = "md", isInvalid = false, children, id: externalId, className, ref, ...props }: SelectProps) {
+export function Select({ scale = "md", color = "blue", isInvalid = false, children, id: externalId, className, ref, ...props }: SelectProps) {
   const generatedId = useId();
+  const { color: contextUIColor } = useUIColor() ?? { color: undefined };
+  const colorStyle = colorToCSSVars(resolveColor(contextUIColor ?? color));
   const formField = useFormField();
   const id = externalId ?? formField?.id ?? generatedId;
   const mergedInvalid = isInvalid || formField?.isInvalid || false;
@@ -50,8 +56,9 @@ export function Select({ scale = "md", isInvalid = false, children, id: external
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
         required={mergedRequired || undefined}
+        style={colorStyle}
         className={clsx(
-          `cs:w-full cs:shadow-none cs:border-0 cs:min-w-0 cs:appearance-none cs:rounded-md cs:outline-1 cs:-outline-offset-1 cs:outline-gray-300 cs:dark:outline-gray-600 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:disabled:bg-gray-300 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500`,
+          `cs:w-full cs:shadow-none cs:border-0 cs:min-w-0 cs:appearance-none cs:rounded-md cs:outline-1 cs:-outline-offset-1 cs:outline-gray-300 cs:dark:outline-gray-600 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs-focus-visible cs:disabled:bg-gray-300 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500`,
           mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
             : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800",

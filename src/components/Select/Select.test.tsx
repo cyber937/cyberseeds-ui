@@ -192,5 +192,15 @@ describe('Select Component', () => {
       expect(select).toHaveClass('custom-x');
       expect(select.className).toContain('cs:appearance-none');
     });
+
+    it('applies the color prop as CSS variables', () => {
+      render(
+        <Select color="violet" aria-label="s">
+          <SelectOption value="a" label="A" />
+        </Select>
+      );
+      const select = screen.getByRole('combobox');
+      expect(select.getAttribute('style')).toContain('--cs-ui-');
+    });
   });
 });
