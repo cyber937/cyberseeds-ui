@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useId, useState } from "react";
+import { type Ref, useId, useState } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -23,6 +23,8 @@ interface SliderProps {
   formatValue?: (value: number) => string;
   className?: string;
   "aria-label"?: string;
+  /** Forwarded to the underlying `<input type="range">`. */
+  ref?: Ref<HTMLInputElement>;
 }
 
 const trackHeight: Record<Scale, string> = {
@@ -54,6 +56,7 @@ export function Slider({
   formatValue,
   className,
   "aria-label": ariaLabel,
+  ref,
 }: SliderProps) {
   const id = useId();
   const { color: contextColor } = useUIColor() ?? { color: undefined };
@@ -86,6 +89,7 @@ export function Slider({
       )}
       <div className="cs:flex cs:items-center cs:gap-3">
         <input
+          ref={ref}
           id={id}
           type="range"
           min={min}

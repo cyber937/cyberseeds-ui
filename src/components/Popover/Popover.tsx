@@ -322,6 +322,7 @@ function PopoverContent({
   } = usePopoverContext("Popover.Content");
 
   const [coords, setCoords] = useState<Coords | null>(null);
+  const frameRef = useRef<number | null>(null);
 
   const reposition = useCallback(() => {
     const trigger = triggerRef.current;
@@ -338,6 +339,16 @@ function PopoverContent({
     setResolvedPlacement(next.placement);
   }, [placement, align, triggerRef, contentRef, setResolvedPlacement]);
 
+  // Coalesce bursts of scroll/resize events into one reposition per frame
+  // so we don't setState on every event while open.
+  const scheduleReposition = useCallback(() => {
+    if (frameRef.current != null) return;
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = null;
+      reposition();
+    });
+  }, [reposition]);
+
   // Position before paint so there's no visible jump from a default spot.
   useLayoutEffect(() => {
     if (open) reposition();
@@ -347,14 +358,17 @@ function PopoverContent({
   // viewport-relative, so the trigger moves under them otherwise).
   useEffect(() => {
     if (!open) return;
-    reposition();
-    window.addEventListener("scroll", reposition, true);
-    window.addEventListener("resize", reposition);
+    window.addEventListener("scroll", scheduleReposition, true);
+    window.addEventListener("resize", scheduleReposition);
     return () => {
-      window.removeEventListener("scroll", reposition, true);
-      window.removeEventListener("resize", reposition);
+      window.removeEventListener("scroll", scheduleReposition, true);
+      window.removeEventListener("resize", scheduleReposition);
+      if (frameRef.current != null) {
+        cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
+      }
     };
-  }, [open, reposition]);
+  }, [open, scheduleReposition]);
 
   // Optionally move focus into the panel when it opens (used by Menu).
   useEffect(() => {

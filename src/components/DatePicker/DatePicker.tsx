@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useMemo, useState } from "react";
+import { type Ref, useMemo, useState } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -21,6 +21,8 @@ interface DatePickerProps {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  /** Forwarded to the trigger `<button>`. */
+  ref?: Ref<HTMLButtonElement>;
 }
 
 const triggerScale: Record<Scale, string> = {
@@ -82,6 +84,7 @@ export function DatePicker({
   disabled = false,
   placeholder = "Select a date",
   className,
+  ref,
 }: DatePickerProps) {
   const { color: contextColor } = useUIColor() ?? { color: undefined };
   const colorStyle = colorToCSSVars(resolveColor(contextColor ?? color));
@@ -133,6 +136,7 @@ export function DatePicker({
     <Popover open={open} onOpenChange={setOpen} placement="bottom" align="start">
       <Popover.Trigger asChild>
         <button
+          ref={ref}
           type="button"
           disabled={disabled}
           aria-label={selected ? formatDate(selected) : placeholder}
