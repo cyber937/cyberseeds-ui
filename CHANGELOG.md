@@ -1,5 +1,16 @@
 # Changelog
 
+## Next
+
+### Performance
+
+- **Popover / Menu / DatePicker: throttle reposition** — while open, scroll/resize repositioning is now coalesced into one update per animation frame (`requestAnimationFrame`) instead of calling `setState` on every scroll event. Smoother scrolling when popovers/menus are open over long lists.
+
+### API / DX
+
+- **Ref forwarding** — `Slider`, `TagInput`, `DatePicker`, and `Select` now forward a `ref` to their underlying interactive element (`<input>` / trigger `<button>` / `<select>`), so consumers can call `.focus()` etc.
+- **Select: `className` is now merged, not overwritten** — passing `className` to `Select` previously clobbered the component's base styles (the spread landed after the base class). It is now merged with the built-in classes.
+
 ## 1.9.0 (2026-06-07)
 
 ### Improvements

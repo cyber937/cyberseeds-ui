@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import clsx from "clsx";
+import type { ReactNode, Ref } from "react";
 import React, { useId } from "react";
 import { FOCUS_RING_INSET } from "../Constants/designTokens";
 import type { Scale } from "../DesignSystemUtils";
@@ -9,6 +10,8 @@ interface SelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   scale?: Scale;
   isInvalid?: boolean;
   children: ReactNode;
+  /** Forwarded to the underlying `<select>`. */
+  ref?: Ref<HTMLSelectElement>;
 }
 
 const scaleMap: Record<Scale, string> = {
@@ -25,7 +28,7 @@ const iconScaleMap: Record<Scale, string> = {
   lg: "cs:size-5 cs:right-3.5 cs:top-1/2 cs:-translate-y-1/2",
 };
 
-export function Select({ scale = "md", isInvalid = false, children, id: externalId, ...props }: SelectProps) {
+export function Select({ scale = "md", isInvalid = false, children, id: externalId, className, ref, ...props }: SelectProps) {
   const generatedId = useId();
   const formField = useFormField();
   const id = externalId ?? formField?.id ?? generatedId;
@@ -41,16 +44,20 @@ export function Select({ scale = "md", isInvalid = false, children, id: external
   return (
     <div className="cs:relative cs:inline-flex cs:min-w-0">
       <select
+        ref={ref}
         id={id}
         aria-invalid={mergedInvalid || undefined}
         aria-describedby={describedBy}
         disabled={mergedDisabled || undefined}
         required={mergedRequired || undefined}
-        className={`cs:w-full cs:shadow-none cs:border-0 cs:min-w-0 cs:appearance-none cs:rounded-md cs:outline-1 cs:-outline-offset-1 cs:outline-gray-300 cs:dark:outline-gray-600 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:disabled:bg-gray-300 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500
-          ${mergedInvalid
+        className={clsx(
+          `cs:w-full cs:shadow-none cs:border-0 cs:min-w-0 cs:appearance-none cs:rounded-md cs:outline-1 cs:-outline-offset-1 cs:outline-gray-300 cs:dark:outline-gray-600 cs:dark:text-gray-400 cs:dark:bg-gray-800 cs:font-sans ${FOCUS_RING_INSET} cs:disabled:bg-gray-300 cs:dark:disabled:bg-gray-700 cs:dark:disabled:text-gray-500`,
+          mergedInvalid
             ? "cs:text-red-400 cs:bg-red-100/50 cs:outline-red-300 cs:dark:bg-red-200 cs:dark:text-red-500"
-            : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800"
-          } ${scaleMap[mergedScale]}`}
+            : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800",
+          scaleMap[mergedScale],
+          className,
+        )}
         {...props}
       >
         {children}

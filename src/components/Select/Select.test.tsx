@@ -170,4 +170,27 @@ describe('Select Component', () => {
       expect(select).toHaveAttribute('aria-label', 'Custom select');
     });
   });
+
+  describe('ref & className', () => {
+    it('forwards a ref to the native select', () => {
+      const ref = { current: null as HTMLSelectElement | null };
+      render(
+        <Select ref={ref} aria-label="s">
+          <SelectOption value="a" label="A" />
+        </Select>
+      );
+      expect(ref.current).toBe(screen.getByRole('combobox'));
+    });
+
+    it('merges a custom className without dropping base styles', () => {
+      render(
+        <Select className="custom-x" aria-label="s">
+          <SelectOption value="a" label="A" />
+        </Select>
+      );
+      const select = screen.getByRole('combobox');
+      expect(select).toHaveClass('custom-x');
+      expect(select.className).toContain('cs:appearance-none');
+    });
+  });
 });

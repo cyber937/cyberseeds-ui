@@ -34,4 +34,10 @@ describe("Slider", () => {
     render(<Slider aria-label="vol" defaultValue={10} disabled />);
     expect(screen.getByRole("slider")).toBeDisabled();
   });
+
+  it("forwards a ref to the range input", () => {
+    const ref = { current: null as HTMLInputElement | null };
+    render(<Slider aria-label="vol" defaultValue={10} ref={ref} />);
+    expect(ref.current).toBe(screen.getByRole("slider"));
+  });
 });

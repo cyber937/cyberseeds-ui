@@ -1,7 +1,7 @@
 "use client";
 
 import clsx from "clsx";
-import { useId, useState } from "react";
+import { type Ref, useId, useState } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -20,6 +20,8 @@ interface TagInputProps {
   maxTags?: number;
   className?: string;
   "aria-label"?: string;
+  /** Forwarded to the inner text `<input>`. */
+  ref?: Ref<HTMLInputElement>;
 }
 
 const fieldScale: Record<Scale, string> = {
@@ -41,6 +43,7 @@ export function TagInput({
   maxTags,
   className,
   "aria-label": ariaLabel,
+  ref,
 }: TagInputProps) {
   const inputId = useId();
   const { color: contextColor } = useUIColor() ?? { color: undefined };
@@ -120,6 +123,7 @@ export function TagInput({
         </span>
       ))}
       <input
+        ref={ref}
         id={inputId}
         type="text"
         value={draft}
