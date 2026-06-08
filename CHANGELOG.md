@@ -1,6 +1,6 @@
 # Changelog
 
-## Next
+## 1.10.0 (2026-06-07)
 
 ### Performance
 
