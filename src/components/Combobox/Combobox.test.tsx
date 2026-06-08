@@ -1,3 +1,4 @@
+import { createRef } from "react";
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { composeStories } from "@storybook/react";
@@ -339,5 +340,13 @@ describe("Combobox Component", () => {
         expect(screen.getByRole("searchbox")).toBeInTheDocument();
       },
     );
+  });
+
+  describe("ref", () => {
+    it("forwards a ref to the search input", () => {
+      const ref = createRef<HTMLInputElement>();
+      render(<Combobox options={FRUITS} ref={ref} />);
+      expect(ref.current).toBe(screen.getByRole("searchbox"));
+    });
   });
 });
