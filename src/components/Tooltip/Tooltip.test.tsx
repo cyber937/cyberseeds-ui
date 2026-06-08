@@ -281,9 +281,11 @@ describe("Tooltip Component", () => {
         vi.advanceTimersByTime(0);
       });
 
-      const triggerWrapper = screen.getByText("Trigger").parentElement;
+      // aria-describedby now sits on the focusable trigger itself (not a
+      // wrapper), so screen readers announce it on focus.
+      const trigger = screen.getByText("Trigger");
       const tooltip = screen.getByRole("tooltip");
-      expect(triggerWrapper).toHaveAttribute("aria-describedby", tooltip.id);
+      expect(trigger).toHaveAttribute("aria-describedby", tooltip.id);
     });
 
     it("does not set aria-describedby when hidden", () => {
@@ -293,8 +295,8 @@ describe("Tooltip Component", () => {
         </Tooltip>,
       );
 
-      const triggerWrapper = screen.getByText("Trigger").parentElement;
-      expect(triggerWrapper).not.toHaveAttribute("aria-describedby");
+      const trigger = screen.getByText("Trigger");
+      expect(trigger).not.toHaveAttribute("aria-describedby");
     });
   });
 });

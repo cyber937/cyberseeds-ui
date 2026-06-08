@@ -1,5 +1,15 @@
 # Changelog
 
+## Next
+
+### Accessibility
+
+- **Tooltip: describe the trigger, not a wrapper** — `aria-describedby` is now applied to the focusable trigger element itself (the single child is cloned) instead of a non-focusable wrapper `<div>`, so screen readers announce the tooltip when the trigger receives focus. Text/fragment children fall back to a `<span>`. Escape-to-close and focus/hover behavior are unchanged.
+
+### Tests
+
+- Added a dedicated `useFocusTrap` test suite (escaped-focus recovery, empty-container Tab, wrap-around), lifting its branch coverage.
+
 ## 1.11.0 (2026-06-07)
 
 ### API / DX
