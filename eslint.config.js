@@ -28,4 +28,12 @@ export default tseslint.config({ ignores: ["dist", "storybook-static", "coverage
     "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-explicit-any": "off",
   },
+}, {
+  // Barrels, context providers, and Storybook config intentionally co-locate
+  // non-component exports (re-exports, hooks, types, decorators). Fast Refresh
+  // doesn't meaningfully apply to them, so the rule is just noise here.
+  files: ["**/index.tsx", "**/*Context.tsx", ".storybook/**/*.{ts,tsx}"],
+  rules: {
+    "react-refresh/only-export-components": "off",
+  },
 }, storybook.configs["flat/recommended"]);
