@@ -37,7 +37,7 @@ export { Modal } from "./Modal/Modal";
 export { NavMenu } from "./NavMenu/NavMenu";
 export { Pagination } from "./Pagination/Pagination";
 export { PhoneInput } from "./PhoneInput/PhoneInput";
-export { PillBox as Pillbox } from "./PillBox/PillBox";
+export { PillBox, PillBox as Pillbox } from "./PillBox/PillBox";
 export { Popover } from "./Popover/Popover";
 export type { PopoverAlign, PopoverPlacement } from "./Popover/Popover";
 export { Progress } from "./Progress/Progress";

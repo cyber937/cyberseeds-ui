@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
 import * as stories from './Checkbox.stories';
 import { Checkbox } from './Checkbox';
+import { FormField } from '../FormField/FormField';
 import { renderWithUIColorProvider, testColors, testScales } from '../../test-utils';
 
 const { Default, Color } = composeStories(stories);
@@ -142,6 +143,20 @@ describe('Checkbox Component', () => {
       render(<Checkbox className="my-checkbox" />);
       const input = screen.getByRole('checkbox');
       expect(input.className).not.toContain('my-checkbox');
+    });
+  });
+
+  describe('FormField integration', () => {
+    it('wires aria-invalid and aria-describedby from a FormField', () => {
+      render(
+        <FormField isInvalid>
+          <Checkbox label="Agree" />
+          <FormField.Error>Required</FormField.Error>
+        </FormField>,
+      );
+      const input = screen.getByRole('checkbox');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
+      expect(input.getAttribute('aria-describedby')).toBeTruthy();
     });
   });
 });

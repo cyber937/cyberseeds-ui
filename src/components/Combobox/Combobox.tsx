@@ -9,6 +9,7 @@ import {
   type ChangeEvent,
   type KeyboardEvent,
   type ReactNode,
+  type Ref,
 } from "react";
 
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
@@ -68,6 +69,8 @@ interface ComboboxProps {
    * in standard form submissions.
    */
   name?: string;
+  /** Forwarded to the search `<input>`. */
+  ref?: Ref<HTMLInputElement>;
 }
 
 const inputScaleMap: Record<Scale, string> = {
@@ -133,6 +136,7 @@ export function Combobox({
   className,
   id: externalId,
   name,
+  ref,
 }: ComboboxProps) {
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState<string | null>(defaultValue);
@@ -150,6 +154,18 @@ export function Combobox({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+
+  // Keep the internal inputRef (used for focus management) while also
+  // forwarding the node to a consumer-provided ref.
+  const setInputRef = useCallback(
+    (node: HTMLInputElement | null) => {
+      inputRef.current = node;
+      if (typeof ref === "function") ref(node);
+      else if (ref)
+        (ref as { current: HTMLInputElement | null }).current = node;
+    },
+    [ref],
+  );
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
   const finalUIColor = resolveColor(contextUIColor ?? color ?? "blue");
@@ -338,7 +354,7 @@ export function Combobox({
         className="cs:relative"
       >
         <input
-          ref={inputRef}
+          ref={setInputRef}
           id={id}
           type="text"
           role="searchbox"

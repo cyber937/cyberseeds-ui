@@ -8,8 +8,13 @@
 
 ### API / DX
 
-- **Ref forwarding** — `Slider`, `TagInput`, `DatePicker`, and `Select` now forward a `ref` to their underlying interactive element (`<input>` / trigger `<button>` / `<select>`), so consumers can call `.focus()` etc.
+- **Ref forwarding** — `Slider`, `TagInput`, `DatePicker`, `Select`, and `Combobox` now forward a `ref` to their underlying interactive element (`<input>` / trigger `<button>` / `<select>`), so consumers can call `.focus()` etc.
 - **Select: `className` is now merged, not overwritten** — passing `className` to `Select` previously clobbered the component's base styles (the spread landed after the base class). It is now merged with the built-in classes.
+- **`PillBox` is now also exported under its real name** — previously only the `Pillbox` (lowercase-b) alias was exported from the barrel; both `PillBox` and `Pillbox` now work.
+
+### Accessibility
+
+- **Checkbox / Radio: FormField wiring** — inside a `FormField`, `Checkbox` and `Radio` now set `aria-invalid` and `aria-describedby` (linking the field's error/help text), matching `Input` / `Select` / `TextArea`. (Radio keeps its own id so a group doesn't collide on the FormField id.)
 
 ## 1.9.0 (2026-06-07)
 

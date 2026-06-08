@@ -3,6 +3,7 @@ import { useId, type Ref } from "react";
 import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
 import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
+import { useFormField } from "../FormField/FormFieldContext";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "color"> {
@@ -64,7 +65,11 @@ export function Checkbox({
   ...props
 }: CheckboxProps) {
   const generatedId = useId();
-  const id = externalId ?? generatedId;
+  const formField = useFormField();
+  const id = externalId ?? formField?.id ?? generatedId;
+  const describedBy = formField
+    ? [formField.errorId, formField.helpId].join(" ")
+    : undefined;
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
@@ -87,6 +92,8 @@ export function Checkbox({
             ref={ref}
             id={id}
             type="checkbox"
+            aria-describedby={describedBy}
+            aria-invalid={formField?.isInvalid || undefined}
             style={colorStyle}
             className={`cs:col-start-1 cs:row-start-1 cs:appearance-none cs:rounded-sm cs:border cs:border-gray-300 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:checked:bg-gray-200 cs:forced-colors:appearance-auto cs-checked`}
             onChange={handleChange}
