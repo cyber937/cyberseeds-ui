@@ -1,6 +1,9 @@
 import clsx from "clsx";
 import {
+  type ReactElement,
   type ReactNode,
+  cloneElement,
+  isValidElement,
   useCallback,
   useEffect,
   useId,
@@ -162,12 +165,28 @@ export function Tooltip({
       onBlur={isTouch ? undefined : hide}
       onClick={isTouch ? toggle : undefined}
     >
-      <div
-        aria-describedby={isVisible ? tooltipId : undefined}
-        aria-expanded={isTouch ? isVisible : undefined}
-      >
-        {children}
-      </div>
+      {/* Put the description on the focusable trigger itself (not a wrapper)
+          so screen readers announce it on focus. Clone a single element
+          child; fall back to a span for text/fragment children. */}
+      {isValidElement(children) ? (
+        cloneElement(
+          children as ReactElement<{
+            "aria-describedby"?: string;
+            "aria-expanded"?: boolean;
+          }>,
+          {
+            "aria-describedby": isVisible ? tooltipId : undefined,
+            "aria-expanded": isTouch ? isVisible : undefined,
+          },
+        )
+      ) : (
+        <span
+          aria-describedby={isVisible ? tooltipId : undefined}
+          aria-expanded={isTouch ? isVisible : undefined}
+        >
+          {children}
+        </span>
+      )}
       {isVisible && (
         <div
           ref={tooltipRef}
