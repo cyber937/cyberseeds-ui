@@ -17,6 +17,12 @@ interface TableProps extends HTMLAttributes<HTMLTableElement> {
   striped?: boolean;
   /** Outer wrapper gets a border and rounded corners when true (default). */
   bordered?: boolean;
+  /**
+   * Stick the header to the top while the body scrolls. The table's wrapper
+   * becomes a vertical scroll container that fills its parent's height — give
+   * the parent a bounded height (e.g. a `flex-1 min-h-0` flex child).
+   */
+  stickyHeader?: boolean;
 }
 
 interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
@@ -48,6 +54,7 @@ interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
 }
 
 const TableScaleContext = createContext<Scale>("md");
+const TableStickyContext = createContext<boolean>(false);
 
 const cellScaleMap: Record<Scale, string> = {
   xs: "cs:px-2 cs:py-1.5 cs:text-xs",
@@ -102,30 +109,34 @@ export function Table({
   scale = "md",
   striped,
   bordered = true,
+  stickyHeader = false,
   className,
   children,
   ...props
 }: TableProps) {
   return (
     <TableScaleContext.Provider value={scale}>
-      <div
-        className={clsx(
-          "cs:overflow-x-auto cs:bg-white cs:dark:bg-gray-800",
-          bordered &&
-            "cs:rounded-lg cs:border cs:border-gray-200 cs:dark:border-gray-700 cs:shadow-sm",
-        )}
-      >
-        <table
-          {...props}
-          data-striped={striped ? "true" : undefined}
+      <TableStickyContext.Provider value={stickyHeader}>
+        <div
           className={clsx(
-            "cs:min-w-full cs:divide-y cs:divide-gray-200 cs:dark:divide-gray-700 cs:font-sans",
-            className,
+            "cs:bg-white cs:dark:bg-gray-800",
+            stickyHeader ? "cs:overflow-auto cs:h-full" : "cs:overflow-x-auto",
+            bordered &&
+              "cs:rounded-lg cs:border cs:border-gray-200 cs:dark:border-gray-700 cs:shadow-sm",
           )}
         >
-          {children}
-        </table>
-      </div>
+          <table
+            {...props}
+            data-striped={striped ? "true" : undefined}
+            className={clsx(
+              "cs:min-w-full cs:divide-y cs:divide-gray-200 cs:dark:divide-gray-700 cs:font-sans",
+              className,
+            )}
+          >
+            {children}
+          </table>
+        </div>
+      </TableStickyContext.Provider>
     </TableScaleContext.Provider>
   );
 }
@@ -135,6 +146,7 @@ function TableHead({
   className,
   ...props
 }: HTMLAttributes<HTMLTableSectionElement>) {
+  const stickyHeader = useContext(TableStickyContext);
   return (
     <thead
       {...props}
@@ -142,6 +154,7 @@ function TableHead({
         "cs:bg-gray-50 cs:dark:bg-gray-900",
         "cs:text-gray-500 cs:dark:text-gray-300",
         "cs:uppercase cs:tracking-wide",
+        stickyHeader && "cs:sticky cs:top-0 cs:z-10",
         className,
       )}
     >

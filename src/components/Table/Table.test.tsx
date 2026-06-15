@@ -126,6 +126,46 @@ describe("Table Component", () => {
       expect(wrapper.className).not.toContain("rounded-lg");
       expect(wrapper.className).not.toContain("border ");
     });
+
+    it("stickyHeader makes the wrapper scrollable and the head sticky", () => {
+      const { container } = render(
+        <Table stickyHeader>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell>H</Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      );
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.className).toContain("overflow-auto");
+      const thead = container.querySelector("thead");
+      expect(thead?.className).toContain("sticky");
+    });
+
+    it("does not stick the head by default", () => {
+      const { container } = render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell>H</Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      );
+      const thead = container.querySelector("thead");
+      expect(thead?.className).not.toContain("sticky");
+    });
   });
 
   describe("Accessibility", () => {
