@@ -166,6 +166,21 @@ describe("Table Component", () => {
       const thead = container.querySelector("thead");
       expect(thead?.className).not.toContain("sticky");
     });
+
+    it("forwards ref to the scroll wrapper element", () => {
+      const ref = { current: null as HTMLDivElement | null };
+      render(
+        <Table ref={ref}>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>x</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>
+      );
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current?.querySelector("table")).not.toBeNull();
+    });
   });
 
   describe("Accessibility", () => {
