@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import {
   createContext,
+  forwardRef,
   useContext,
   type HTMLAttributes,
   type TdHTMLAttributes,
@@ -105,19 +106,23 @@ const alignClass: Record<Align, string> = {
  * `scale` propagates through context so nested cells pick up the right
  * padding without prop drilling.
  */
-export function Table({
-  scale = "md",
-  striped,
-  bordered = true,
-  stickyHeader = false,
-  className,
-  children,
-  ...props
-}: TableProps) {
+const TableRoot = forwardRef<HTMLDivElement, TableProps>(function Table(
+  {
+    scale = "md",
+    striped,
+    bordered = true,
+    stickyHeader = false,
+    className,
+    children,
+    ...props
+  },
+  ref,
+) {
   return (
     <TableScaleContext.Provider value={scale}>
       <TableStickyContext.Provider value={stickyHeader}>
         <div
+          ref={ref}
           className={clsx(
             "cs:bg-white cs:dark:bg-gray-800",
             stickyHeader ? "cs:overflow-auto cs:h-full" : "cs:overflow-x-auto",
@@ -139,7 +144,7 @@ export function Table({
       </TableStickyContext.Provider>
     </TableScaleContext.Provider>
   );
-}
+});
 
 function TableHead({
   children,
@@ -296,10 +301,12 @@ function TableCell({
   );
 }
 
-Table.Head = TableHead;
-Table.Body = TableBody;
-Table.Row = TableRow;
-Table.HeaderCell = TableHeaderCell;
-Table.Cell = TableCell;
+export const Table = Object.assign(TableRoot, {
+  Head: TableHead,
+  Body: TableBody,
+  Row: TableRow,
+  HeaderCell: TableHeaderCell,
+  Cell: TableCell,
+});
 
 export type { Align as TableAlign };
