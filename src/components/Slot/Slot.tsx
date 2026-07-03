@@ -71,8 +71,9 @@ export const Slot = forwardRef<HTMLElement, SlotProps>(function Slot(props, forw
     mergedProps.style = { ...(slotProps.style ?? {}), ...((childProps.style as object) ?? {}) };
   }
 
-  // Compose refs
-  const childRef = (child as unknown as { ref?: Ref<HTMLElement> }).ref;
+  // Compose refs. In React 19 `ref` is a regular prop, so read it from
+  // `child.props.ref` — reading `child.ref` is removed and logs a warning.
+  const childRef = (childProps as { ref?: Ref<HTMLElement> }).ref;
   mergedProps.ref = composeRefs(forwardedRef, childRef);
 
   return cloneElement(child, mergedProps);
