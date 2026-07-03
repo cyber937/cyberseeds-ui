@@ -90,4 +90,31 @@ describe("Popover", () => {
     fireEvent.click(link);
     expect(screen.getByText("panel")).toBeInTheDocument();
   });
+
+  it("portals the content to document.body so fixed positioning escapes transformed ancestors", () => {
+    render(
+      // A transformed ancestor would become the containing block for a
+      // non-portaled position:fixed panel; the portal must escape it.
+      <div style={{ transform: "scale(1)" }}>
+        <Basic open />
+      </div>,
+    );
+    const panel = screen.getByText("Panel content").closest('[role="dialog"]')!;
+    expect(panel.parentElement).toBe(document.body);
+    expect((panel as HTMLElement).className).toContain("z-[60]");
+    expect((panel as HTMLElement).style.position).toBe("fixed");
+  });
+
+  it("composes a ref onto an asChild trigger (React 19 props.ref)", () => {
+    const ref = { current: null as HTMLElement | null };
+    render(
+      <Popover>
+        <Popover.Trigger asChild>
+          <button ref={ref}>Trigger</button>
+        </Popover.Trigger>
+        <Popover.Content>panel</Popover.Content>
+      </Popover>,
+    );
+    expect(ref.current).toBe(screen.getByRole("button", { name: "Trigger" }));
+  });
 });
