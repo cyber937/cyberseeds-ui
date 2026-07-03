@@ -21,6 +21,11 @@ interface DatePickerProps {
   disabled?: boolean;
   placeholder?: string;
   className?: string;
+  /** Marks the field invalid: red border + `aria-invalid` on the trigger. */
+  isInvalid?: boolean;
+  /** Forwarded to the trigger `<button>` (label association / error linking). */
+  id?: string;
+  "aria-describedby"?: string;
   /** Forwarded to the trigger `<button>`. */
   ref?: Ref<HTMLButtonElement>;
 }
@@ -84,6 +89,9 @@ export function DatePicker({
   disabled = false,
   placeholder = "Select a date",
   className,
+  isInvalid = false,
+  id,
+  "aria-describedby": ariaDescribedby,
   ref,
 }: DatePickerProps) {
   const { color: contextColor } = useUIColor() ?? { color: undefined };
@@ -133,16 +141,27 @@ export function DatePicker({
   }
 
   return (
-    <Popover open={open} onOpenChange={setOpen} placement="bottom" align="start">
+    <Popover
+      open={open}
+      onOpenChange={setOpen}
+      placement="bottom"
+      align="start"
+      triggerId={id}
+    >
       <Popover.Trigger asChild>
         <button
           ref={ref}
           type="button"
           disabled={disabled}
           aria-label={selected ? formatDate(selected) : placeholder}
+          aria-invalid={isInvalid || undefined}
+          aria-describedby={ariaDescribedby}
           className={clsx(
             "cs:inline-flex cs:items-center cs:justify-between cs:gap-2 cs:min-w-44",
-            "cs:rounded-md cs:border cs:border-gray-300 cs:dark:border-gray-600",
+            "cs:rounded-md cs:border",
+            isInvalid
+              ? "cs:border-red-500 cs:dark:border-red-500"
+              : "cs:border-gray-300 cs:dark:border-gray-600",
             "cs:bg-white cs:dark:bg-gray-800 cs:font-sans cs:text-left",
             "cs:text-gray-900 cs:dark:text-gray-200",
             "cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:focus-visible:outline-[var(--cs-ui-focus)]",

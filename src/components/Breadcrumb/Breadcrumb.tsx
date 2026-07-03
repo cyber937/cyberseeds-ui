@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import { Children, isValidElement, memo, type ReactElement, type ReactNode } from "react";
+import { Slot } from "../Slot/Slot";
 
 interface BreadcrumbProps {
   children: ReactNode;
@@ -19,6 +20,12 @@ interface BreadcrumbItemProps {
    * Renders without a link and gets aria-current="page".
    */
   current?: boolean;
+  /**
+   * Merges the item's link styling and handlers onto a single child element
+   * (typically a router `<Link>`) instead of rendering an `<a>`. The child
+   * supplies its own `href`. Ignored when `current`. Mirrors Button `asChild`.
+   */
+  asChild?: boolean;
   className?: string;
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
@@ -58,13 +65,28 @@ function BreadcrumbRoot({
   );
 }
 
+const linkClasses =
+  "cs:text-gray-600 cs:dark:text-gray-400 cs:hover:text-gray-900 cs:dark:hover:text-gray-200 cs:hover:underline cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:focus-visible:outline-blue-600 cs:rounded-sm";
+
 const BreadcrumbItem = memo(function BreadcrumbItem({
   children,
   href,
   current = false,
+  asChild = false,
   className,
   onClick,
 }: BreadcrumbItemProps) {
+  if (asChild && !current) {
+    return (
+      <Slot
+        className={clsx(linkClasses, className)}
+        onClick={onClick as React.MouseEventHandler | undefined}
+      >
+        {children as ReactElement}
+      </Slot>
+    );
+  }
+
   if (current || !href) {
     return (
       <span
@@ -85,10 +107,7 @@ const BreadcrumbItem = memo(function BreadcrumbItem({
     <a
       href={href}
       onClick={onClick}
-      className={clsx(
-        "cs:text-gray-600 cs:dark:text-gray-400 cs:hover:text-gray-900 cs:dark:hover:text-gray-200 cs:hover:underline cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:focus-visible:outline-blue-600 cs:rounded-sm",
-        className,
-      )}
+      className={clsx(linkClasses, className)}
     >
       {children}
     </a>

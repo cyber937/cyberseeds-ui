@@ -72,3 +72,42 @@ export const SingleItem: Story = {
     </Breadcrumb>
   ),
 };
+
+/**
+ * `asChild` merges the item's link styling onto a single child element —
+ * typically a router link (e.g. Next.js `<Link>`), so client-side navigation
+ * is preserved instead of a full page load through a raw `<a>`.
+ */
+export const AsChild: Story = {
+  render: () => {
+    // Stand-in for a router link (Next.js <Link>, react-router <Link>, …).
+    const RouterLink = ({
+      href,
+      children,
+    }: {
+      href: string;
+      children: React.ReactNode;
+    }) => (
+      <a
+        href={href}
+        onClick={(e) => {
+          e.preventDefault();
+          console.log("[router] navigate:", href);
+        }}
+      >
+        {children}
+      </a>
+    );
+    return (
+      <Breadcrumb>
+        <Breadcrumb.Item asChild>
+          <RouterLink href="/">Home</RouterLink>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item asChild>
+          <RouterLink href="/library">Library</RouterLink>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item current>Checkout</Breadcrumb.Item>
+      </Breadcrumb>
+    );
+  },
+};

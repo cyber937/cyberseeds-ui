@@ -70,4 +70,29 @@ describe("DatePicker", () => {
     fireEvent.click(screen.getByRole("button", { name: "Clear" }));
     expect(onChange).toHaveBeenCalledWith(null);
   });
+
+  describe("invalid state and aria wiring", () => {
+    it("isInvalid marks the trigger with aria-invalid and a red border", () => {
+      render(<DatePicker isInvalid placeholder="Pick" />);
+      const trigger = screen.getByRole("button", { name: "Pick" });
+      expect(trigger).toHaveAttribute("aria-invalid", "true");
+      expect(trigger.className).toContain("border-red-500");
+    });
+
+    it("does not set aria-invalid or red border by default", () => {
+      render(<DatePicker placeholder="Pick" />);
+      const trigger = screen.getByRole("button", { name: "Pick" });
+      expect(trigger).not.toHaveAttribute("aria-invalid");
+      expect(trigger.className).not.toContain("border-red-500");
+    });
+
+    it("forwards id and aria-describedby to the trigger", () => {
+      render(
+        <DatePicker id="start" aria-describedby="start-error" placeholder="Pick" />,
+      );
+      const trigger = screen.getByRole("button", { name: "Pick" });
+      expect(trigger).toHaveAttribute("id", "start");
+      expect(trigger).toHaveAttribute("aria-describedby", "start-error");
+    });
+  });
 });

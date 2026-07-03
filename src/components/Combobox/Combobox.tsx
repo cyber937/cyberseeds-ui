@@ -48,6 +48,12 @@ interface ComboboxProps {
    * substring match against `option.label`.
    */
   filter?: (option: ComboboxOption, search: string) => boolean;
+  /**
+   * Fires with the search text on every keystroke. For async/server-driven
+   * options: fetch with this query, feed the results into `options`, and
+   * pass `filter={() => true}` (the server already filtered).
+   */
+  onSearchChange?: (search: string) => void;
   placeholder?: string;
   /** Shown inside the open dropdown when nothing matches. */
   emptyMessage?: ReactNode;
@@ -60,6 +66,8 @@ interface ComboboxProps {
   color?: Color;
   /** When true, marks the input with `aria-invalid` and red ring styling. */
   isInvalid?: boolean;
+  /** Forwarded to the search `<input>` (error-message linking). */
+  "aria-describedby"?: string;
   disabled?: boolean;
   /** Outer `<div>` className for layout-level overrides. */
   className?: string;
@@ -126,12 +134,14 @@ export function Combobox({
   defaultValue = null,
   onChange,
   filter = defaultFilter,
+  onSearchChange,
   placeholder = "Search…",
   emptyMessage = "No matches",
   clearable = true,
   scale = "md",
   color,
   isInvalid = false,
+  "aria-describedby": ariaDescribedby,
   disabled = false,
   className,
   id: externalId,
@@ -241,6 +251,7 @@ export function Combobox({
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const next = event.target.value;
     setInputValue(next);
+    onSearchChange?.(next);
     if (!isOpen) setIsOpen(true);
     // Reset highlight to the first match after each filter pass; users
     // can press Enter to select the most relevant match immediately.
@@ -368,6 +379,7 @@ export function Combobox({
           aria-autocomplete="list"
           aria-activedescendant={activeOptionId}
           aria-invalid={isInvalid || undefined}
+          aria-describedby={ariaDescribedby}
           aria-controls={isOpen ? listboxId : undefined}
           className={clsx(
             "cs:w-full cs:rounded-md cs:border cs:font-sans",

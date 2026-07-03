@@ -33,6 +33,11 @@ interface FileUploadProps {
   label?: ReactNode;
   /** Secondary hint text under the label. */
   hint?: ReactNode;
+  /** Marks the field invalid: red dropzone border + `aria-invalid`. */
+  isInvalid?: boolean;
+  /** Forwarded to the dropzone (label association / error linking). */
+  id?: string;
+  "aria-describedby"?: string;
   className?: string;
 }
 
@@ -88,6 +93,9 @@ export function FileUpload({
   onReject,
   label = "Click to choose a file or drag it here",
   hint,
+  isInvalid = false,
+  id,
+  "aria-describedby": ariaDescribedby,
   className,
 }: FileUploadProps) {
   const inputId = useId();
@@ -173,9 +181,12 @@ export function FileUpload({
     <div className={clsx("cs:font-sans", className)}>
       <div
         role="button"
+        id={id}
         tabIndex={disabled ? -1 : 0}
         aria-disabled={disabled || undefined}
         aria-label={typeof label === "string" ? label : "Upload file"}
+        aria-invalid={isInvalid || undefined}
+        aria-describedby={ariaDescribedby}
         onClick={openPicker}
         onKeyDown={handleKeyDown}
         onDrop={handleDrop}
@@ -188,7 +199,9 @@ export function FileUpload({
           zonePaddingMap[scale],
           dragActive
             ? "cs:border-blue-500 cs:bg-blue-50 cs:dark:bg-blue-950/30"
-            : "cs:border-gray-300 cs:dark:border-gray-600 cs:bg-gray-50 cs:dark:bg-gray-800/40",
+            : isInvalid
+              ? "cs:border-red-500 cs:dark:border-red-500 cs:bg-gray-50 cs:dark:bg-gray-800/40"
+              : "cs:border-gray-300 cs:dark:border-gray-600 cs:bg-gray-50 cs:dark:bg-gray-800/40",
           disabled
             ? "cs:opacity-50 cs:cursor-not-allowed"
             : "cs:cursor-pointer cs:hover:border-gray-400 cs:dark:hover:border-gray-500",

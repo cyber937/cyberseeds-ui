@@ -130,4 +130,52 @@ describe("Breadcrumb Component", () => {
       expect(container.querySelectorAll('[aria-hidden="true"]')).toHaveLength(0);
     });
   });
+
+  describe("asChild", () => {
+    it("merges link styling onto the child element without nesting an <a>", () => {
+      render(
+        <Breadcrumb>
+          <Breadcrumb.Item asChild>
+            <a href="/library">Library</a>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item current>Book</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      const link = screen.getByRole("link", { name: "Library" });
+      expect(link).toHaveAttribute("href", "/library");
+      expect(link.className).toContain("hover:underline");
+      // The child IS the anchor; no wrapper <a> around it.
+      expect(link.closest("a")).toBe(link);
+      expect(link.parentElement?.closest("a")).toBeNull();
+    });
+
+    it("composes the child's onClick with the Item's onClick", async () => {
+      const user = userEvent.setup();
+      const childClick = vi.fn((e: React.MouseEvent) => e.preventDefault());
+      const itemClick = vi.fn();
+      render(
+        <Breadcrumb>
+          <Breadcrumb.Item asChild onClick={itemClick}>
+            <a href="/x" onClick={childClick}>X</a>
+          </Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      await user.click(screen.getByRole("link", { name: "X" }));
+      expect(childClick).toHaveBeenCalledTimes(1);
+      expect(itemClick).toHaveBeenCalledTimes(1);
+    });
+
+    it("current wins over asChild (renders a plain span, no Slot)", () => {
+      render(
+        <Breadcrumb>
+          <Breadcrumb.Item asChild current>
+            Now
+          </Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      const el = screen.getByText("Now");
+      expect(el.tagName).toBe("SPAN");
+      expect(el).toHaveAttribute("aria-current", "page");
+    });
+  });
 });

@@ -349,4 +349,36 @@ describe("Combobox Component", () => {
       expect(ref.current).toBe(screen.getByRole("searchbox"));
     });
   });
+
+  describe("onSearchChange (async/server-driven options)", () => {
+    it("fires with the typed search text", () => {
+      const onSearchChange = vi.fn();
+      render(<Combobox options={FRUITS} onSearchChange={onSearchChange} />);
+      fireEvent.change(screen.getByRole("searchbox"), {
+        target: { value: "ap" },
+      });
+      expect(onSearchChange).toHaveBeenCalledWith("ap");
+    });
+
+    it("fires even when options is empty (server has not answered yet)", () => {
+      const onSearchChange = vi.fn();
+      render(<Combobox options={[]} onSearchChange={onSearchChange} />);
+      fireEvent.change(screen.getByRole("searchbox"), {
+        target: { value: "yamada" },
+      });
+      expect(onSearchChange).toHaveBeenCalledWith("yamada");
+    });
+  });
+
+  describe("aria-describedby", () => {
+    it("forwards aria-describedby to the search input", () => {
+      render(
+        <Combobox options={FRUITS} aria-describedby="parent-error" />,
+      );
+      expect(screen.getByRole("searchbox")).toHaveAttribute(
+        "aria-describedby",
+        "parent-error",
+      );
+    });
+  });
 });

@@ -54,3 +54,20 @@ export const WithMinMax: Story = {
 export const Disabled: Story = {
   args: { defaultValue: new Date(2026, 5, 15), disabled: true },
 };
+
+/** Form-validation error state: red border + `aria-invalid` on the trigger. */
+export const Invalid: Story = {
+  args: {
+    isInvalid: true,
+    placeholder: "Required — pick a date",
+    "aria-describedby": "date-error",
+  },
+  render: (args) => (
+    <div>
+      <DatePicker {...args} />
+      <p id="date-error" role="alert" style={{ color: "#ef4444", fontSize: 12, marginTop: 4 }}>
+        日付を選択してください
+      </p>
+    </div>
+  ),
+};
