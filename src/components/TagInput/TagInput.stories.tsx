@@ -65,3 +65,24 @@ export const MaxThree: Story = {
 export const Disabled: Story = {
   args: { defaultValue: ["locked", "tags"], disabled: true },
 };
+
+/** Form-validation error state: red border + `aria-invalid` on the input. */
+export const Invalid: Story = {
+  render: () => {
+    const [tags, setTags] = useState<string[]>([]);
+    return (
+      <div style={{ width: 320 }}>
+        <TagInput
+          value={tags}
+          onChange={setTags}
+          isInvalid
+          aria-describedby="tags-error"
+          placeholder="Required — add at least one"
+        />
+        <p id="tags-error" role="alert" style={{ color: "#ef4444", fontSize: 12, marginTop: 4 }}>
+          1件以上入力してください
+        </p>
+      </div>
+    );
+  },
+};

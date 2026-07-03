@@ -56,6 +56,12 @@ interface PopoverProps {
   open?: boolean;
   /** Called whenever the open state should change (controlled or not). */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Overrides the generated trigger `id` (applied to the trigger element and
+   * referenced by the content's `aria-labelledby`). Lets composed components
+   * (e.g. DatePicker) expose an externally supplied id for label association.
+   */
+  triggerId?: string;
 }
 
 export function Popover({
@@ -65,8 +71,10 @@ export function Popover({
   defaultOpen = false,
   open: controlledOpen,
   onOpenChange,
+  triggerId: externalTriggerId,
 }: PopoverProps) {
-  const triggerId = useId();
+  const generatedTriggerId = useId();
+  const triggerId = externalTriggerId ?? generatedTriggerId;
   const contentId = useId();
   const triggerRef = useRef<HTMLElement | null>(null);
   const contentRef = useRef<HTMLDivElement>(null);

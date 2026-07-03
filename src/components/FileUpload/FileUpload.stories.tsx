@@ -63,3 +63,20 @@ export const Disabled: Story = {
     label: "Uploads are disabled",
   },
 };
+
+/** Form-validation error state: red dropzone border + `aria-invalid`. */
+export const Invalid: Story = {
+  args: {
+    isInvalid: true,
+    label: "Required — attach at least one file",
+    "aria-describedby": "file-error",
+  },
+  render: (args) => (
+    <div>
+      <FileUpload {...args} />
+      <p id="file-error" role="alert" style={{ color: "#ef4444", fontSize: 12, marginTop: 4 }}>
+        ファイルを選択してください
+      </p>
+    </div>
+  ),
+};

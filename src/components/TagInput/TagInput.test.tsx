@@ -60,4 +60,28 @@ describe("TagInput", () => {
     fireEvent.keyDown(getField(), { key: "Enter" });
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  describe("invalid state and aria wiring", () => {
+    it("isInvalid marks the input with aria-invalid and the container with a red border", () => {
+      const { container } = render(<TagInput isInvalid />);
+      expect(getField()).toHaveAttribute("aria-invalid", "true");
+      expect((container.firstChild as HTMLElement).className).toContain(
+        "border-red-500",
+      );
+    });
+
+    it("does not set aria-invalid or red border by default", () => {
+      const { container } = render(<TagInput />);
+      expect(getField()).not.toHaveAttribute("aria-invalid");
+      expect((container.firstChild as HTMLElement).className).not.toContain(
+        "border-red-500",
+      );
+    });
+
+    it("forwards id and aria-describedby to the inner input", () => {
+      render(<TagInput id="tags" aria-describedby="tags-error" />);
+      expect(getField()).toHaveAttribute("id", "tags");
+      expect(getField()).toHaveAttribute("aria-describedby", "tags-error");
+    });
+  });
 });

@@ -101,4 +101,29 @@ describe("FileUpload", () => {
     fireEvent.drop(zone, { dataTransfer: { files: [makeFile("a.txt", 1)] } });
     expect(onChange).not.toHaveBeenCalled();
   });
+
+  describe("invalid state and aria wiring", () => {
+    it("isInvalid marks the dropzone with aria-invalid and a red border", () => {
+      render(<FileUpload isInvalid label="Zone" />);
+      const zone = screen.getByRole("button", { name: "Zone" });
+      expect(zone).toHaveAttribute("aria-invalid", "true");
+      expect(zone.className).toContain("border-red-500");
+    });
+
+    it("does not set aria-invalid or red border by default", () => {
+      render(<FileUpload label="Zone" />);
+      const zone = screen.getByRole("button", { name: "Zone" });
+      expect(zone).not.toHaveAttribute("aria-invalid");
+      expect(zone.className).not.toContain("border-red-500");
+    });
+
+    it("forwards id and aria-describedby to the dropzone", () => {
+      render(
+        <FileUpload id="attachments" aria-describedby="attachments-error" label="Zone" />,
+      );
+      const zone = screen.getByRole("button", { name: "Zone" });
+      expect(zone).toHaveAttribute("id", "attachments");
+      expect(zone).toHaveAttribute("aria-describedby", "attachments-error");
+    });
+  });
 });

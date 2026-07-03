@@ -18,6 +18,11 @@ interface TagInputProps {
   dedupe?: boolean;
   /** Cap the number of tags. */
   maxTags?: number;
+  /** Marks the field invalid: red border + `aria-invalid` on the input. */
+  isInvalid?: boolean;
+  /** Forwarded to the inner text `<input>` (label association / error linking). */
+  id?: string;
+  "aria-describedby"?: string;
   className?: string;
   "aria-label"?: string;
   /** Forwarded to the inner text `<input>`. */
@@ -41,11 +46,15 @@ export function TagInput({
   disabled = false,
   dedupe = true,
   maxTags,
+  isInvalid = false,
+  id,
+  "aria-describedby": ariaDescribedby,
   className,
   "aria-label": ariaLabel,
   ref,
 }: TagInputProps) {
-  const inputId = useId();
+  const internalId = useId();
+  const inputId = id ?? internalId;
   const { color: contextColor } = useUIColor() ?? { color: undefined };
   const colorStyle = colorToCSSVars(resolveColor(contextColor ?? color));
 
@@ -89,7 +98,10 @@ export function TagInput({
     <div
       className={clsx(
         "cs:flex cs:flex-wrap cs:items-center cs:font-sans",
-        "cs:rounded-md cs:border cs:border-gray-300 cs:dark:border-gray-600",
+        "cs:rounded-md cs:border",
+        isInvalid
+          ? "cs:border-red-500 cs:dark:border-red-500"
+          : "cs:border-gray-300 cs:dark:border-gray-600",
         "cs:bg-white cs:dark:bg-gray-800",
         "cs:focus-within:outline-2 cs:focus-within:outline-offset-2 cs:focus-within:outline-[var(--cs-ui-focus)]",
         disabled && "cs:opacity-50",
@@ -130,6 +142,8 @@ export function TagInput({
         disabled={disabled}
         placeholder={tags.length === 0 ? placeholder : ""}
         aria-label={ariaLabel ?? "Add a tag"}
+        aria-invalid={isInvalid || undefined}
+        aria-describedby={ariaDescribedby}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={handleKeyDown}
         onBlur={() => addTag(draft)}
