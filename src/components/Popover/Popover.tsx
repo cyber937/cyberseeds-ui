@@ -15,6 +15,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { createPortal } from "react-dom";
 import { Slot } from "../Slot/Slot";
 
 export type PopoverPlacement = "top" | "bottom" | "left" | "right";
@@ -388,9 +389,14 @@ function PopoverContent({
     }
   }, [open, autoFocus, contentRef]);
 
-  if (!open) return null;
+  if (!open || typeof document === "undefined") return null;
 
-  return (
+  // Portal to <body> so `position: fixed` is resolved against the viewport,
+  // not a transformed/overflow ancestor (e.g. a Modal panel, which uses
+  // `transform` for its enter animation and would otherwise become the
+  // containing block, displacing the panel). z-index sits above Modal/Drawer
+  // (z-50) so it layers over them.
+  return createPortal(
     <div
       ref={contentRef}
       id={contentId}
@@ -406,7 +412,7 @@ function PopoverContent({
         visibility: coords ? "visible" : "hidden",
       }}
       className={clsx(
-        "cs:z-40 cs:min-w-[8rem] cs:rounded-md cs:font-sans",
+        "cs:z-[60] cs:min-w-[8rem] cs:rounded-md cs:font-sans",
         "cs:border cs:border-gray-200 cs:dark:border-gray-700",
         "cs:bg-white cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200",
         "cs:shadow-lg cs:p-2",
@@ -414,7 +420,8 @@ function PopoverContent({
       )}
     >
       {children}
-    </div>
+    </div>,
+    document.body,
   );
 }
 
