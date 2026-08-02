@@ -130,6 +130,19 @@
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
+/* Table — the column currently being sorted.
+   Falls back to gray-700 / gray-200 when no UIColorProvider is present. */
+.cs-sort-active {
+  color: var(--cs-ui-base, oklch(0.373 0.034 259.733));
+}
+:is(.dark, .dark *) .cs-sort-active {
+  color: color-mix(
+    in oklch,
+    var(--cs-ui-base, oklch(0.928 0.006 264.531)) 60%,
+    white 40%
+  );
+}
+
 /* Scrollbar hidden utility for horizontal scroll containers */
 .cs-scrollbar-none {
   -ms-overflow-style: none; /* IE/Edge */

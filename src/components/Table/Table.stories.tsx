@@ -147,6 +147,42 @@ export const Scales: Story = {
   ),
 };
 
+/**
+ * The three sort states side by side. The sorted column is the only one drawn
+ * in the UI accent colour with a bold label and a single solid chevron —
+ * sortable-but-unsorted columns stay muted with a double chevron.
+ */
+export const SortIndicatorStates: Story = {
+  render: () => (
+    <Table>
+      <Table.Head>
+        <Table.Row>
+          <Table.HeaderCell sortable onSort={() => {}}>
+            Unsorted
+          </Table.HeaderCell>
+          <Table.HeaderCell sortable sortDirection="asc" onSort={() => {}}>
+            Ascending
+          </Table.HeaderCell>
+          <Table.HeaderCell sortable sortDirection="desc" onSort={() => {}}>
+            Descending
+          </Table.HeaderCell>
+          <Table.HeaderCell>Not sortable</Table.HeaderCell>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
+        {rows.slice(0, 2).map((r) => (
+          <Table.Row key={r.sku}>
+            <Table.Cell>{r.sku}</Table.Cell>
+            <Table.Cell>{r.description}</Table.Cell>
+            <Table.Cell>{r.status}</Table.Cell>
+            <Table.Cell>{r.price}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  ),
+};
+
 export const SortableAndSelectable: Story = {
   render: () => {
     const [sortKey, setSortKey] = useState<"sku" | "on_hand">("sku");

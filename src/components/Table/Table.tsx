@@ -8,6 +8,7 @@ import {
   type ThHTMLAttributes,
 } from "react";
 
+import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Scale } from "../DesignSystemUtils";
 
 type Align = "left" | "right" | "center";
@@ -221,16 +222,36 @@ const ariaSortMap: Record<"asc" | "desc" | "none", "ascending" | "descending" | 
   none: "none",
 };
 
+/**
+ * Sort indicator.
+ *
+ * Unsorted columns show a muted up/down chevron pair ("this column can be
+ * sorted"); the sorted column shows a single, full-strength chevron pointing
+ * in the active direction. Direction is conveyed by shape, not by opacity
+ * alone, so it survives low-contrast displays and greyscale printing.
+ *
+ * Kept `aria-hidden` — the direction is already announced through the
+ * `aria-sort` attribute on the `<th>`.
+ */
 function SortArrows({ direction }: { direction: SortDirection }) {
   return (
-    <span className="cs:inline-flex cs:flex-col cs:leading-[0.5]" aria-hidden="true">
-      <span className={clsx("cs:text-[0.6em]", direction === "asc" ? "cs:opacity-100" : "cs:opacity-30")}>
-        ▲
-      </span>
-      <span className={clsx("cs:text-[0.6em]", direction === "desc" ? "cs:opacity-100" : "cs:opacity-30")}>
-        ▼
-      </span>
-    </span>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={direction ? 2.5 : 1.5}
+      stroke="currentColor"
+      aria-hidden="true"
+      className={clsx("cs:size-4 cs:shrink-0", !direction && "cs:opacity-50")}
+    >
+      {direction === "asc" ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+      ) : direction === "desc" ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+      ) : (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
+      )}
+    </svg>
   );
 }
 
@@ -262,8 +283,15 @@ function TableHeaderCell({
           onClick={onSort}
           className={clsx(
             "cs:inline-flex cs:items-center cs:gap-1.5 cs:cursor-pointer cs:select-none",
-            "cs:font-semibold cs:uppercase cs:tracking-wide",
-            "cs:hover:text-gray-900 cs:dark:hover:text-gray-100",
+            "cs:uppercase cs:tracking-wide cs:rounded-sm",
+            TRANSITION_FAST,
+            FOCUS_RING,
+            "cs-focus-visible",
+            // The sorted column reads as the active one: stronger weight and
+            // the UI accent colour, not just a darker arrow.
+            sortDirection
+              ? "cs:font-bold cs-sort-active"
+              : "cs:font-semibold cs:hover:text-gray-900 cs:dark:hover:text-gray-100",
             align === "right" && "cs:flex-row-reverse",
           )}
         >

@@ -235,6 +235,94 @@ describe("Table Component", () => {
       expect(screen.getByRole("columnheader")).toHaveAttribute("aria-sort", "none");
     });
 
+    it("highlights the sorted column and leaves unsorted ones muted", () => {
+      const { rerender } = render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell sortable onSort={() => {}}>
+                SKU
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+        </Table>,
+      );
+      const unsorted = screen.getByRole("button", { name: /SKU/ });
+      expect(unsorted.className).not.toContain("cs-sort-active");
+      expect(unsorted.querySelector("svg")).toHaveClass("cs:opacity-50");
+
+      rerender(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell sortable sortDirection="asc" onSort={() => {}}>
+                SKU
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+        </Table>,
+      );
+      const sorted = screen.getByRole("button", { name: /SKU/ });
+      expect(sorted.className).toContain("cs-sort-active");
+      expect(sorted.querySelector("svg")).not.toHaveClass("cs:opacity-50");
+    });
+
+    it("draws a different arrow for each sort direction", () => {
+      const arrowFor = (direction: "asc" | "desc") => {
+        const { unmount } = render(
+          <Table>
+            <Table.Head>
+              <Table.Row>
+                <Table.HeaderCell sortable sortDirection={direction} onSort={() => {}}>
+                  SKU
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Head>
+          </Table>,
+        );
+        const d = screen
+          .getByRole("button", { name: /SKU/ })
+          .querySelector("path")!
+          .getAttribute("d");
+        unmount();
+        return d;
+      };
+      expect(arrowFor("asc")).not.toEqual(arrowFor("desc"));
+    });
+
+    it("keeps the sort arrows out of the accessible name", () => {
+      render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell sortable sortDirection="desc" onSort={() => {}}>
+                SKU
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+        </Table>,
+      );
+      const button = screen.getByRole("button", { name: "SKU" });
+      expect(button.querySelector("svg")).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("gives the sort toggle a focus ring", () => {
+      render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell sortable onSort={() => {}}>
+                SKU
+              </Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+        </Table>,
+      );
+      expect(screen.getByRole("button", { name: /SKU/ }).className).toContain(
+        "cs-focus-visible",
+      );
+    });
+
     it("marks a selected row with aria-selected", () => {
       render(
         <Table>
