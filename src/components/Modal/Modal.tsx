@@ -11,7 +11,7 @@ type ModalContextType = {
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined);
 
-type ModalWidth = "sm" | "md" | "lg";
+type ModalWidth = "sm" | "md" | "lg" | "xl" | "2xl";
 
 /**
  * Responsive width: a single named size, or an object mapping Tailwind
@@ -37,17 +37,19 @@ const baseWidthMap = {
   sm: "cs:sm:w-2xs",
   md: "cs:sm:w-md",
   lg: "cs:sm:w-2xl",
+  xl: "cs:sm:w-4xl",
+  "2xl": "cs:sm:w-5xl",
 } as const;
 
 // For the responsive object form, each breakpoint key prefixes the class.
 // `base` has no prefix (applies on all sizes); the rest use the standard
 // Tailwind responsive prefixes.
 const breakpointWidthClasses = {
-  sm: { sm: "cs:sm:w-2xs", md: "cs:sm:w-md", lg: "cs:sm:w-2xl" },
-  md: { sm: "cs:md:w-2xs", md: "cs:md:w-md", lg: "cs:md:w-2xl" },
-  lg: { sm: "cs:lg:w-2xs", md: "cs:lg:w-md", lg: "cs:lg:w-2xl" },
-  xl: { sm: "cs:xl:w-2xs", md: "cs:xl:w-md", lg: "cs:xl:w-2xl" },
-  base: { sm: "cs:w-2xs", md: "cs:w-md", lg: "cs:w-2xl" },
+  sm: { sm: "cs:sm:w-2xs", md: "cs:sm:w-md", lg: "cs:sm:w-2xl", xl: "cs:sm:w-4xl", "2xl": "cs:sm:w-5xl" },
+  md: { sm: "cs:md:w-2xs", md: "cs:md:w-md", lg: "cs:md:w-2xl", xl: "cs:md:w-4xl", "2xl": "cs:md:w-5xl" },
+  lg: { sm: "cs:lg:w-2xs", md: "cs:lg:w-md", lg: "cs:lg:w-2xl", xl: "cs:lg:w-4xl", "2xl": "cs:lg:w-5xl" },
+  xl: { sm: "cs:xl:w-2xs", md: "cs:xl:w-md", lg: "cs:xl:w-2xl", xl: "cs:xl:w-4xl", "2xl": "cs:xl:w-5xl" },
+  base: { sm: "cs:w-2xs", md: "cs:w-md", lg: "cs:w-2xl", xl: "cs:w-4xl", "2xl": "cs:w-5xl" },
 } as const;
 
 function resolveWidthClasses(width: ResponsiveModalWidth): string {

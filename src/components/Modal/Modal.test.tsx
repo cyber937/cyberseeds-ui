@@ -18,7 +18,7 @@ describe('Modal Component', () => {
 
   describe('Component Functionality', () => {
     it('renders with different widths', () => {
-      const widths = ['sm', 'md', 'lg'] as const;
+      const widths = ['sm', 'md', 'lg', 'xl', '2xl'] as const;
       
       widths.forEach(width => {
         const { unmount } = render(
@@ -275,6 +275,41 @@ describe('Modal Component', () => {
       );
       const panel = panelOf(screen.getByRole('dialog', { hidden: true }));
       expect(panel.className).toContain('cs:sm:w-2xl');
+    });
+
+    it('offers wide sizes for content that needs the room', () => {
+      // A template editor or a document preview does not fit in 42rem.
+      render(
+        <Modal width="xl">
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      expect(panelOf(screen.getByRole('dialog', { hidden: true })).className).toContain(
+        'cs:sm:w-4xl'
+      );
+    });
+
+    it('offers the widest size too', () => {
+      render(
+        <Modal width="2xl">
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      expect(panelOf(screen.getByRole('dialog', { hidden: true })).className).toContain(
+        'cs:sm:w-5xl'
+      );
+    });
+
+    it('takes the wide sizes per breakpoint as well', () => {
+      render(
+        <Modal width={{ base: "md", lg: "xl", xl: "2xl" }}>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      const panel = panelOf(screen.getByRole('dialog', { hidden: true }));
+      expect(panel.className).toContain('cs:w-md');
+      expect(panel.className).toContain('cs:lg:w-4xl');
+      expect(panel.className).toContain('cs:xl:w-5xl');
     });
 
     it('applies an object width as per-breakpoint classes', () => {

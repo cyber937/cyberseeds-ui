@@ -75,3 +75,18 @@ export const ResponsiveWidth: Story = {
     </Modal>
   ),
 };
+
+/**
+ * 広い幅。テンプレート編集や書類プレビューのように 42rem（`lg`）では
+ * 収まらない内容向け。モバイルでは従来どおり全画面になる。
+ */
+export const WideWidths: Story = {
+  render: () => (
+    <div className="cs:space-y-2">
+      <Modal width="xl">
+        <Modal.Header>xl — 56rem</Modal.Header>
+        <Modal.Body>表や編集フォームなど、横に広い内容向け。</Modal.Body>
+      </Modal>
+    </div>
+  ),
+};
