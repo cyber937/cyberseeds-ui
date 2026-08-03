@@ -78,6 +78,15 @@ const containerScaleMap: Record<Scale, string> = {
   lg: "cs:px-5 cs:py-4 cs:gap-3 cs:text-base",
 };
 
+// Page mode is a flush segmented bar, so it only takes the type size — no
+// container padding, no gaps between the controls.
+const pageTextScaleMap: Record<Scale, string> = {
+  xs: "cs:text-xs",
+  sm: "cs:text-xs",
+  md: "cs:text-sm",
+  lg: "cs:text-base",
+};
+
 const DOUBLE_LEFT = "M18.75 19.5 11.25 12l7.5-7.5m-6 15L5.25 12l7.5-7.5";
 const SINGLE_LEFT = "M15.75 19.5 8.25 12l7.5-7.5";
 const SINGLE_RIGHT = "m8.25 4.5 7.5 7.5-7.5 7.5";
@@ -171,13 +180,15 @@ function PagePagination({
   return (
     <nav
       aria-label="Pagination"
+      // 余白・間隔は offset 方式の containerScaleMap を使わない。ページ方式は
+      // 隙間なく連なった分割バーで、同じ種類のクラス（px-*/gap-*）を重ねると
+      // どちらが効くかが CSS の出力順まかせになるため。
       className={clsx(
-        "cs:flex cs:font-sans cs:tabular-nums",
+        "cs:flex cs:font-sans cs:tabular-nums cs:gap-0 cs:md:gap-1",
+        pageTextScaleMap[scale],
         fullWidthOnMobile
           ? "cs:w-full cs:h-11 cs:items-stretch cs:md:h-auto cs:md:w-auto cs:md:items-center"
           : "cs:items-center",
-        containerScaleMap[scale],
-        "cs:px-0 cs:py-0 cs:md:gap-1",
         className,
       )}
     >
