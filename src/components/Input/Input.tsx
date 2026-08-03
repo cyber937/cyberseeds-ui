@@ -13,6 +13,17 @@ interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "
   color?: Color;
   require?: boolean;
   isInvalid?: boolean;
+  /**
+   * Decoration shown inside the field, on the leading edge (a search glyph,
+   * a currency sign). Pointer events pass through to the input.
+   */
+  startIcon?: React.ReactNode;
+  /**
+   * Content shown inside the field, on the trailing edge. Unlike `startIcon`
+   * this stays interactive, so a clear button or a reveal-password toggle
+   * can live here.
+   */
+  endIcon?: React.ReactNode;
 }
 
 const scaleMap: Record<Scale, string> = {
@@ -22,6 +33,29 @@ const scaleMap: Record<Scale, string> = {
   lg: "cs:px-4 cs:py-2 cs:text-base cs:h-11",
 };
 
+// Room the icon needs on its side of the field, replacing the normal padding.
+const startPadMap: Record<Scale, string> = {
+  xs: "cs:pl-6",
+  sm: "cs:pl-7",
+  md: "cs:pl-9",
+  lg: "cs:pl-10",
+};
+
+const endPadMap: Record<Scale, string> = {
+  xs: "cs:pr-6",
+  sm: "cs:pr-7",
+  md: "cs:pr-9",
+  lg: "cs:pr-10",
+};
+
+// Where the icon sits, and how big it is drawn.
+const iconSlotMap: Record<Scale, string> = {
+  xs: "cs:w-6 cs:[&>svg]:size-3",
+  sm: "cs:w-7 cs:[&>svg]:size-3.5",
+  md: "cs:w-9 cs:[&>svg]:size-4",
+  lg: "cs:w-10 cs:[&>svg]:size-5",
+};
+
 export function Input({
   id: externalId,
   label,
@@ -29,6 +63,8 @@ export function Input({
   color = "blue",
   require = false,
   isInvalid = false,
+  startIcon,
+  endIcon,
   className = "",
   ...props
 }: InputProps) {
@@ -54,19 +90,55 @@ export function Input({
         : "cs:text-gray-900 cs:bg-white cs:dark:bg-gray-800 cs:outline-gray-300 cs:dark:outline-gray-600"
         } ${scaleMap[mergedScale]} cs-focus-visible`;
 
+  const hasIcons = !!startIcon || !!endIcon;
+
+  // Only the icon padding overrides the scale's own padding — without icons the
+  // element keeps exactly the classes (and the DOM shape) it had before, so
+  // existing callers are untouched.
+  const iconPadding = hasIcons
+    ? `${startIcon ? startPadMap[mergedScale] : ""} ${endIcon ? endPadMap[mergedScale] : ""}`
+    : "";
+
+  const field = (
+    <input
+      id={id}
+      aria-invalid={mergedInvalid || undefined}
+      aria-describedby={describedBy}
+      disabled={mergedDisabled || undefined}
+      required={mergedRequired || undefined}
+      style={colorStyle}
+      className={`${label || hasIcons ? "cs:w-full " : ""}${baseClassName} ${iconPadding} ${className}`}
+      {...props}
+    />
+  );
+
+  // Icons are absolutely placed over the field. The leading one is decoration
+  // and lets clicks through to the input; the trailing one stays clickable so
+  // it can hold a clear button.
+  const withIcons = hasIcons ? (
+    <div className="cs:relative cs:flex cs:w-full">
+      {startIcon && (
+        <span
+          className={`cs:pointer-events-none cs:absolute cs:inset-y-0 cs:left-0 cs:flex cs:items-center cs:justify-center cs:text-gray-500 cs:dark:text-gray-400 ${iconSlotMap[mergedScale]}`}
+        >
+          {startIcon}
+        </span>
+      )}
+      {field}
+      {endIcon && (
+        <span
+          className={`cs:absolute cs:inset-y-0 cs:right-0 cs:flex cs:items-center cs:justify-center cs:text-gray-500 cs:dark:text-gray-400 ${iconSlotMap[mergedScale]}`}
+        >
+          {endIcon}
+        </span>
+      )}
+    </div>
+  ) : (
+    field
+  );
+
   if (!label) {
-    return (
-      <input
-        id={id}
-        aria-invalid={mergedInvalid || undefined}
-        aria-describedby={describedBy}
-        disabled={mergedDisabled || undefined}
-        required={mergedRequired || undefined}
-        style={colorStyle}
-        className={`${baseClassName} ${className}`}
-        {...props}
-      />
-    );
+    return withIcons;
   }
 
   return (
@@ -78,16 +150,7 @@ export function Input({
         require={require}
         className="cs:ml-2"
       />
-      <input
-        id={id}
-        aria-invalid={mergedInvalid || undefined}
-        aria-describedby={describedBy}
-        disabled={mergedDisabled || undefined}
-        required={mergedRequired || undefined}
-        style={colorStyle}
-        className={`cs:w-full ${baseClassName} ${className}`}
-        {...props}
-      />
+      {withIcons}
     </div>
   );
 }

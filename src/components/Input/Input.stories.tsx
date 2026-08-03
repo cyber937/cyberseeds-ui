@@ -145,3 +145,35 @@ export const MobileTouch: Story = {
     </div>
   ),
 };
+
+/**
+ * `startIcon` は装飾なのでクリックが入力欄に抜ける。`endIcon` は操作できるので
+ * クリアボタンなどを置ける。アイコンを渡さない限り DOM は増えない。
+ */
+export const WithIcons: Story = {
+  render: () => (
+    <div className="cs:space-y-4 cs:max-w-sm">
+      <Input
+        placeholder="検索"
+        startIcon={
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          </svg>
+        }
+        endIcon={
+          <button type="button" aria-label="検索条件をクリア" className="cs:cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+          </button>
+        }
+      />
+      <Input
+        label="金額"
+        scale="sm"
+        placeholder="0"
+        startIcon={<span className="cs:text-xs">¥</span>}
+      />
+    </div>
+  ),
+};

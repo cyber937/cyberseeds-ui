@@ -121,4 +121,59 @@ describe('Input Component', () => {
       expect(input).toHaveAttribute('placeholder', 'Enter your email');
     });
   });
+
+  describe('Icons', () => {
+    it('leaves the DOM untouched when no icon is given', () => {
+      const { container } = render(<Input />);
+      // The bare input stays the root node — no wrapper appears — so existing
+      // layouts (flex rows, width constraints) keep behaving the same.
+      expect(container.firstElementChild?.tagName).toBe('INPUT');
+    });
+
+    it('wraps the field once an icon is given', () => {
+      const { container } = render(<Input startIcon={<svg data-testid="glyph" />} />);
+      expect(container.firstElementChild?.tagName).toBe('DIV');
+      expect(screen.getByTestId('glyph')).toBeInTheDocument();
+      expect(screen.getByRole('textbox')).toBeInTheDocument();
+    });
+
+    it('lets clicks through the leading icon to the field', () => {
+      render(<Input startIcon={<svg data-testid="glyph" />} />);
+      expect(screen.getByTestId('glyph').parentElement?.className).toContain(
+        'cs:pointer-events-none',
+      );
+    });
+
+    it('keeps the trailing icon interactive', async () => {
+      const user = userEvent.setup();
+      const onClear = vi.fn();
+      render(
+        <Input
+          endIcon={
+            <button type="button" aria-label="Clear" onClick={onClear}>
+              x
+            </button>
+          }
+        />,
+      );
+      await user.click(screen.getByRole('button', { name: 'Clear' }));
+      expect(onClear).toHaveBeenCalledTimes(1);
+      expect(screen.getByRole('button', { name: 'Clear' }).parentElement?.className).not.toContain(
+        'cs:pointer-events-none',
+      );
+    });
+
+    it('reserves room so the text does not run under the icons', () => {
+      render(<Input startIcon={<svg />} endIcon={<svg />} />);
+      const input = screen.getByRole('textbox');
+      expect(input.className).toContain('cs:pl-9');
+      expect(input.className).toContain('cs:pr-9');
+    });
+
+    it('still renders the label alongside icons', () => {
+      render(<Input label="Search" id="q" startIcon={<svg />} />);
+      expect(screen.getByText('Search')).toHaveAttribute('for', 'q');
+      expect(screen.getByRole('textbox')).toHaveAttribute('id', 'q');
+    });
+  });
 });
