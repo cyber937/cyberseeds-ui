@@ -47,8 +47,12 @@ export function Select({ scale = "md", color = "blue", isInvalid = false, childr
     ? [formField.errorId, formField.helpId].join(" ")
     : undefined;
 
+  // 横並び（flex）の中に直接置いたときに縮ませない。内側の select が min-w-0 を
+  // 持つため、shrink-0 が無いと flex の自動最小サイズが 0 まで許され、選択中の
+  // 文字が矢印に食われて読めなくなる。幅を詰めたい／伸ばしたい場合は、呼び出し側で
+  // ラッパーに幅を指定する（select は w-full + min-w-0 なのでその幅に収まる）。
   return (
-    <div className="cs:relative cs:inline-flex cs:min-w-0">
+    <div className="cs:relative cs:inline-flex cs:shrink-0">
       <select
         ref={ref}
         id={id}

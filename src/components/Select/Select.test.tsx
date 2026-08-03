@@ -115,7 +115,7 @@ describe('Select Component', () => {
   });
 
   describe('Layout', () => {
-    it('wrapper div has relative, inline-flex and min-w-0 for container width constraint', () => {
+    it('wrapper div is relative and inline-flex, and does not shrink below its content', () => {
       render(
         <Select>
           <SelectOption value="option1" label="Option 1" />
@@ -125,7 +125,11 @@ describe('Select Component', () => {
       const wrapperClass = select.parentElement?.className ?? '';
       expect(wrapperClass).toContain('cs:relative');
       expect(wrapperClass).toContain('cs:inline-flex');
-      expect(wrapperClass).toContain('cs:min-w-0');
+      // 内側の select が min-w-0 を持つので、shrink-0 が無いと flex 行に直接
+      // 置いたときに幅 0 まで潰れ、選択中の文字が矢印に食われて読めなくなる。
+      // 幅を詰めたい場合は呼び出し側がラッパーに幅を指定する。
+      expect(wrapperClass).not.toContain('cs:min-w-0');
+      expect(wrapperClass).toContain('cs:shrink-0');
     });
 
     it('select element has min-w-0 for overflow prevention', () => {
