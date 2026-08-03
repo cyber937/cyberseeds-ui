@@ -155,12 +155,69 @@ describe('Modal Component', () => {
         </Modal>
       );
 
+      // 3 in the content + the header's close button.
       const buttons = screen.getAllByRole('button');
-      expect(buttons).toHaveLength(3);
+      expect(buttons).toHaveLength(4);
 
       // Test Escape key closes modal
       fireEvent.keyDown(document, { key: 'Escape' });
       expect(handleClose).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Header close button', () => {
+    it('closes the modal when clicked', () => {
+      const onClose = vi.fn();
+      render(
+        <Modal onClose={onClose}>
+          <Modal.Header>Title</Modal.Header>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Close' }));
+      expect(onClose).toHaveBeenCalledTimes(1);
+    });
+
+    it('is absent when the modal cannot be closed', () => {
+      render(
+        <Modal>
+          <Modal.Header>Title</Modal.Header>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    });
+
+    it('can be suppressed for flows that must not be abandoned', () => {
+      render(
+        <Modal onClose={() => {}}>
+          <Modal.Header showClose={false}>Title</Modal.Header>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      expect(screen.queryByRole('button', { name: 'Close' })).not.toBeInTheDocument();
+    });
+
+    it('takes a localised label', () => {
+      render(
+        <Modal onClose={() => {}}>
+          <Modal.Header closeLabel="閉じる">Title</Modal.Header>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      expect(screen.getByRole('button', { name: '閉じる' })).toBeInTheDocument();
+    });
+
+    it('still labels the dialog by the title, not the close button', () => {
+      render(
+        <Modal onClose={() => {}}>
+          <Modal.Header>Title</Modal.Header>
+          <Modal.Body>Body</Modal.Body>
+        </Modal>
+      );
+      const dialog = screen.getByRole('dialog', { hidden: true });
+      const labelledBy = dialog.getAttribute('aria-labelledby')!;
+      expect(document.getElementById(labelledBy)?.textContent).toBe('Title');
     });
   });
 

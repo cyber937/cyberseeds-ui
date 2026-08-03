@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
+import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
@@ -130,11 +131,53 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
   );
 }
 
-Modal.Header = memo(function ModalHeader({ children }: { children: ReactNode }) {
+/**
+ * Modal title row. Renders a close button on the trailing edge whenever the
+ * modal was given an `onClose`.
+ *
+ * The button matters most on phones: the panel goes full-screen there, so
+ * there is no backdrop left to tap and no Escape key to press — without it the
+ * only way out is whatever the footer happens to offer.
+ *
+ * Pass `showClose={false}` for flows that must not be abandoned halfway.
+ */
+Modal.Header = memo(function ModalHeader({
+  children,
+  showClose = true,
+  closeLabel = "Close",
+}: {
+  children: ReactNode;
+  showClose?: boolean;
+  closeLabel?: string;
+}) {
   const context = useContext(ModalContext);
+  const close = context?.close;
+
   return (
-    <div id={context?.headerId} className="cs:px-4 cs:py-2 cs:font-semibold cs:dark:text-gray-400">
-      {children}
+    <div className="cs:flex cs:items-start cs:gap-2 cs:px-4 cs:py-2">
+      <div id={context?.headerId} className="cs:flex-1 cs:font-semibold cs:dark:text-gray-400">
+        {children}
+      </div>
+      {showClose && close && (
+        <button
+          type="button"
+          onClick={close}
+          aria-label={closeLabel}
+          className={`cs:border-0 cs:shadow-none cs:shrink-0 cs:cursor-pointer cs:rounded-md cs:bg-transparent cs:p-1 cs:text-gray-400 cs:hover:text-gray-600 cs:dark:text-gray-500 cs:dark:hover:text-gray-300 ${TRANSITION_FAST} ${FOCUS_RING} cs-focus-visible`}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            aria-hidden="true"
+            className="cs:size-5"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      )}
     </div>
   );
 });
