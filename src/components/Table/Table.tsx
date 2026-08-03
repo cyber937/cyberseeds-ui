@@ -226,9 +226,13 @@ const ariaSortMap: Record<"asc" | "desc" | "none", "ascending" | "descending" | 
  * Sort indicator.
  *
  * Unsorted columns show a muted up/down chevron pair ("this column can be
- * sorted"); the sorted column shows a single, full-strength chevron pointing
- * in the active direction. Direction is conveyed by shape, not by opacity
- * alone, so it survives low-contrast displays and greyscale printing.
+ * sorted"); the sorted column shows the matching single chevron. The single
+ * chevron is drawn at exactly the size of one half of the pair and with the
+ * same stroke width, so switching states changes only the colour — not the
+ * visual weight of the header.
+ *
+ * Direction is still conveyed by shape (up vs down), so it survives
+ * low-contrast displays and greyscale printing.
  *
  * Kept `aria-hidden` — the direction is already announced through the
  * `aria-sort` attribute on the `<th>`.
@@ -239,15 +243,15 @@ function SortArrows({ direction }: { direction: SortDirection }) {
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
-      strokeWidth={direction ? 2.5 : 1.5}
+      strokeWidth={1.5}
       stroke="currentColor"
       aria-hidden="true"
       className={clsx("cs:size-4 cs:shrink-0", !direction && "cs:opacity-50")}
     >
       {direction === "asc" ? (
-        <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 13.875 12 10.125l3.75 3.75" />
       ) : direction === "desc" ? (
-        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+        <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 10.125 12 13.875l3.75-3.75" />
       ) : (
         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 15 12 18.75 15.75 15m-7.5-6L12 5.25 15.75 9" />
       )}
