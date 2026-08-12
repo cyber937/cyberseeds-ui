@@ -111,3 +111,22 @@ export const AsChild: Story = {
     );
   },
 };
+
+/**
+ * A tinted strip that sits directly under a page header.
+ * Apps otherwise hand-roll this wrapper and drift on tint, padding, and rule.
+ */
+export const Bar: Story = {
+  parameters: { layout: "fullscreen" },
+  render: () => (
+    <div>
+      <div className="flex h-14 items-center bg-blue-700 px-8">
+        <h1 className="text-xl font-semibold text-white">Settings</h1>
+      </div>
+      <Breadcrumb variant="bar" separator="›">
+        <Breadcrumb.Item href="/">Dashboard</Breadcrumb.Item>
+        <Breadcrumb.Item current>Settings</Breadcrumb.Item>
+      </Breadcrumb>
+    </div>
+  ),
+};

@@ -4,10 +4,22 @@ import clsx from "clsx";
 import { Children, isValidElement, memo, type ReactElement, type ReactNode } from "react";
 import { Slot } from "../Slot/Slot";
 
+/**
+ * How the trail is presented.
+ *
+ * - `plain` … just the text. Place it inside your own layout.
+ * - `bar`   … a full-width tinted strip with a bottom rule, sized to sit
+ *             directly under a page header. Apps otherwise hand-roll this
+ *             wrapper, and each one drifts on tint, padding, and rule colour.
+ */
+type BreadcrumbVariant = "plain" | "bar";
+
 interface BreadcrumbProps {
   children: ReactNode;
   /** Custom separator between items. Default is "/". */
   separator?: ReactNode;
+  /** Presentation. Default is "plain". @see BreadcrumbVariant */
+  variant?: BreadcrumbVariant;
   className?: string;
 }
 
@@ -30,9 +42,13 @@ interface BreadcrumbItemProps {
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
+const barClasses =
+  "cs:bg-gray-100 cs:dark:bg-gray-700 cs:border-b cs:border-gray-200 cs:dark:border-gray-600 cs:px-8 cs:py-2 cs:print:hidden";
+
 function BreadcrumbRoot({
   children,
   separator = "/",
+  variant = "plain",
   className,
 }: BreadcrumbProps) {
   const items = Children.toArray(children).filter(isValidElement) as ReactElement[];
@@ -41,7 +57,11 @@ function BreadcrumbRoot({
   return (
     <nav
       aria-label="Breadcrumb"
-      className={clsx("cs:font-sans cs:text-sm", className)}
+      className={clsx(
+        "cs:font-sans cs:text-sm",
+        variant === "bar" && barClasses,
+        className,
+      )}
     >
       <ol className="cs:flex cs:flex-wrap cs:items-center cs:gap-x-2 cs:gap-y-1 cs:list-none cs:p-0 cs:m-0">
         {items.map((item, i) => (
