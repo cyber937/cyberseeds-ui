@@ -4,6 +4,74 @@ import userEvent from "@testing-library/user-event";
 import { Breadcrumb } from "./Breadcrumb";
 
 describe("Breadcrumb Component", () => {
+  describe("Variant", () => {
+    it("is plain by default (no bar chrome)", () => {
+      render(
+        <Breadcrumb>
+          <Breadcrumb.Item current>Home</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
+      expect(nav.className).not.toContain("bg-gray-100");
+      expect(nav.className).not.toContain("border-b");
+    });
+
+    it("draws a tinted strip with a bottom rule when variant='bar'", () => {
+      render(
+        <Breadcrumb variant="bar">
+          <Breadcrumb.Item href="/">Dashboard</Breadcrumb.Item>
+          <Breadcrumb.Item current>Settings</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
+      expect(nav.className).toContain("bg-gray-100");
+      expect(nav.className).toContain("border-b");
+      expect(nav.className).toContain("px-8");
+    });
+
+    it("hides the bar when printing", () => {
+      // The trail is on-screen navigation; it has no place on a printed page.
+      render(
+        <Breadcrumb variant="bar">
+          <Breadcrumb.Item current>Settings</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      expect(
+        screen.getByRole("navigation", { name: "Breadcrumb" }).className,
+      ).toContain("print:hidden");
+    });
+
+    it("still lets the caller add classes on top", () => {
+      render(
+        <Breadcrumb variant="bar" className="custom-pad">
+          <Breadcrumb.Item current>Settings</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      const nav = screen.getByRole("navigation", { name: "Breadcrumb" });
+      expect(nav.className).toContain("bg-gray-100");
+      expect(nav.className).toContain("custom-pad");
+    });
+
+    it("keeps the list markup identical in both variants", () => {
+      const { rerender } = render(
+        <Breadcrumb>
+          <Breadcrumb.Item href="/">A</Breadcrumb.Item>
+          <Breadcrumb.Item current>B</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+
+      rerender(
+        <Breadcrumb variant="bar">
+          <Breadcrumb.Item href="/">A</Breadcrumb.Item>
+          <Breadcrumb.Item current>B</Breadcrumb.Item>
+        </Breadcrumb>,
+      );
+      expect(screen.getAllByRole("listitem")).toHaveLength(2);
+      expect(screen.getByText("B")).toHaveAttribute("aria-current", "page");
+    });
+  });
+
   describe("Structure", () => {
     it("renders a <nav> with aria-label='Breadcrumb' and an <ol>", () => {
       render(
