@@ -9,7 +9,8 @@
   "type": "module",
   "files": [
     "dist",
-    "dist/style.css"
+    "dist/style.css",
+    "AGENTS.md"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",
