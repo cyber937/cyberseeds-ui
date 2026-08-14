@@ -72,4 +72,6 @@ export type { Breakpoint } from "../hooks/useBreakpoint";
 export { useIsMobile } from "../hooks/useIsMobile";
 export { useTouchDevice } from "../hooks/useTouchDevice";
 export { useBodyScrollLock } from "../hooks/useBodyScrollLock";
+export { useViewportFillHeight } from "../hooks/useViewportFillHeight";
+export type { ViewportFillHeightOptions } from "../hooks/useViewportFillHeight";
 import "../style.css";

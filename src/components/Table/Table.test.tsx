@@ -336,4 +336,216 @@ describe("Table Component", () => {
       expect(screen.getByRole("row")).toHaveAttribute("aria-selected", "true");
     });
   });
+
+  describe("Column sizing", () => {
+    it("applies width and maxWidth as inline lengths, numbers as px", () => {
+      render(
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell width={160}>H</Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell width="30%" maxWidth={200}>
+                c
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      // Assert on the inline style: test-setup mocks getComputedStyle, so
+      // toHaveStyle would read back nothing.
+      expect((screen.getByRole("columnheader") as HTMLElement).style.width).toBe("160px");
+      const cell = screen.getByRole("cell") as HTMLElement;
+      expect(cell.style.width).toBe("30%");
+      expect(cell.style.maxWidth).toBe("200px");
+    });
+
+    it("keeps width off the DOM as a deprecated HTML attribute", () => {
+      render(
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell width={120}>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      expect(screen.getByRole("cell")).not.toHaveAttribute("width");
+    });
+
+    it("preserves a caller-supplied style alongside width", () => {
+      render(
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell width={80} style={{ color: "rgb(1, 2, 3)" }}>
+                c
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      const cell = screen.getByRole("cell") as HTMLElement;
+      expect(cell.style.width).toBe("80px");
+      expect(cell.style.color).toBe("rgb(1, 2, 3)");
+    });
+
+    it("applies nowrap, truncate and mono as classes", () => {
+      render(
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell nowrap truncate mono>
+                c
+              </Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      const cell = screen.getByRole("cell");
+      expect(cell.className).toContain("whitespace-nowrap");
+      expect(cell.className).toContain("truncate");
+      expect(cell.className).toContain("font-mono");
+    });
+
+    it("sets the table layout algorithm", () => {
+      const { container, rerender } = render(
+        <Table layout="fixed">
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      expect(container.querySelector("table")?.className).toContain("table-fixed");
+
+      rerender(
+        <Table layout="auto">
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      expect(container.querySelector("table")?.className).toContain("table-auto");
+    });
+  });
+
+  describe("Row dividers", () => {
+    it("clears the rule above the row and its cells when noDivider is set", () => {
+      render(
+        <Table>
+          <Table.Body>
+            <Table.Row noDivider>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      const row = screen.getByRole("row");
+      expect(row.className).toContain("border-t-0");
+      expect(row.className).toContain("[&>td]:border-t-0");
+    });
+
+    it("keeps the rule by default", () => {
+      render(
+        <Table>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      expect(screen.getByRole("row").className).not.toContain("border-t-0");
+    });
+  });
+
+  describe("autoHeight", () => {
+    const renderAutoHeight = (autoHeight: boolean | { bottomGap?: number; minHeight?: number }) =>
+      render(
+        <Table autoHeight={autoHeight}>
+          <Table.Head>
+            <Table.Row>
+              <Table.HeaderCell>H</Table.HeaderCell>
+            </Table.Row>
+          </Table.Head>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+
+    it("caps the wrapper at the room left below its top edge", () => {
+      // jsdom reports 0 for getBoundingClientRect and 768 for innerHeight.
+      const { container } = renderAutoHeight(true);
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe(`${window.innerHeight}px`);
+    });
+
+    it("subtracts bottomGap", () => {
+      const { container } = renderAutoHeight({ bottomGap: 24 });
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe(`${window.innerHeight - 24}px`);
+    });
+
+    it("never shrinks below minHeight", () => {
+      const { container } = renderAutoHeight({ bottomGap: 10_000, minHeight: 200 });
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe("200px");
+    });
+
+    it("implies a sticky header without requiring a bounded ancestor", () => {
+      const { container } = renderAutoHeight(true);
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.className).toContain("overflow-auto");
+      // h-full would stretch the wrapper back to an unbounded parent, undoing
+      // the measurement.
+      expect(wrapper.className).not.toContain("h-full");
+      expect(container.querySelector("thead")?.className).toContain("sticky");
+    });
+
+    it("leaves the wrapper unbounded when off", () => {
+      const { container } = renderAutoHeight(false);
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.style.maxHeight).toBe("");
+    });
+
+    it("still fills the parent when stickyHeader is used on its own", () => {
+      const { container } = render(
+        <Table stickyHeader>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>c</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      const wrapper = container.firstChild as HTMLElement;
+      expect(wrapper.className).toContain("h-full");
+      expect(wrapper.style.maxHeight).toBe("");
+    });
+
+    it("forwards the ref while measuring the same node", () => {
+      const ref = { current: null as HTMLDivElement | null };
+      render(
+        <Table autoHeight ref={ref}>
+          <Table.Body>
+            <Table.Row>
+              <Table.Cell>x</Table.Cell>
+            </Table.Row>
+          </Table.Body>
+        </Table>,
+      );
+      expect(ref.current).toBeInstanceOf(HTMLDivElement);
+      expect(ref.current?.style.maxHeight).toBe(`${window.innerHeight}px`);
+    });
+  });
 });
