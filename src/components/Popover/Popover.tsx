@@ -17,6 +17,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { Slot } from "../Slot/Slot";
+import { Z_INDEX } from "../Constants/designTokens";
+import { useDismissable } from "../../hooks/useDismissable";
 
 export type PopoverPlacement = "top" | "bottom" | "left" | "right";
 export type PopoverAlign = "start" | "center" | "end";
@@ -97,38 +99,17 @@ export function Popover({
 
   const toggle = useCallback(() => setOpen(!open), [open, setOpen]);
 
-  // Close on outside pointer-down and on Escape, while open.
-  useEffect(() => {
-    if (!open) return;
-
-    const handlePointerDown = (e: MouseEvent | TouchEvent) => {
-      const target = e.target as Node;
-      if (
-        triggerRef.current?.contains(target) ||
-        contentRef.current?.contains(target)
-      ) {
-        return;
-      }
+  useDismissable({
+    enabled: open,
+    refs: [triggerRef, contentRef],
+    onDismiss: (reason) => {
       setOpen(false);
-    };
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-        // Return focus to the trigger for keyboard users.
-        triggerRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("touchstart", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("touchstart", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, setOpen]);
+      // Only on Escape: the pointer never moved, so send focus back to the
+      // trigger. After an outside press the user has already picked a new
+      // target and pulling focus back would fight them.
+      if (reason === "escape") triggerRef.current?.focus();
+    },
+  });
 
   const contextValue = useMemo<PopoverContextType>(
     () => ({
@@ -412,7 +393,8 @@ function PopoverContent({
         visibility: coords ? "visible" : "hidden",
       }}
       className={clsx(
-        "cs:z-[60] cs:min-w-[8rem] cs:rounded-md cs:font-sans",
+        Z_INDEX.POPOVER,
+        "cs:min-w-[8rem] cs:rounded-md cs:font-sans",
         "cs:border cs:border-gray-200 cs:dark:border-gray-700",
         "cs:bg-white cs:dark:bg-gray-800 cs:text-gray-900 cs:dark:text-gray-200",
         "cs:shadow-lg cs:p-2",

@@ -1,9 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { UIColorProvider } from "../UIColorProvider/UIColorContext";
-import { Button } from "./Button";
+import { Button, type ButtonBaseProps } from "./Button";
 
-const meta: Meta<typeof Button> = {
-  component: Button,
+/**
+ * Button's public props are a discriminated union (`iconOnly` requires
+ * `aria-label`), and `Meta<typeof Button>` collapses a union component to
+ * `never`. Typing the stories against the widened shape keeps the controls
+ * working; the union still guards real call sites.
+ */
+type ButtonArgs = ButtonBaseProps & {
+  iconOnly?: boolean;
+  "aria-label"?: string;
+};
+
+const meta: Meta<ButtonArgs> = {
+  component: Button as React.FC<ButtonArgs>,
   title: "System/Button",
   tags: ["autodocs"],
   argTypes: {
@@ -51,7 +62,7 @@ export const Default: Story = {
     scale: "md",
   },
   render: (args) => (
-    <Button {...args}>
+    <Button {...(args as ButtonBaseProps)}>
       <Button.Icon>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -167,7 +178,7 @@ export const Disabled: Story = {
     color: "red",
   },
   render: (args) => (
-    <Button {...args} >
+    <Button {...(args as ButtonBaseProps)}>
       <Button.Icon>
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -187,6 +198,71 @@ export const Disabled: Story = {
     </Button >
   )
 }
+
+/** A trash-can glyph, sized by Button rather than by the caller. */
+const TrashIcon = (props: { className?: string }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth="1.5"
+    stroke="currentColor"
+    {...props}
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+    />
+  </svg>
+);
+
+/**
+ * `startIcon` / `endIcon` take the bare icon and size it from the button's
+ * `scale`, so the two stay in step. Writing the icon as a child with
+ * `className="h-4 w-4"` pins it, and it then stops matching when the button
+ * grows or shrinks.
+ */
+export const WithIcons: Story = {
+  render: () => (
+    <div className="cs:flex cs:flex-col cs:gap-4">
+      {(["xs", "sm", "md", "lg"] as const).map((scale) => (
+        <div key={scale} className="cs:flex cs:gap-3 cs:items-center">
+          <span className="cs:w-8 cs:text-xs cs:text-gray-500">{scale}</span>
+          <Button scale={scale} startIcon={<TrashIcon />}>
+            削除
+          </Button>
+          <Button scale={scale} variant="secondary" endIcon={<TrashIcon />}>
+            次へ
+          </Button>
+        </div>
+      ))}
+    </div>
+  ),
+};
+
+/**
+ * `iconOnly` gives the button a square box instead of the pill padding, and
+ * **requires `aria-label`** — TypeScript rejects the call without one.
+ *
+ * That requirement is the point: a button with no visible text is announced as
+ * just "button" without it. An audit of the consuming app found 59 such
+ * buttons with no accessible name at all.
+ */
+export const IconOnly: Story = {
+  render: () => (
+    <div className="cs:flex cs:gap-3 cs:items-center">
+      {(["xs", "sm", "md", "lg"] as const).map((scale) => (
+        <Button key={scale} iconOnly scale={scale} color="red" aria-label={`削除 (${scale})`}>
+          <TrashIcon />
+        </Button>
+      ))}
+      <Button iconOnly variant="secondary" aria-label="削除">
+        <TrashIcon />
+      </Button>
+    </div>
+  ),
+};
 
 export const AsChildLink: Story = {
   name: "asChild (render as <a>)",

@@ -32,14 +32,14 @@ export function Progress({
   value,
   max = 100,
   scale = "md",
-  color = "blue",
+  color,
   showValue = false,
   animated = false,
   label,
   className,
 }: ProgressProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const percentage = Math.min(100, Math.max(0, (value / max) * 100));
 

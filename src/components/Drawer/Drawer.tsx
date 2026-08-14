@@ -16,6 +16,8 @@ import {
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { Z_INDEX } from "../Constants/designTokens";
+import { useDismissable } from "../../hooks/useDismissable";
 
 type DrawerContextType = {
   close?: () => void;
@@ -78,24 +80,19 @@ export function Drawer({
 
   const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose?.();
-    },
-    [onClose],
-  );
+  // The backdrop press is handled by onClick below, so only Escape is needed
+  // here. Drawer is mounted only while open, hence `enabled: true`.
+  useDismissable({ enabled: true, onDismiss: () => onClose?.() });
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
     let frameId: number | undefined;
     if (!prefersReducedMotion) {
       frameId = requestAnimationFrame(() => setIsVisible(true));
     }
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
       if (frameId !== undefined) cancelAnimationFrame(frameId);
     };
-  }, [handleKeyDown, prefersReducedMotion]);
+  }, [prefersReducedMotion]);
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -119,7 +116,8 @@ export function Drawer({
       <div
         className={clsx(
           "cs:transition-opacity cs:duration-200 cs:ease-in-out cs:motion-reduce:transition-none",
-          "cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:z-50",
+          "cs:fixed cs:inset-0 cs:bg-gray-500/80",
+          Z_INDEX.OVERLAY,
           isVisible ? "cs:opacity-100" : "cs:opacity-0",
         )}
         onClick={handleBackdropClick}

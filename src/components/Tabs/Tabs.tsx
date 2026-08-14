@@ -13,6 +13,7 @@ import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING, TOUCH_TARGET_MIN, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
+import { PillBox } from "../PillBox/PillBox";
 import { Slot } from "../Slot/Slot";
 import { TabsContext, useTabsContext } from "./TabsContext";
 
@@ -37,6 +38,20 @@ interface TabsTriggerProps {
   disabled?: boolean;
   className?: string;
   asChild?: boolean;
+  /**
+   * Icon shown before the label. Sized from the Tabs `scale` — pass the bare
+   * icon, not a pre-sized one.
+   *
+   * Ignored with `asChild`, which forwards a single child element as-is.
+   */
+  icon?: React.ReactElement<{ className?: string }>;
+  /**
+   * Item count shown after the label as a pill. The active tab's pill picks up
+   * the theme colour so it reads with the underline; inactive tabs stay grey.
+   *
+   * `0` still renders — "0 件" is information. Omit the prop for no pill.
+   */
+  count?: number;
 }
 
 interface TabsContentProps {
@@ -52,19 +67,35 @@ const scaleMap: Record<Scale, string> = {
   lg: "cs:text-base cs:px-5 cs:py-2.5",
 };
 
+/** Icon size per tab scale, matching Button.Icon's ladder. */
+const iconScaleMap: Record<Scale, string> = {
+  xs: "cs:size-3",
+  sm: "cs:size-4",
+  md: "cs:size-4",
+  lg: "cs:size-5",
+};
+
+/** The count pill runs one step smaller than the tab it sits in. */
+const countScaleMap: Record<Scale, Scale> = {
+  xs: "xs",
+  sm: "xs",
+  md: "sm",
+  lg: "sm",
+};
+
 export function Tabs({
   children,
   value: controlledValue,
   defaultValue = "",
   onChange,
   scale,
-  color = "blue",
+  color,
   className,
 }: TabsProps) {
   const baseId = useId();
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const isControlled = controlledValue !== undefined;
   const activeValue = isControlled ? controlledValue : uncontrolledValue;
@@ -79,9 +110,36 @@ export function Tabs({
     [isControlled, onChange],
   );
 
+  const [panels, setPanels] = useState<ReadonlySet<string>>(() => new Set());
+  const registerPanel = useCallback((panelValue: string) => {
+    setPanels((prev) => {
+      if (prev.has(panelValue)) return prev;
+      const next = new Set(prev);
+      next.add(panelValue);
+      return next;
+    });
+  }, []);
+  const unregisterPanel = useCallback((panelValue: string) => {
+    setPanels((prev) => {
+      if (!prev.has(panelValue)) return prev;
+      const next = new Set(prev);
+      next.delete(panelValue);
+      return next;
+    });
+  }, []);
+
   const contextValue = useMemo(
-    () => ({ activeValue, onChange: handleChange, baseId, scale, color: finalColor }),
-    [activeValue, handleChange, baseId, scale, finalColor],
+    () => ({
+      activeValue,
+      onChange: handleChange,
+      baseId,
+      scale,
+      color: finalColor,
+      panels,
+      registerPanel,
+      unregisterPanel,
+    }),
+    [activeValue, handleChange, baseId, scale, finalColor, panels, registerPanel, unregisterPanel],
   );
 
   return (
@@ -198,7 +256,15 @@ function TabsList({ children, className }: TabsListProps) {
   );
 }
 
-function TabsTrigger({ children, value, disabled = false, className, asChild = false }: TabsTriggerProps) {
+function TabsTrigger({
+  children,
+  value,
+  disabled = false,
+  className,
+  asChild = false,
+  icon,
+  count,
+}: TabsTriggerProps) {
   const ctx = useTabsContext();
   const isActive = ctx.activeValue === value;
   const tabId = `${ctx.baseId}-tab-${value}`;
@@ -217,17 +283,25 @@ function TabsTrigger({ children, value, disabled = false, className, asChild = f
     ? "cs:border-b-2 cs:-mb-px cs-tab-active"
     : "cs:text-gray-500 cs:dark:text-gray-400 cs:hover:text-gray-700 cs:dark:hover:text-gray-300";
 
+  const scale = ctx.scale ?? "md";
+
   const sharedProps = {
     role: "tab" as const,
     id: tabId,
     "aria-selected": isActive,
-    ...(!asChild && { "aria-controls": panelId }),
+    // Only claim to control a panel that is actually rendered. Tabs used for
+    // navigation have no Tabs.Content at all, and a dangling aria-controls is
+    // an invalid ARIA reference.
+    ...(!asChild && ctx.panels.has(value) && { "aria-controls": panelId }),
     tabIndex: isActive ? 0 : -1,
     style: isActive ? colorStyle : undefined,
     onClick: () => ctx.onChange(value),
     className: clsx(
       `cs:border-0 cs:shadow-none cs:font-medium cs:whitespace-nowrap cs:no-underline ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
-      scaleMap[ctx.scale ?? "md"],
+      // An icon or count turns the label into a row; without them the original
+      // block layout is left untouched so existing tabs render identically.
+      (icon || count !== undefined) && "cs:inline-flex cs:items-center cs:gap-1.5",
+      scaleMap[scale],
       activeClasses,
       className,
     ),
@@ -248,7 +322,21 @@ function TabsTrigger({ children, value, disabled = false, className, asChild = f
       disabled={disabled}
       {...sharedProps}
     >
+      {icon &&
+        React.cloneElement(icon, {
+          className: `${icon.props.className ?? ""} ${iconScaleMap[scale]}`.trim(),
+          "aria-hidden": true,
+        } as { className: string })}
       {children}
+      {count !== undefined && (
+        <PillBox
+          // The active pill takes the theme colour so it reads with the
+          // underline; inactive tabs stay grey and recede.
+          color={isActive ? ctx.color : "gray"}
+          scale={countScaleMap[scale]}
+          label={String(count)}
+        />
+      )}
     </button>
   );
 }
@@ -258,6 +346,15 @@ function TabsContent({ children, value, className }: TabsContentProps) {
   const isActive = ctx.activeValue === value;
   const tabId = `${ctx.baseId}-tab-${value}`;
   const panelId = `${ctx.baseId}-panel-${value}`;
+
+  // Tell the trigger this panel exists, so it can point aria-controls at it.
+  // Only the active panel is rendered, so registration follows the selection.
+  const { registerPanel, unregisterPanel } = ctx;
+  useEffect(() => {
+    if (!isActive) return;
+    registerPanel(value);
+    return () => unregisterPanel(value);
+  }, [isActive, value, registerPanel, unregisterPanel]);
 
   if (!isActive) return null;
 

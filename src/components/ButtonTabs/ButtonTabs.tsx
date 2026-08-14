@@ -56,13 +56,13 @@ export function ButtonTabs({
   defaultValue = "",
   onChange,
   scale,
-  color = "blue",
+  color,
   className,
 }: ButtonTabsProps) {
   const baseId = useId();
   const [uncontrolledValue, setUncontrolledValue] = useState(defaultValue);
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const isControlled = controlledValue !== undefined;
   const activeValue = isControlled ? controlledValue : uncontrolledValue;

@@ -43,13 +43,13 @@ function formatCount(count: ReactNode, max?: number): ReactNode {
 export function Badge({
   children,
   variant = "solid",
-  color = "blue",
+  color,
   scale = "md",
   max,
   className,
 }: BadgeProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const colorStyle = colorToCSSVars(finalColor);
 

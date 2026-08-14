@@ -55,7 +55,7 @@ const textScaleMap: Record<Scale, string> = {
 
 export function Checkbox({
   scale = "md",
-  color = "blue",
+  color,
   label,
   id: externalId,
   onCheckedChange,
@@ -73,7 +73,7 @@ export function Checkbox({
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const colorStyle = colorToCSSVars(finalUIColor);
 

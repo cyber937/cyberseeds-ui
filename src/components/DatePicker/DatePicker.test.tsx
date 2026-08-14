@@ -95,4 +95,43 @@ describe("DatePicker", () => {
       expect(trigger).toHaveAttribute("aria-describedby", "start-error");
     });
   });
+
+  /**
+   * Like Menu, DatePicker delegates its dismissal to the Popover it renders.
+   * Nothing asserted that, so a change inside Popover could have left the
+   * calendar with no way to close from the keyboard.
+   */
+  describe("dismissal (inherited from Popover)", () => {
+    const open = () => {
+      render(<DatePicker defaultValue={new Date(2026, 5, 10)} />);
+      fireEvent.click(screen.getByRole("button", { name: "Jun 10, 2026" }));
+      expect(screen.getByRole("grid")).toBeInTheDocument();
+    };
+
+    it("closes the calendar on Escape", () => {
+      open();
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+    });
+
+    it("closes the calendar on an outside press", () => {
+      render(
+        <div>
+          <span data-testid="outside">elsewhere</span>
+          <DatePicker defaultValue={new Date(2026, 5, 10)} />
+        </div>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Jun 10, 2026" }));
+      expect(screen.getByRole("grid")).toBeInTheDocument();
+
+      fireEvent.mouseDown(screen.getByTestId("outside"));
+      expect(screen.queryByRole("grid")).not.toBeInTheDocument();
+    });
+
+    it("keeps the calendar open while interacting inside it", () => {
+      open();
+      fireEvent.mouseDown(screen.getByRole("grid"));
+      expect(screen.getByRole("grid")).toBeInTheDocument();
+    });
+  });
 });

@@ -21,7 +21,10 @@ interface RadioGroupProps {
 
 export function RadioGroup({
   scale,
-  color = "blue",
+  // No default: an explicit "blue" here would be forwarded to every Radio as an
+  // explicit prop, which now outranks UIColorProvider and would pin the whole
+  // group to blue. Passing undefined lets Radio fall back to the context.
+  color,
   value,
   onChange,
   children,

@@ -42,7 +42,7 @@ export function TagInput({
   onChange,
   placeholder = "Add a tag…",
   scale = "md",
-  color = "blue",
+  color,
   disabled = false,
   dedupe = true,
   maxTags,
@@ -56,7 +56,7 @@ export function TagInput({
   const internalId = useId();
   const inputId = id ?? internalId;
   const { color: contextColor } = useUIColor() ?? { color: undefined };
-  const colorStyle = colorToCSSVars(resolveColor(contextColor ?? color));
+  const colorStyle = colorToCSSVars(resolveColor(color ?? contextColor ?? "blue"));
 
   const isControlled = controlledValue !== undefined;
   const [uncontrolled, setUncontrolled] = useState<string[]>(defaultValue);

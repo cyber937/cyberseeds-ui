@@ -51,13 +51,13 @@ function CheckIcon({ className }: { className?: string }) {
 export function Stepper({
   steps,
   currentStep,
-  color = "blue",
+  color,
   scale = "md",
   inverted = false,
   className,
 }: StepperProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
   const colorStyle = colorToCSSVars(finalUIColor);
 
   const textColor = isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor)

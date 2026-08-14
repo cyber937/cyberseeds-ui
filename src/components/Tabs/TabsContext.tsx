@@ -9,6 +9,17 @@ export interface TabsContextType {
   baseId: string;
   scale?: Scale;
   color: PresetColor | CustomColor;
+  /**
+   * Values whose `Tabs.Content` is currently in the DOM.
+   *
+   * A trigger may only advertise `aria-controls` for a panel that actually
+   * exists. Using Tabs for navigation — triggers only, with the page painting
+   * the body itself — is a supported pattern, and pointing `aria-controls` at
+   * an id that was never rendered is an invalid ARIA reference.
+   */
+  panels: ReadonlySet<string>;
+  registerPanel: (value: string) => void;
+  unregisterPanel: (value: string) => void;
 }
 
 export const TabsContext = createContext<TabsContextType | undefined>(undefined);
