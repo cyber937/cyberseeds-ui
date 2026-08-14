@@ -263,3 +263,143 @@ export const SortableAndSelectable: Story = {
     );
   },
 };
+
+const manyRows = Array.from({ length: 60 }, (_, i) => ({
+  sku: `SKU-${String(i + 1).padStart(3, "0")}`,
+  description:
+    i % 4 === 0
+      ? "A deliberately long description that would otherwise wrap onto a second line and make the rows uneven"
+      : "Standard widget",
+  on_hand: (i * 7) % 40,
+}));
+
+/**
+ * `autoHeight` measures the table's own top edge and caps its height at the
+ * room left below it, so the header sticks and the body scrolls **without any
+ * ancestor needing a bounded height**.
+ *
+ * Compare with `stickyHeader`, which only pins the header and leaves the
+ * bounding to the caller — that needs `h-full` / `flex-1 min-h-0` threaded all
+ * the way up, and breaks inside detail pages, tab panels, and screens with two
+ * tables. Resize the preview to watch it follow the viewport.
+ */
+export const AutoHeight: Story = {
+  render: () => (
+    <div>
+      <p className="cs:mb-3 cs:text-sm cs:text-gray-600">
+        Content above the table. The table below starts here and runs to the
+        bottom of the viewport.
+      </p>
+      <Table autoHeight={{ bottomGap: 24 }} scale="sm">
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell width={140}>SKU</Table.HeaderCell>
+            <Table.HeaderCell>Description</Table.HeaderCell>
+            <Table.HeaderCell width={100} align="right">
+              On hand
+            </Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+        <Table.Body>
+          {manyRows.map((r) => (
+            <Table.Row key={r.sku}>
+              <Table.Cell mono nowrap>
+                {r.sku}
+              </Table.Cell>
+              <Table.Cell>{r.description}</Table.Cell>
+              <Table.Cell align="right" numeric>
+                {r.on_hand}
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+    </div>
+  ),
+};
+
+/**
+ * `width` pins a column, `nowrap` keeps a value on one line, and `truncate`
+ * clips the overflow with an ellipsis. Pair `layout="fixed"` with widths so the
+ * columns stop shifting as the data changes.
+ */
+export const ColumnSizing: Story = {
+  render: () => (
+    <Table layout="fixed" scale="sm">
+      <Table.Head>
+        <Table.Row>
+          <Table.HeaderCell width={140}>SKU</Table.HeaderCell>
+          <Table.HeaderCell>Description (truncates)</Table.HeaderCell>
+          <Table.HeaderCell width="20%" align="right">
+            On hand
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
+        {manyRows.slice(0, 5).map((r) => (
+          <Table.Row key={r.sku}>
+            <Table.Cell mono nowrap>
+              {r.sku}
+            </Table.Cell>
+            <Table.Cell truncate maxWidth={280}>
+              {r.description}
+            </Table.Cell>
+            <Table.Cell align="right" numeric>
+              {r.on_hand}
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  ),
+};
+
+/**
+ * `noDivider` drops the rule above a row so it reads as a continuation of the
+ * one before it — for an expanded detail row, or the second line of a group.
+ */
+export const GroupedRows: Story = {
+  render: () => (
+    <Table scale="sm">
+      <Table.Head>
+        <Table.Row>
+          <Table.HeaderCell width={160}>Grade</Table.HeaderCell>
+          <Table.HeaderCell>Breakdown</Table.HeaderCell>
+          <Table.HeaderCell align="right" width={100}>
+            Count
+          </Table.HeaderCell>
+        </Table.Row>
+      </Table.Head>
+      <Table.Body>
+        <Table.Row>
+          <Table.Cell nowrap>Grade 1</Table.Cell>
+          <Table.Cell />
+          <Table.Cell align="right" numeric>
+            32
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row noDivider>
+          <Table.Cell />
+          <Table.Cell>Boys</Table.Cell>
+          <Table.Cell align="right" numeric>
+            17
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row noDivider>
+          <Table.Cell />
+          <Table.Cell>Girls</Table.Cell>
+          <Table.Cell align="right" numeric>
+            15
+          </Table.Cell>
+        </Table.Row>
+        <Table.Row>
+          <Table.Cell nowrap>Grade 2</Table.Cell>
+          <Table.Cell />
+          <Table.Cell align="right" numeric>
+            28
+          </Table.Cell>
+        </Table.Row>
+      </Table.Body>
+    </Table>
+  ),
+};

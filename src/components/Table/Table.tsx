@@ -3,6 +3,7 @@ import {
   createContext,
   forwardRef,
   useContext,
+  type CSSProperties,
   type HTMLAttributes,
   type TdHTMLAttributes,
   type ThHTMLAttributes,
@@ -10,8 +11,15 @@ import {
 
 import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Scale } from "../DesignSystemUtils";
+import {
+  useViewportFillHeight,
+  type ViewportFillHeightOptions,
+} from "../../hooks/useViewportFillHeight";
 
 type Align = "left" | "right" | "center";
+
+/** Column width. A number is read as pixels. */
+type CellWidth = number | string;
 
 interface TableProps extends HTMLAttributes<HTMLTableElement> {
   scale?: Scale;
@@ -22,9 +30,27 @@ interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /**
    * Stick the header to the top while the body scrolls. The table's wrapper
    * becomes a vertical scroll container that fills its parent's height — give
-   * the parent a bounded height (e.g. a `flex-1 min-h-0` flex child).
+   * the parent a bounded height (e.g. a `flex-1 min-h-0` flex child), or hand
+   * that job to `autoHeight` instead.
    */
   stickyHeader?: boolean;
+  /**
+   * Cap the table's height at the space left below its own top edge, so the
+   * body scrolls without any ancestor needing a bounded height. Implies
+   * `stickyHeader`.
+   *
+   * Use this instead of threading `h-full` / `flex-1 min-h-0` up the tree — it
+   * also works inside a detail page, a tab panel, or a screen with two tables.
+   * Pass an object to leave room below (`bottomGap`) or to set a floor
+   * (`minHeight`, default 160px).
+   */
+  autoHeight?: boolean | ViewportFillHeightOptions;
+  /**
+   * Column sizing algorithm. `"fixed"` honours the widths you set and keeps
+   * columns from shifting as data changes; `"auto"` (the browser default) sizes
+   * columns to their content.
+   */
+  layout?: "auto" | "fixed";
 }
 
 interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
@@ -35,11 +61,31 @@ interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
   interactive?: boolean;
   /** Highlight the row as selected and set `aria-selected`. */
   selected?: boolean;
+  /**
+   * Drop the rule above this row, so it reads as a continuation of the row
+   * before it. Use for the expanded detail of a parent row, or for a group's
+   * second and subsequent lines.
+   */
+  noDivider?: boolean;
 }
 
 type SortDirection = "asc" | "desc" | false;
 
-interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
+/** Width / wrapping controls shared by both cell kinds. */
+interface CellSizingProps {
+  /** Column width. A number is read as pixels. */
+  width?: CellWidth;
+  /** Upper bound on the column width. A number is read as pixels. */
+  maxWidth?: CellWidth;
+  /** Keep the content on one line instead of wrapping. */
+  nowrap?: boolean;
+  /** Clip overflow with an ellipsis. Needs `width` or `maxWidth` to bite. */
+  truncate?: boolean;
+}
+
+interface TableHeaderCellProps
+  extends Omit<ThHTMLAttributes<HTMLTableCellElement>, "width">,
+    CellSizingProps {
   align?: Align;
   /** Render the header as a sort toggle (a button + direction arrows). */
   sortable?: boolean;
@@ -49,11 +95,34 @@ interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
   onSort?: () => void;
 }
 
-interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+interface TableCellProps
+  extends Omit<TdHTMLAttributes<HTMLTableCellElement>, "width">,
+    CellSizingProps {
   align?: Align;
   /** Apply `tabular-nums` so digits line up at the right edge. */
   numeric?: boolean;
+  /** Render in a monospaced face — for IDs, codes, and hashes. */
+  mono?: boolean;
 }
+
+/** Numbers mean pixels; strings pass through so `%` and `rem` still work. */
+const toLength = (value: CellWidth | undefined) =>
+  typeof value === "number" ? `${value}px` : value;
+
+function cellSizingStyle(
+  { width, maxWidth }: CellSizingProps,
+  style: CSSProperties | undefined,
+): CSSProperties | undefined {
+  if (width === undefined && maxWidth === undefined) return style;
+  return {
+    ...style,
+    ...(width !== undefined && { width: toLength(width) }),
+    ...(maxWidth !== undefined && { maxWidth: toLength(maxWidth) }),
+  };
+}
+
+const cellSizingClass = ({ nowrap, truncate }: CellSizingProps) =>
+  clsx(nowrap && "cs:whitespace-nowrap", truncate && "cs:truncate");
 
 const TableScaleContext = createContext<Scale>("md");
 const TableStickyContext = createContext<boolean>(false);
@@ -113,20 +182,42 @@ const TableRoot = forwardRef<HTMLDivElement, TableProps>(function Table(
     striped,
     bordered = true,
     stickyHeader = false,
+    autoHeight = false,
+    layout,
     className,
     children,
     ...props
   },
   ref,
 ) {
+  const autoHeightOn = autoHeight !== false;
+  const { ref: measuredRef, maxHeight } = useViewportFillHeight<HTMLDivElement>(
+    autoHeightOn,
+    typeof autoHeight === "object" ? autoHeight : undefined,
+  );
+  // autoHeight bounds the wrapper itself, which is exactly the condition
+  // stickyHeader needs — so turning it on implies a sticky header.
+  const sticky = stickyHeader || autoHeightOn;
+
+  const setRefs = (node: HTMLDivElement | null) => {
+    measuredRef.current = node;
+    if (typeof ref === "function") ref(node);
+    else if (ref) ref.current = node;
+  };
+
   return (
     <TableScaleContext.Provider value={scale}>
-      <TableStickyContext.Provider value={stickyHeader}>
+      <TableStickyContext.Provider value={sticky}>
         <div
-          ref={ref}
+          ref={setRefs}
+          style={maxHeight === undefined ? undefined : { maxHeight }}
           className={clsx(
             "cs:bg-white cs:dark:bg-gray-800",
-            stickyHeader ? "cs:overflow-auto cs:h-full" : "cs:overflow-x-auto",
+            sticky ? "cs:overflow-auto" : "cs:overflow-x-auto",
+            // Fill the parent only when the parent is the one doing the
+            // bounding. With autoHeight the wrapper sizes itself, and h-full
+            // would stretch it back to the (unbounded) parent.
+            stickyHeader && !autoHeightOn && "cs:h-full",
             bordered &&
               "cs:rounded-lg cs:border cs:border-gray-200 cs:dark:border-gray-700 cs:shadow-sm",
           )}
@@ -136,6 +227,8 @@ const TableRoot = forwardRef<HTMLDivElement, TableProps>(function Table(
             data-striped={striped ? "true" : undefined}
             className={clsx(
               "cs:min-w-full cs:divide-y cs:divide-gray-200 cs:dark:divide-gray-700 cs:font-sans",
+              layout === "fixed" && "cs:table-fixed",
+              layout === "auto" && "cs:table-auto",
               className,
             )}
           >
@@ -193,6 +286,7 @@ function TableBody({
 function TableRow({
   interactive,
   selected,
+  noDivider,
   className,
   children,
   ...props
@@ -208,6 +302,10 @@ function TableRow({
           ? "cs:cursor-pointer cs:hover:bg-gray-50 cs:dark:hover:bg-gray-700/40"
           : "cs:hover:bg-gray-50 cs:dark:hover:bg-gray-700/20",
         selected && "cs:bg-gray-100 cs:dark:bg-gray-700/50",
+        // The rule comes from `divide-y` on the section, which lands on the row
+        // in the collapsed border model and on the cells in the separated one.
+        // Clear both so the prop behaves the same either way.
+        noDivider && "cs:border-t-0 cs:[&>td]:border-t-0 cs:[&>th]:border-t-0",
         className,
       )}
     >
@@ -264,20 +362,28 @@ function TableHeaderCell({
   sortable,
   sortDirection = false,
   onSort,
+  width,
+  maxWidth,
+  nowrap,
+  truncate,
   className,
+  style,
   children,
   ...props
 }: TableHeaderCellProps) {
   const scale = useContext(TableScaleContext);
+  const sizing = { width, maxWidth, nowrap, truncate };
   return (
     <th
       scope="col"
       {...props}
+      style={cellSizingStyle(sizing, style)}
       aria-sort={sortable ? ariaSortMap[sortDirection || "none"] : undefined}
       className={clsx(
         "cs:font-semibold",
         headCellScaleMap[scale],
         alignClass[align],
+        cellSizingClass(sizing),
         className,
       )}
     >
@@ -312,19 +418,29 @@ function TableHeaderCell({
 function TableCell({
   align = "left",
   numeric,
+  mono,
+  width,
+  maxWidth,
+  nowrap,
+  truncate,
   className,
+  style,
   children,
   ...props
 }: TableCellProps) {
   const scale = useContext(TableScaleContext);
+  const sizing = { width, maxWidth, nowrap, truncate };
   return (
     <td
       {...props}
+      style={cellSizingStyle(sizing, style)}
       className={clsx(
         "cs:text-gray-700 cs:dark:text-gray-200 cs:align-middle",
         cellScaleMap[scale],
         alignClass[align],
         numeric && "cs:tabular-nums",
+        mono && "cs:font-mono",
+        cellSizingClass(sizing),
         className,
       )}
     >
