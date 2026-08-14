@@ -18,6 +18,21 @@ Designed for clean, accessible, and maintainable interfaces in modern web applic
 - Interactive component catalog with **Storybook 10**
 - Tested with **Vitest**, **React Testing Library**, and **jest-axe**
 
+## Before you write against this library
+
+**The API reference is the shipped type definitions**, not this README. They are
+generated from source, carry the JSDoc, and cannot drift:
+
+```bash
+cat node_modules/cyberseeds-ui/dist/Button.d.ts
+```
+
+Component lists in prose go stale; that file does not. `AGENTS.md` (also shipped,
+at `node_modules/cyberseeds-ui/AGENTS.md`) covers the cross-cutting rules that
+don't belong to any single component — colour precedence, the stacking order,
+which components delegate their behaviour to others, and the prop to reach for
+instead of a `className` override.
+
 ## Installation
 
 ```bash
@@ -79,6 +94,9 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 
 ## Components
 
+A map of what exists, not a prop reference — for props, read the shipped
+`dist/*.d.ts`.
+
 ### Form
 
 | Component | Description |
@@ -103,7 +121,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 
 | Component | Description |
 | --- | --- |
-| `Button` | Versatile button with `primary` / `secondary` variants, `Button.Icon`, and `asChild` (Slot) support |
+| `Button` | Versatile button with `primary` / `secondary` variants, `startIcon` / `endIcon`, `iconOnly` (requires `aria-label`), and `asChild` (Slot) support |
 | `ButtonGroup` | Segmented control with `ButtonGroup.Item`, single/multi select, horizontal/vertical orientation |
 | `ButtonTabs` | Button-style tabs (`ButtonTabs.List` / `Trigger` / `Content`), WAI-ARIA keyboard navigation, `fullWidth` |
 
@@ -119,7 +137,7 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 
 | Component | Description |
 | --- | --- |
-| `Tabs` | Tab navigation with `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, WAI-ARIA keyboard navigation |
+| `Tabs` | Tab navigation with `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`, WAI-ARIA keyboard navigation; per-trigger `icon` and `count` pill |
 | `Breadcrumb` | Breadcrumb trail with `Breadcrumb.Item` and `current` state |
 | `NavMenu` | Sidebar navigation compound component with `NavMenu.Section` and `NavMenu.Item` |
 | `Pagination` | Page navigation control with offset/limit/total props and accessible page buttons |
@@ -143,13 +161,13 @@ in larger consumer apps. Both forms can be mixed freely in the same file.
 | `Toast` | Notification toasts with 4 variants (`success` / `error` / `warning` / `info`), auto-dismiss, per-instance position, and an optional action button (e.g. Undo) |
 | `Spinner` | SVG-based loading indicator with `role="status"` |
 | `Progress` | Progress bar with optional value display and stripe animation |
-| `Skeleton` | Loading placeholder for content that is still fetching |
+| `Skeleton` | Loading placeholder with `variant` (text / circular / rectangular), `width`, `height`, and multi-line `lines` |
 
 ### Data Display
 
 | Component | Description |
 | --- | --- |
-| `Table` | Data table with `Table.Head`, `Table.Body`, `Table.Row`, `Table.HeaderCell`, `Table.Cell`; sortable headers (`sortable`/`sortDirection`/`onSort`) and `selected` rows |
+| `Table` | Data table with `Table.Head`, `Table.Body`, `Table.Row`, `Table.HeaderCell`, `Table.Cell`; sortable headers, `selected` / `noDivider` rows, cell `width` / `nowrap` / `truncate` / `mono`, and `autoHeight` (sticky header sized to the viewport, no bounded ancestor needed) |
 | `Avatar` | Profile image with initials fallback, custom fallback, and `circle` / `square` shapes |
 | `Badge` | Notification count / status with `solid` / `outline` / `dot` variants and `Badge.Wrapper` |
 | `PillBox` | Capsule-style tag/badge component |
@@ -223,7 +241,49 @@ function App() {
 }
 ```
 
-Individual components can override the context color with an explicit `color` prop.
+Colour resolves in three steps: **explicit prop → provider → the component's own
+default**. An explicit `color` always wins over the surrounding provider.
+
+```tsx
+<UIColorProvider initialColor="sky">
+  <Button>Save</Button>               {/* sky — from the provider */}
+  <Button color="error">Delete</Button> {/* error — the prop wins */}
+</UIColorProvider>
+```
+
+> **Changed in v2.0.0.** Before v2 the provider outranked the prop, so `color`
+> did nothing inside a themed subtree. Callers who needed a red destructive
+> button had to fall back to `className="bg-red-600"`, which then stopped
+> following the theme entirely. If you are upgrading, those overrides can now be
+> replaced with `color`, and any `color` you were already passing will start
+> taking effect.
+
+When writing a component that forwards `color` to its children, **do not give the
+prop a default value** — the default would reach the child as an explicit prop
+and override the provider for the whole subtree.
+
+## Stacking order
+
+Anything that floats gets its `z-index` from one ladder, exported as `Z_INDEX`:
+
+```tsx
+import { Z_INDEX } from 'cyberseeds-ui';
+
+<div className={`fixed inset-0 ${Z_INDEX.OVERLAY}`}>…</div>
+```
+
+| Token | Value | Used for |
+|---|---:|---|
+| `STICKY` | 10 | Sticky table headers, in-flow layering |
+| `DROPDOWN` | 30 | Listboxes anchored to a control |
+| `OVERLAY` | 40 | Full-screen scrims (Modal, Drawer) |
+| `POPOVER` | 50 | Floating panels above a scrim |
+| `TOAST` | 60 | Transient messages — must clear a modal |
+| `TOOLTIP` | 70 | Always on top |
+
+Reach for the token rather than a number. Hand-picked values drift out of order:
+before v2 the tooltip sat at 40 and a modal at 50, so a tooltip opened inside a
+modal was painted behind it.
 
 ### Dark mode
 
