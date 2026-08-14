@@ -116,4 +116,45 @@ describe("Menu", () => {
     expect(onMove).toHaveBeenCalledTimes(1);
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
+
+  /**
+   * Menu owns no dismissal logic of its own — it renders a Popover and inherits
+   * Escape and outside-press from there. That works, but nothing was asserting
+   * it, so a change inside Popover could have removed the behaviour from Menu
+   * without a single test going red. These lock it down at the Menu level.
+   */
+  describe("dismissal (inherited from Popover)", () => {
+    it("closes on Escape", () => {
+      render(<Basic />);
+      fireEvent.click(screen.getByRole("button", { name: "Actions" }));
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+
+    it("returns focus to the trigger after Escape", () => {
+      render(<Basic />);
+      const trigger = screen.getByRole("button", { name: "Actions" });
+      fireEvent.click(trigger);
+      fireEvent.keyDown(document, { key: "Escape" });
+      expect(trigger).toHaveFocus();
+    });
+
+    it("closes on an outside press but stays open for a press inside", () => {
+      render(
+        <div>
+          <span data-testid="outside">elsewhere</span>
+          <Basic />
+        </div>,
+      );
+      fireEvent.click(screen.getByRole("button", { name: "Actions" }));
+
+      fireEvent.mouseDown(screen.getByRole("menu"));
+      expect(screen.getByRole("menu")).toBeInTheDocument();
+
+      fireEvent.mouseDown(screen.getByTestId("outside"));
+      expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+    });
+  });
 });

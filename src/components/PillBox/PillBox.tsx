@@ -3,6 +3,7 @@ import { memo } from "react";
 
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
+import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface PillBoxProps {
   label: string;
@@ -20,11 +21,12 @@ const scaleMap: Record<Scale, string> = {
 
 export const PillBox = memo(function PillBox({
   label,
-  color = "blue",
+  color,
   scale = "md",
   className,
 }: PillBoxProps) {
-  const resolvedColor = resolveColor(color);
+  const { color: contextUIColor } = useUIColor() ?? { color: undefined };
+  const resolvedColor = resolveColor(color ?? contextUIColor ?? "blue");
   const baseClasses =
     "cs:inline-block cs:font-medium cs:rounded-full cs:outline-1 cs:font-sans cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start";
 

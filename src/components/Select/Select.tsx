@@ -32,10 +32,10 @@ const iconScaleMap: Record<Scale, string> = {
   lg: "cs:size-5 cs:right-3.5 cs:top-1/2 cs:-translate-y-1/2",
 };
 
-export function Select({ scale = "md", color = "blue", isInvalid = false, children, id: externalId, className, ref, ...props }: SelectProps) {
+export function Select({ scale = "md", color, isInvalid = false, children, id: externalId, className, ref, ...props }: SelectProps) {
   const generatedId = useId();
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const colorStyle = colorToCSSVars(resolveColor(contextUIColor ?? color));
+  const colorStyle = colorToCSSVars(resolveColor(color ?? contextUIColor ?? "blue"));
   const formField = useFormField();
   const id = externalId ?? formField?.id ?? generatedId;
   const mergedInvalid = isInvalid || formField?.isInvalid || false;

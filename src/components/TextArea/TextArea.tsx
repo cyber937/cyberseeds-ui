@@ -25,7 +25,7 @@ const scaleMap: Record<Scale, string> = {
 export function TextArea({
   label,
   scale = "md",
-  color = "blue",
+  color,
   require = false,
   isInvalid = false,
   id: externalId,
@@ -37,7 +37,7 @@ export function TextArea({
   const id = externalId ?? formField?.id ?? generatedId;
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
   const mergedInvalid = isInvalid || formField?.isInvalid || false;
   const mergedDisabled = props.disabled || formField?.isDisabled || false;
   const mergedRequired = props.required || formField?.isRequired || false;

@@ -13,9 +13,10 @@ import {
 } from "react";
 
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
-import { FOCUS_RING } from "../Constants/designTokens";
+import { FOCUS_RING, Z_INDEX } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
+import { useDismissable } from "../../hooks/useDismissable";
 
 /**
  * A single, selectable option in a {@link Combobox}.
@@ -178,7 +179,7 @@ export function Combobox({
   );
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalUIColor = resolveColor(contextUIColor ?? color ?? "blue");
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
   const colorStyle = colorToCSSVars(finalUIColor);
 
   const selectedOption = useMemo(
@@ -199,23 +200,22 @@ export function Combobox({
     }
   }, [selectedOption, isOpen]);
 
-  // Click-outside closes the dropdown and rolls the input back to the
-  // selected label (preventing the input from being left mid-search).
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClick = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-        setActiveIndex(-1);
-        setInputValue(selectedOption?.label ?? "");
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [isOpen, selectedOption]);
+  // Press-outside closes the dropdown and rolls the input back to the selected
+  // label (preventing the input from being left mid-search).
+  //
+  // Escape stays on the input's own onKeyDown rather than moving here: it also
+  // has to call preventDefault so the key doesn't bubble out and close a
+  // surrounding dialog at the same time.
+  useDismissable({
+    enabled: isOpen,
+    refs: [containerRef],
+    escape: false,
+    onDismiss: () => {
+      setIsOpen(false);
+      setActiveIndex(-1);
+      setInputValue(selectedOption?.label ?? "");
+    },
+  });
 
   // Scroll the active (keyboard-highlighted) option into view as it moves.
   // jsdom doesn't implement scrollIntoView, so the call is feature-detected.
@@ -461,7 +461,8 @@ export function Combobox({
           id={listboxId}
           role="listbox"
           className={clsx(
-            "cs:absolute cs:top-full cs:left-0 cs:right-0 cs:z-10 cs:mt-1",
+            "cs:absolute cs:top-full cs:left-0 cs:right-0 cs:mt-1",
+            Z_INDEX.DROPDOWN,
             "cs:max-h-60 cs:overflow-y-auto",
             "cs:rounded-md cs:border cs:border-gray-200 cs:dark:border-gray-700",
             "cs:bg-white cs:dark:bg-gray-800",

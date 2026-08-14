@@ -44,14 +44,14 @@ export const Avatar = memo(function Avatar({
   name,
   fallback,
   scale = "md",
-  color = "gray",
+  color,
   shape = "circle",
   className,
   ref,
 }: AvatarProps) {
   const [imageFailed, setImageFailed] = useState(false);
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "gray");
   const colorStyle = colorToCSSVars(finalColor);
 
   const showImage = !!src && !imageFailed;

@@ -43,7 +43,7 @@ const scaleMap: Record<Scale, string> = {
 export function PhoneInput({
   label,
   scale = "md",
-  color = "blue",
+  color,
   require = false,
   isInvalid = false,
   value,
@@ -59,7 +59,7 @@ export function PhoneInput({
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
   const mergedInvalid = isInvalid || formField?.isInvalid || false;
   const mergedDisabled = props.disabled || formField?.isDisabled || false;
   const mergedRequired = props.required || formField?.isRequired || false;

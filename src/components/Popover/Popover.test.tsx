@@ -2,6 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 
 import { Popover } from "./Popover";
+import { Z_INDEX } from "../Constants/designTokens";
 
 function Basic(props: React.ComponentProps<typeof Popover>) {
   return (
@@ -101,7 +102,10 @@ describe("Popover", () => {
     );
     const panel = screen.getByText("Panel content").closest('[role="dialog"]')!;
     expect(panel.parentElement).toBe(document.body);
-    expect((panel as HTMLElement).className).toContain("z-[60]");
+    // Reference the token rather than a literal: the ladder in designTokens is
+    // the source of truth for stacking order, and hard-coding the number here
+    // meant this test broke when the ladder was renumbered.
+    expect((panel as HTMLElement).className).toContain(Z_INDEX.POPOVER.replace("cs:", ""));
     expect((panel as HTMLElement).style.position).toBe("fixed");
   });
 

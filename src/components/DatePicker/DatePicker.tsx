@@ -85,7 +85,7 @@ export function DatePicker({
   min,
   max,
   scale = "md",
-  color = "blue",
+  color,
   disabled = false,
   placeholder = "Select a date",
   className,
@@ -95,7 +95,7 @@ export function DatePicker({
   ref,
 }: DatePickerProps) {
   const { color: contextColor } = useUIColor() ?? { color: undefined };
-  const colorStyle = colorToCSSVars(resolveColor(contextColor ?? color));
+  const colorStyle = colorToCSSVars(resolveColor(color ?? contextColor ?? "blue"));
 
   const isControlled = controlledValue !== undefined;
   const [uncontrolled, setUncontrolled] = useState<Date | null>(defaultValue);

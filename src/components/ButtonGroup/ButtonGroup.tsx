@@ -59,13 +59,13 @@ export function ButtonGroup({
   multiple = false,
   fullWidth = false,
   orientation = "horizontal",
-  color = "blue",
+  color,
   scale = "md",
   className,
 }: ButtonGroupProps) {
   const [uncontrolledValue, setUncontrolledValue] = useState(() => toSet(defaultValue));
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const isControlled = controlledValue !== undefined;
   const selectedValues = isControlled ? toSet(controlledValue) : uncontrolledValue;

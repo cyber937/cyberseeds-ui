@@ -49,7 +49,7 @@ export function Slider({
   max = 100,
   step = 1,
   scale = "md",
-  color = "blue",
+  color,
   disabled = false,
   showValue = false,
   label,
@@ -60,7 +60,7 @@ export function Slider({
 }: SliderProps) {
   const id = useId();
   const { color: contextColor } = useUIColor() ?? { color: undefined };
-  const colorStyle = colorToCSSVars(resolveColor(contextColor ?? color));
+  const colorStyle = colorToCSSVars(resolveColor(color ?? contextColor ?? "blue"));
 
   const isControlled = controlledValue !== undefined;
   const [uncontrolled, setUncontrolled] = useState(defaultValue);

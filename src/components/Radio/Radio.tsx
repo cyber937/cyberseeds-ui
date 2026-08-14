@@ -48,7 +48,7 @@ const textScaleMap: Record<Scale, string> = {
 export const Radio = memo(function Radio({
   label,
   scale = "md",
-  color = "blue",
+  color,
   id: externalId,
   onCheckedChange,
   onChange,
@@ -67,7 +67,7 @@ export const Radio = memo(function Radio({
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const colorStyle = colorToCSSVars(finalUIColor);
 

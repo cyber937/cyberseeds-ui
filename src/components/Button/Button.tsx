@@ -15,7 +15,15 @@ type ButtonContextType = {
 
 const ButtonContext = createContext<ButtonContextType | null>(null);
 
-interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
+/**
+ * Every Button prop except the `iconOnly` / `aria-label` pairing.
+ *
+ * Exported for tooling that can't work with the discriminated union below —
+ * Storybook's `Meta<typeof Button>` resolves a union component to `never`.
+ * Application code should use the component's own props, not this.
+ */
+export interface ButtonBaseProps
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "color"> {
   scale?: Scale;
   variant?: Variant;
   color?: Color;
@@ -28,7 +36,40 @@ interface ButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>
    * styles, and any handlers / refs from Button's props.
    */
   asChild?: boolean;
+  /**
+   * Icon placed before the label. Sized from `scale` automatically — pass the
+   * bare icon element, not a pre-sized one.
+   *
+   * Ignored with `asChild`, which forwards a single child element as-is.
+   */
+  startIcon?: ReactElement<{ className?: string }>;
+  /** Icon placed after the label. Sized from `scale` automatically. */
+  endIcon?: ReactElement<{ className?: string }>;
 }
+
+/**
+ * A button showing nothing but an icon has no text for a screen reader to
+ * announce, so `aria-label` becomes mandatory rather than optional. Splitting
+ * the props into a union is what lets TypeScript enforce that — the
+ * `iconOnly: true` arm requires the label, the default arm leaves it optional.
+ */
+type ButtonProps =
+  | (ButtonBaseProps & {
+      /**
+       * Square padding for a button whose content is a single icon. Requires
+       * `aria-label`: with no visible text there is nothing else to announce.
+       */
+      iconOnly: true;
+      "aria-label": string;
+    })
+  | (ButtonBaseProps & { iconOnly?: false });
+
+const iconOnlyScaleMap: Record<Scale, string> = {
+  xs: "cs:p-1 cs:h-5 cs:w-5 cs:max-md:min-h-11 cs:max-md:min-w-11",
+  sm: "cs:p-1 cs:h-6 cs:w-6 cs:max-md:min-h-11 cs:max-md:min-w-11",
+  md: "cs:p-1.5 cs:h-9 cs:w-9 cs:max-md:min-h-11 cs:max-md:min-w-11",
+  lg: "cs:p-2 cs:h-11 cs:w-11",
+};
 
 const scaleMap: Record<Scale, string> = {
   xs: "cs:px-1.5 cs:py-0.5 cs:text-[0.625rem] cs:h-5 cs:max-md:min-h-11",
@@ -40,15 +81,18 @@ const scaleMap: Record<Scale, string> = {
 export function Button({
   scale = "md",
   variant = "primary",
-  color = "blue",
+  color,
   children,
   className = "",
   asChild = false,
+  startIcon,
+  endIcon,
+  iconOnly = false,
   ...props
 }: ButtonProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   // Text color: light backgrounds (amber/yellow/lime) need dark text for contrast
   const textColor = isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor)
@@ -66,7 +110,21 @@ export function Button({
 
   const buttonContextValue = useMemo(() => ({ scale }), [scale]);
 
-  const mergedClassName = `cs:border-0 cs:shadow-none cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${scaleMap[scale]} ${variantClasses[variant]} cs-focus-visible ${className}`;
+  // iconOnly swaps the horizontal padding for a square box; everything else
+  // (colour, focus ring, motion) is shared.
+  const sizeClasses = iconOnly ? iconOnlyScaleMap[scale] : scaleMap[scale];
+
+  const mergedClassName = `cs:border-0 cs:shadow-none cs:inline-flex cs:items-center cs:rounded-md cs:font-sans cs:justify-center cs:font-semibold cs:cursor-pointer cs:w-fit cs:max-w-full cs:whitespace-nowrap cs:self-start cs:align-middle cs:gap-1.5 cs:active:scale-[0.97] cs:motion-reduce:active:scale-100 ${TRANSITION_FAST} ${FOCUS_RING} ${sizeClasses} ${variantClasses[variant]} cs-focus-visible ${className}`;
+
+  // Sizing the icons here (rather than asking the caller for `size-4`) is what
+  // keeps them in step when `scale` changes.
+  const content = (
+    <>
+      {startIcon && <Button.Icon>{startIcon}</Button.Icon>}
+      {children}
+      {endIcon && <Button.Icon>{endIcon}</Button.Icon>}
+    </>
+  );
 
   return (
     <ButtonContext.Provider value={buttonContextValue}>
@@ -84,7 +142,7 @@ export function Button({
           className={mergedClassName}
           {...props}
         >
-          {children}
+          {content}
         </button>
       )}
     </ButtonContext.Provider>

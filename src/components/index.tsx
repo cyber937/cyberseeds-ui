@@ -72,6 +72,11 @@ export type { Breakpoint } from "../hooks/useBreakpoint";
 export { useIsMobile } from "../hooks/useIsMobile";
 export { useTouchDevice } from "../hooks/useTouchDevice";
 export { useBodyScrollLock } from "../hooks/useBodyScrollLock";
+// The stacking ladder is public so consumers can layer their own overlays on
+// the same scale instead of guessing a number that happens to clear ours.
+export { Z_INDEX } from "./Constants/designTokens";
+export { useDismissable } from "../hooks/useDismissable";
+export type { DismissReason, DismissableOptions } from "../hooks/useDismissable";
 export { useViewportFillHeight } from "../hooks/useViewportFillHeight";
 export type { ViewportFillHeightOptions } from "../hooks/useViewportFillHeight";
 import "../style.css";
