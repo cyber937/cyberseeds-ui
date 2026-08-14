@@ -265,4 +265,122 @@ describe("Tabs Component", () => {
       expect(tab.className).toContain("child-class");
     });
   });
+
+  describe("icon and count", () => {
+    const Star = (props: { className?: string }) => (
+      <svg data-testid="star" {...props} />
+    );
+
+    const WithExtras = ({ scale }: { scale?: "xs" | "sm" | "md" | "lg" }) => (
+      <Tabs defaultValue="a" scale={scale}>
+        <Tabs.List>
+          <Tabs.Trigger value="a" icon={<Star />} count={12}>
+            在籍
+          </Tabs.Trigger>
+          <Tabs.Trigger value="b" count={0}>
+            退学
+          </Tabs.Trigger>
+          <Tabs.Trigger value="c">その他</Tabs.Trigger>
+        </Tabs.List>
+      </Tabs>
+    );
+
+    it("renders the icon and hides it from the accessible name", () => {
+      render(<WithExtras />);
+      const star = screen.getByTestId("star");
+      expect(star).toBeInTheDocument();
+      expect(star).toHaveAttribute("aria-hidden", "true");
+    });
+
+    it("sizes the icon from the Tabs scale", () => {
+      const { rerender } = render(<WithExtras scale="lg" />);
+      expect(screen.getByTestId("star").getAttribute("class")).toContain("size-5");
+
+      rerender(<WithExtras scale="xs" />);
+      expect(screen.getByTestId("star").getAttribute("class")).toContain("size-3");
+    });
+
+    it("renders the count, including zero", () => {
+      render(<WithExtras />);
+      expect(screen.getByText("12")).toBeInTheDocument();
+      // 0 is information, not absence — it must still show.
+      expect(screen.getByText("0")).toBeInTheDocument();
+    });
+
+    it("omits the pill entirely when count is not given", () => {
+      render(<WithExtras />);
+      const plain = screen.getByRole("tab", { name: /その他/ });
+      expect(plain.querySelector("span")).toBeNull();
+    });
+
+    it("keeps the count out of the tab's accessible name being just the label", () => {
+      render(<WithExtras />);
+      // The count is part of the tab's text, which is intended — a screen
+      // reader should hear "在籍 12".
+      expect(screen.getByRole("tab", { name: "在籍 12" })).toBeInTheDocument();
+    });
+
+    it("only switches to a row layout when there is something to lay out", () => {
+      render(<WithExtras />);
+      expect(screen.getByRole("tab", { name: "在籍 12" }).className).toContain("inline-flex");
+      expect(screen.getByRole("tab", { name: "その他" }).className).not.toContain("inline-flex");
+    });
+
+    it("keeps aria-controls off triggers that have no panel", () => {
+      // Tabs used for navigation: triggers only, the page paints the body.
+      // Advertising aria-controls here would point at an id that was never
+      // rendered, which axe reports as an invalid ARIA reference.
+      render(<WithExtras />);
+      for (const tab of screen.getAllByRole("tab")) {
+        expect(tab).not.toHaveAttribute("aria-controls");
+      }
+    });
+
+    it("gives the active tab's pill the theme colour and leaves others grey", () => {
+      render(<WithExtras />);
+      const activePill = screen.getByText("12");
+      const inactivePill = screen.getByText("0");
+      // Both carry CSS vars; only the values differ.
+      expect(activePill.getAttribute("style")).toContain("--cs-ui-base");
+      expect(inactivePill.getAttribute("style")).toContain("--cs-ui-base");
+      expect(activePill.getAttribute("style")).not.toBe(
+        inactivePill.getAttribute("style"),
+      );
+    });
+  });
+  describe("aria-controls hygiene", () => {
+    it("points at the panel when Tabs.Content is rendered", async () => {
+      render(
+        <Tabs defaultValue="a">
+          <Tabs.List>
+            <Tabs.Trigger value="a">A</Tabs.Trigger>
+            <Tabs.Trigger value="b">B</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="a">Panel A</Tabs.Content>
+          <Tabs.Content value="b">Panel B</Tabs.Content>
+        </Tabs>,
+      );
+      const active = await screen.findByRole("tab", { name: "A" });
+      const controls = active.getAttribute("aria-controls");
+      expect(controls).toBeTruthy();
+      expect(document.getElementById(controls!)).toBeInTheDocument();
+    });
+
+    it("leaves the inactive tab without a dangling reference", async () => {
+      render(
+        <Tabs defaultValue="a">
+          <Tabs.List>
+            <Tabs.Trigger value="a">A</Tabs.Trigger>
+            <Tabs.Trigger value="b">B</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="a">Panel A</Tabs.Content>
+          <Tabs.Content value="b">Panel B</Tabs.Content>
+        </Tabs>,
+      );
+      await screen.findByRole("tabpanel");
+      // Only the active panel is in the DOM, so only the active tab may claim
+      // to control one.
+      expect(screen.getByRole("tab", { name: "B" })).not.toHaveAttribute("aria-controls");
+    });
+  });
 });

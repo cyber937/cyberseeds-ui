@@ -12,6 +12,8 @@ import {
   useState,
 } from "react";
 import { useTouchDevice } from "../../hooks/useTouchDevice";
+import { Z_INDEX } from "../Constants/designTokens";
+import { useDismissable } from "../../hooks/useDismissable";
 
 type TooltipPosition = "top" | "bottom" | "left" | "right";
 
@@ -127,27 +129,14 @@ export function Tooltip({
     }
   }, [isVisible, position]);
 
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") hide();
-    };
-    if (isVisible) {
-      document.addEventListener("keydown", handleEscape);
-    }
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isVisible, hide]);
-
-  // Close on outside touch
-  useEffect(() => {
-    if (!isTouch || !isVisible) return;
-    const handleOutsideTouch = (e: TouchEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
-        hide();
-      }
-    };
-    document.addEventListener("touchstart", handleOutsideTouch);
-    return () => document.removeEventListener("touchstart", handleOutsideTouch);
-  }, [isTouch, isVisible, hide]);
+  useDismissable({
+    enabled: isVisible,
+    // Outside-press dismissal is for touch only. With a mouse the tooltip is
+    // already dismissed by moving the pointer away, and reacting to an outside
+    // press as well would close it during unrelated clicks.
+    refs: isTouch ? [wrapperRef] : undefined,
+    onDismiss: hide,
+  });
 
   useEffect(() => {
     return () => {
@@ -193,7 +182,8 @@ export function Tooltip({
           id={tooltipId}
           role="tooltip"
           className={clsx(
-            "cs:absolute cs:z-40 cs:whitespace-nowrap cs:max-w-[calc(100vw-2rem)] cs:max-md:whitespace-normal cs:rounded-md cs:px-2 cs:py-1 cs:text-xs cs:font-sans cs:bg-gray-900 cs:text-white cs:dark:bg-gray-100 cs:dark:text-gray-900 cs:shadow-md cs:pointer-events-none",
+            Z_INDEX.TOOLTIP,
+            "cs:absolute cs:whitespace-nowrap cs:max-w-[calc(100vw-2rem)] cs:max-md:whitespace-normal cs:rounded-md cs:px-2 cs:py-1 cs:text-xs cs:font-sans cs:bg-gray-900 cs:text-white cs:dark:bg-gray-100 cs:dark:text-gray-900 cs:shadow-md cs:pointer-events-none",
             positionClasses[resolvedPosition],
             className,
           )}

@@ -1,9 +1,10 @@
 import type { ReactNode } from "react";
 import { createContext, memo, useCallback, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
-import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
+import { FOCUS_RING, TRANSITION_FAST, Z_INDEX } from "../Constants/designTokens";
 import { useBodyScrollLock } from "../../hooks/useBodyScrollLock";
 import { useFocusTrap } from "../../hooks/useFocusTrap";
 import { useReducedMotion } from "../../hooks/useReducedMotion";
+import { useDismissable } from "../../hooks/useDismissable";
 
 type ModalContextType = {
   close?: () => void;
@@ -70,18 +71,11 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
 
   const [isVisible, setIsVisible] = useState(prefersReducedMotion);
 
-  const handleKeyDown = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        onClose?.();
-      }
-    },
-    [onClose]
-  );
+  // The backdrop press is handled by onClick below, so only Escape is needed
+  // here. Modal is mounted only while open, hence `enabled: true`.
+  useDismissable({ enabled: true, onDismiss: () => onClose?.() });
 
   useEffect(() => {
-    document.addEventListener("keydown", handleKeyDown);
-
     // reduced motion: 即座に表示（アニメーションなし）
     let frameId: number | undefined;
     if (!prefersReducedMotion) {
@@ -89,10 +83,9 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
     }
 
     return () => {
-      document.removeEventListener("keydown", handleKeyDown);
       if (frameId !== undefined) cancelAnimationFrame(frameId);
     };
-  }, [handleKeyDown, prefersReducedMotion]);
+  }, [prefersReducedMotion]);
 
   const handleBackdropClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
@@ -112,7 +105,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
         role="dialog"
         aria-modal="true"
         aria-labelledby={headerId}
-        className={`cs:transition-opacity cs:duration-200 cs:ease-in-out cs:motion-reduce:transition-none cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:flex cs:justify-center cs:items-center cs:z-50 cs:text-base cs:sm:text-sm/5 ${
+        className={`cs:transition-opacity cs:duration-200 cs:ease-in-out cs:motion-reduce:transition-none cs:fixed cs:inset-0 cs:bg-gray-500/80 cs:flex cs:justify-center cs:items-center ${Z_INDEX.OVERLAY} cs:text-base cs:sm:text-sm/5 ${
           isVisible ? "cs:opacity-100" : "cs:opacity-0"
         }`}
         onClick={handleBackdropClick}

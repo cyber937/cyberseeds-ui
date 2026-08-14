@@ -58,7 +58,7 @@ const labelScaleMap: Record<Scale, string> = {
 
 export function Switch({
   scale = "md",
-  color = "blue",
+  color,
   checked = false,
   onCheckedChange,
   onLabel = "オン",
@@ -75,7 +75,7 @@ export function Switch({
   const labelId = `${id}-label`;
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
 
-  const finalUIColor = resolveColor(contextUIColor ?? color);
+  const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const colorStyle = colorToCSSVars(finalUIColor);
 

@@ -9,7 +9,7 @@ import {
   type ThHTMLAttributes,
 } from "react";
 
-import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
+import { FOCUS_RING, TRANSITION_FAST, Z_INDEX } from "../Constants/designTokens";
 import type { Scale } from "../DesignSystemUtils";
 import {
   useViewportFillHeight,
@@ -253,7 +253,7 @@ function TableHead({
         "cs:bg-gray-50 cs:dark:bg-gray-900",
         "cs:text-gray-500 cs:dark:text-gray-300",
         "cs:uppercase cs:tracking-wide",
-        stickyHeader && "cs:sticky cs:top-0 cs:z-10",
+        stickyHeader && ["cs:sticky cs:top-0", Z_INDEX.STICKY],
         className,
       )}
     >

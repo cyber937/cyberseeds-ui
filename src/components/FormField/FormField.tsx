@@ -44,7 +44,7 @@ const scaleTextMap: Record<Scale, string> = {
 export function FormField({
   children,
   scale,
-  color = "blue",
+  color,
   isInvalid = false,
   isRequired = false,
   isDisabled = false,
@@ -54,7 +54,7 @@ export function FormField({
   const helpId = `${id}-help`;
 
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const contextValue = useMemo<FormFieldContextType>(
     () => ({

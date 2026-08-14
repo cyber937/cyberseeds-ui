@@ -56,14 +56,14 @@ const iconScaleMap: Record<Scale, string> = {
 
 function NavMenuRoot({
   children,
-  color = "blue",
+  color,
   scale = "md",
   fullHeight = false,
   ariaLabel = "Main navigation",
   className,
 }: NavMenuProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
   const colorStyle = colorToCSSVars(finalColor);
 
   return (

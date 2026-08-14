@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { Toast } from "./Toast";
+import { Z_INDEX } from "../Constants/designTokens";
 
 export type ToastVariant = "success" | "error" | "warning" | "info";
 
@@ -148,7 +149,7 @@ export function ToastProvider({
         ([pos, list]) => (
           <div
             key={pos}
-            className={`cs:fixed cs:z-50 cs:flex cs:flex-col cs:gap-2 ${positionClasses[pos]}`}
+            className={`cs:fixed ${Z_INDEX.TOAST} cs:flex cs:flex-col cs:gap-2 ${positionClasses[pos]}`}
           >
             {list.map((toast) => (
               <Toast

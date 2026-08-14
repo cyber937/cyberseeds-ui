@@ -1,6 +1,6 @@
 {
   "name": "cyberseeds-ui",
-  "version": "1.21.0",
+  "version": "2.0.0",
   "license": "MIT",
   "keywords": [
     "react-components"
@@ -9,7 +9,8 @@
   "type": "module",
   "files": [
     "dist",
-    "dist/style.css"
+    "dist/style.css",
+    "AGENTS.md"
   ],
   "main": "dist/index.js",
   "module": "dist/index.js",

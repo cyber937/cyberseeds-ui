@@ -19,12 +19,12 @@ const sizeMap: Record<Scale, string> = {
 
 export function Spinner({
   scale = "md",
-  color = "blue",
+  color,
   label = "Loading",
   className,
 }: SpinnerProps) {
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
-  const finalColor = resolveColor(contextUIColor ?? color);
+  const finalColor = resolveColor(color ?? contextUIColor ?? "blue");
 
   const colorStyle = colorToCSSVars(finalColor);
 

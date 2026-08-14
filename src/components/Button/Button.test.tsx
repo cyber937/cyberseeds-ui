@@ -179,4 +179,108 @@ describe('Button Component', () => {
       expect(screen.getByRole('button', { name: 'Stay a button' })).toBeInTheDocument();
     });
   });
+
+  describe('icons', () => {
+    const Star = (props: { className?: string }) => (
+      <svg data-testid="star" {...props} />
+    );
+
+    it('sizes startIcon from scale rather than the caller', () => {
+      render(
+        <Button scale="lg" startIcon={<Star />}>
+          Save
+        </Button>,
+      );
+      expect(screen.getByTestId('star').getAttribute('class')).toContain('size-6');
+    });
+
+    it('sizes endIcon the same way', () => {
+      render(
+        <Button scale="xs" endIcon={<Star />}>
+          Next
+        </Button>,
+      );
+      expect(screen.getByTestId('star').getAttribute('class')).toContain('size-3');
+    });
+
+    it('keeps the icon in step when scale changes', () => {
+      const { rerender } = render(<Button startIcon={<Star />}>Go</Button>);
+      // md is the default
+      expect(screen.getByTestId('star').getAttribute('class')).toContain('size-5');
+
+      rerender(
+        <Button scale="sm" startIcon={<Star />}>
+          Go
+        </Button>,
+      );
+      expect(screen.getByTestId('star').getAttribute('class')).toContain('size-4');
+    });
+
+    it('preserves a className already on the icon', () => {
+      render(
+        <Button startIcon={<Star className="text-red-500" />}>Save</Button>,
+      );
+      const cls = screen.getByTestId('star').getAttribute('class') ?? '';
+      expect(cls).toContain('text-red-500');
+      expect(cls).toContain('size-5');
+    });
+
+    it('places startIcon before and endIcon after the label', () => {
+      render(
+        <Button startIcon={<Star />} endIcon={<Star />}>
+          Middle
+        </Button>,
+      );
+      expect(screen.getAllByTestId('star')).toHaveLength(2);
+      expect(screen.getByRole('button')).toHaveTextContent('Middle');
+    });
+
+    it('renders the label alone when no icons are given', () => {
+      render(<Button>Plain</Button>);
+      expect(screen.queryByTestId('star')).not.toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Plain' })).toBeInTheDocument();
+    });
+  });
+
+  describe('iconOnly', () => {
+    const Trash = () => <svg data-testid="trash" />;
+
+    it('takes its accessible name from aria-label', () => {
+      render(
+        <Button iconOnly aria-label="削除">
+          <Trash />
+        </Button>,
+      );
+      expect(screen.getByRole('button', { name: '削除' })).toBeInTheDocument();
+    });
+
+    it('swaps the horizontal padding for a square box', () => {
+      render(
+        <Button iconOnly aria-label="Delete">
+          <Trash />
+        </Button>,
+      );
+      const cls = screen.getByRole('button').className;
+      // md: square 9x9 rather than the px-3 pill
+      expect(cls).toContain('h-9');
+      expect(cls).toContain('w-9');
+      expect(cls).not.toContain('px-3');
+    });
+
+    it('keeps a comfortable touch target on small viewports', () => {
+      render(
+        <Button iconOnly scale="xs" aria-label="Delete">
+          <Trash />
+        </Button>,
+      );
+      const cls = screen.getByRole('button').className;
+      expect(cls).toContain('max-md:min-h-11');
+      expect(cls).toContain('max-md:min-w-11');
+    });
+
+    it('leaves the normal padding alone when not set', () => {
+      render(<Button>Label</Button>);
+      expect(screen.getByRole('button').className).toContain('px-3');
+    });
+  });
 });
