@@ -179,3 +179,24 @@ export const States: Story = {
     </div>
   ),
 };
+
+/**
+ * ラベル付き。`htmlFor` で select と結びつくので、ラベルを押すと開く。
+ *
+ * これが無いと、呼び出し側が `<label className="block text-sm …">` を
+ * 手書きして `htmlFor` を書き忘れ、読み上げソフトにラベルが伝わらない。
+ */
+export const WithLabel: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4">
+      <Select label="ステータス">
+        <SelectOption label="下書き" value="draft" />
+        <SelectOption label="公開" value="published" />
+      </Select>
+      <Select label="学年" require>
+        <SelectOption label="1年" value="1" />
+        <SelectOption label="2年" value="2" />
+      </Select>
+    </div>
+  ),
+};

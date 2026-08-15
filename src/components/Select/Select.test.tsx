@@ -7,6 +7,51 @@ import { testScales } from '../../test-utils';
 
 const { Default, Scale } = composeStories(stories);
 
+describe('label', () => {
+  it('ラベルを出し、htmlFor で select と結びつける', () => {
+    render(
+      <Select label="ステータス">
+        <SelectOption label="下書き" value="draft" />
+      </Select>
+    );
+
+    const select = screen.getByLabelText('ステータス');
+    expect(select.tagName).toBe('SELECT');
+  });
+
+  it('label を渡さなければラベルを出さない', () => {
+    render(
+      <Select>
+        <SelectOption label="下書き" value="draft" />
+      </Select>
+    );
+
+    expect(screen.queryByRole('label')).toBeNull();
+    expect(document.querySelector('label')).toBeNull();
+  });
+
+  it('require で必須の印を出す', () => {
+    const { container } = render(
+      <Select label="学年" require>
+        <SelectOption label="1年" value="1" />
+      </Select>
+    );
+
+    expect(container.textContent).toContain('学年');
+    expect(container.querySelector('label')).not.toBeNull();
+  });
+
+  it('外から渡した id をラベルの htmlFor に使う', () => {
+    render(
+      <Select id="my-select" label="年度">
+        <SelectOption label="2026" value="2026" />
+      </Select>
+    );
+
+    expect(screen.getByLabelText('年度')).toHaveAttribute('id', 'my-select');
+  });
+});
+
 describe('Select Component', () => {
   describe('Storybook Stories', () => {
     it('renders Default story correctly', () => {

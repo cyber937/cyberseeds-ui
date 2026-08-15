@@ -5,10 +5,21 @@ import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING_INSET } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
+import { Label } from "../Label/Label";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
 interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>, "color"> {
   id?: string;
+  /**
+   * Renders a `<Label>` above the select, linked by `htmlFor`.
+   *
+   * Without this, callers hand-write `<label className="block text-sm …">`
+   * next to the select and skip `htmlFor`, so the label never reaches the
+   * control. Input and TextArea already take a label; Select did not.
+   */
+  label?: string;
+  /** Shows the required marker on the label. */
+  require?: boolean;
   scale?: Scale;
   /** Focus-ring color (preset / custom / semantic, or inherited from context). */
   color?: Color;
@@ -32,7 +43,7 @@ const iconScaleMap: Record<Scale, string> = {
   lg: "cs:size-5 cs:right-3.5 cs:top-1/2 cs:-translate-y-1/2",
 };
 
-export function Select({ scale = "md", color, isInvalid = false, children, id: externalId, className, ref, ...props }: SelectProps) {
+export function Select({ scale = "md", color, isInvalid = false, children, id: externalId, label, require, className, ref, ...props }: SelectProps) {
   const generatedId = useId();
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
   const colorStyle = colorToCSSVars(resolveColor(color ?? contextUIColor ?? "blue"));
@@ -51,7 +62,7 @@ export function Select({ scale = "md", color, isInvalid = false, children, id: e
   // 持つため、shrink-0 が無いと flex の自動最小サイズが 0 まで許され、選択中の
   // 文字が矢印に食われて読めなくなる。幅を詰めたい／伸ばしたい場合は、呼び出し側で
   // ラッパーに幅を指定する（select は w-full + min-w-0 なのでその幅に収まる）。
-  return (
+  const field = (
     <div className="cs:relative cs:inline-flex cs:shrink-0">
       <select
         ref={ref}
@@ -87,6 +98,23 @@ export function Select({ scale = "md", color, isInvalid = false, children, id: e
           d="m19.5 8.25-7.5 7.5-7.5-7.5"
         />
       </svg>
+    </div>
+  );
+
+  if (!label) {
+    return field;
+  }
+
+  return (
+    <div>
+      <Label
+        htmlFor={id}
+        text={label}
+        scale={mergedScale}
+        require={require || mergedRequired}
+        className="cs:ml-2"
+      />
+      {field}
     </div>
   );
 }
