@@ -120,3 +120,31 @@ export const Scale: Story = {
     );
   },
 };
+
+/**
+ * 入力済みの内容を見せるだけの画面（確認画面など）向け。
+ *
+ * `disabled` を付けても選ばれている項目は分かるので、
+ * `<input type="radio" disabled>` を自前で書く必要がない。
+ * 1 つだけ外したいときは `RadioGroup.Option` の `disabled={false}`。
+ */
+export const Disabled: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <GroupBox label="Whole group disabled">
+        <RadioGroup value="female" disabled>
+          <RadioGroup.Option label="Male" value="male" />
+          <RadioGroup.Option label="Female" value="female" />
+          <RadioGroup.Option label="Other" value="other" />
+        </RadioGroup>
+      </GroupBox>
+      <GroupBox label="One option disabled">
+        <RadioGroup value="male">
+          <RadioGroup.Option label="Male" value="male" />
+          <RadioGroup.Option label="Female" value="female" />
+          <RadioGroup.Option label="Other (not available)" value="other" disabled />
+        </RadioGroup>
+      </GroupBox>
+    </div>
+  ),
+};
