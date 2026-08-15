@@ -7,6 +7,7 @@ interface RadioGroupContextProps {
   color?: Color;
   value?: string;
   onChange?: (value: string) => void;
+  disabled?: boolean;
 }
 
 const RadioGroupContext = createContext<RadioGroupContextProps | null>(null);
@@ -16,6 +17,15 @@ interface RadioGroupProps {
   color?: Color;
   value?: string;
   onChange?: (value: string) => void;
+  /**
+   * Disables every option in the group. Individual options can still opt out
+   * with `disabled={false}`.
+   *
+   * Confirmation screens that show a previously made choice need this: without
+   * it, callers drop out of `RadioGroup` and hand-roll `<input type="radio"
+   * disabled>` with their own class names.
+   */
+  disabled?: boolean;
   children: React.ReactNode;
 }
 
@@ -27,11 +37,12 @@ export function RadioGroup({
   color,
   value,
   onChange,
+  disabled,
   children,
 }: RadioGroupProps) {
   const contextValue = useMemo(
-    () => ({ scale, color, value, onChange }),
-    [scale, color, value, onChange]
+    () => ({ scale, color, value, onChange, disabled }),
+    [scale, color, value, onChange, disabled]
   );
 
   return (
@@ -44,13 +55,22 @@ export function RadioGroup({
 interface OptionProps {
   label: string;
   value: string;
+  /** Overrides the group's `disabled`. Omit to follow the group. */
+  disabled?: boolean;
 }
 
-function Option({ label, value }: OptionProps) {
+function Option({ label, value, disabled }: OptionProps) {
   const ctx = useContext(RadioGroupContext);
   if (!ctx) throw new Error("RadioGroup.Option must be used within RadioGroup");
 
-  const { onChange: ctxOnChange, scale, color, value: ctxValue } = ctx;
+  const {
+    onChange: ctxOnChange,
+    scale,
+    color,
+    value: ctxValue,
+    disabled: ctxDisabled,
+  } = ctx;
+  const isDisabled = disabled ?? ctxDisabled;
   const isSelected = ctxValue === value;
   const handleChange = useCallback(() => {
     ctxOnChange?.(value);
@@ -63,6 +83,7 @@ function Option({ label, value }: OptionProps) {
       color={color}
       value={value}
       checked={isSelected}
+      disabled={isDisabled}
       onChange={handleChange}
     />
   );
