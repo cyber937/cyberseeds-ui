@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { composeStories } from '@storybook/react';
 import * as stories from './RadioGroup.stories';
 import { RadioGroup } from './RadioGroup';
@@ -20,6 +21,83 @@ describe('RadioGroup Component', () => {
       render(<Scale />);
       const radioButtons = screen.getAllByRole('radio');
       expect(radioButtons.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('disabled', () => {
+    it('disables every option when the group is disabled', () => {
+      render(
+        <RadioGroup value="b" disabled>
+          <RadioGroup.Option value="a" label="A" />
+          <RadioGroup.Option value="b" label="B" />
+        </RadioGroup>
+      );
+
+      screen
+        .getAllByRole('radio')
+        .forEach((radio) => expect(radio).toBeDisabled());
+    });
+
+    it('keeps the selected option visible while disabled', () => {
+      render(
+        <RadioGroup value="b" disabled>
+          <RadioGroup.Option value="a" label="A" />
+          <RadioGroup.Option value="b" label="B" />
+        </RadioGroup>
+      );
+
+      expect(screen.getByRole('radio', { name: 'B' })).toBeChecked();
+    });
+
+    // fireEvent.click は jsdom 上では無効な入力にも届いてしまうため、
+    // 実ブラウザに近い userEvent を使う（Button.test.tsx と同じ理由）
+    it('does not fire onChange while disabled', async () => {
+      const user = userEvent.setup();
+      const handleChange = vi.fn();
+      render(
+        <RadioGroup value="a" onChange={handleChange} disabled>
+          <RadioGroup.Option value="a" label="A" />
+          <RadioGroup.Option value="b" label="B" />
+        </RadioGroup>
+      );
+
+      await user.click(screen.getByRole('radio', { name: 'B' }));
+
+      expect(handleChange).not.toHaveBeenCalled();
+    });
+
+    it('lets a single option opt out of the group setting', () => {
+      render(
+        <RadioGroup value="a" disabled>
+          <RadioGroup.Option value="a" label="A" />
+          <RadioGroup.Option value="b" label="B" disabled={false} />
+        </RadioGroup>
+      );
+
+      expect(screen.getByRole('radio', { name: 'A' })).toBeDisabled();
+      expect(screen.getByRole('radio', { name: 'B' })).toBeEnabled();
+    });
+
+    it('disables a single option without disabling the group', () => {
+      render(
+        <RadioGroup value="a">
+          <RadioGroup.Option value="a" label="A" />
+          <RadioGroup.Option value="b" label="B" disabled />
+        </RadioGroup>
+      );
+
+      expect(screen.getByRole('radio', { name: 'A' })).toBeEnabled();
+      expect(screen.getByRole('radio', { name: 'B' })).toBeDisabled();
+    });
+
+    it('is enabled by default', () => {
+      render(
+        <RadioGroup value="a">
+          <RadioGroup.Option value="a" label="A" />
+        </RadioGroup>
+      );
+
+      expect(screen.getByRole('radio', { name: 'A' })).toBeEnabled();
     });
   });
 
