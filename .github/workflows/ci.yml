@@ -13,10 +13,12 @@ jobs:
       - name: Checkout source
         uses: actions/checkout@v4
 
+      # publish.yml と同じ Node に揃えること。
+      # ずれていると CI は通るのに公開時のビルドで落ちる、という見つけにくい壊れ方をする。
       - name: Use Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: '20'
+          node-version: '24'
           cache: npm
 
       - name: Install dependencies
