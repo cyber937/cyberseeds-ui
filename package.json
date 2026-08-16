@@ -6,10 +6,13 @@
     "react-components"
   ],
   "homepage": "https://github.com/cyber937/cyberseeds-ui",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cyber937/cyberseeds-ui.git"
+  },
   "type": "module",
   "files": [
     "dist",
-    "dist/style.css",
     "AGENTS.md"
   ],
   "main": "dist/index.js",
@@ -242,6 +245,7 @@
     }
   },
   "scripts": {
+    "prepublishOnly": "npm run build",
     "dev": "vite",
     "build:css:preview": "tailwindcss -i ./src/index.css -o ./src/style.css --minify",
     "build:css": "tailwindcss -i ./src/index-dist.css -o ./dist/style.css --minify",
