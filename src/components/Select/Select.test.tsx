@@ -7,6 +7,26 @@ import { testScales } from '../../test-utils';
 
 const { Default, Scale } = composeStories(stories);
 
+describe('labelPlacement', () => {
+  it('既定では入力の上に置く', () => {
+    const { container } = render(<Select label="年度"><SelectOption label="2026" value="2026" /></Select>);
+    const wrapper = container.firstElementChild!;
+    expect(wrapper.className).not.toContain('flex');
+  });
+
+  it('start にすると横に並べる', () => {
+    const { container } = render(<Select label="年度" labelPlacement="start"><SelectOption label="2026" value="2026" /></Select>);
+    const wrapper = container.firstElementChild!;
+    expect(wrapper.className).toContain('flex');
+    expect(wrapper.className).toContain('items-center');
+  });
+
+  it('start でもラベルと入力が結びつく', () => {
+    render(<Select label="年度" labelPlacement="start"><SelectOption label="2026" value="2026" /></Select>);
+    expect(screen.getByLabelText('年度')).toBeTruthy();
+  });
+});
+
 describe('label', () => {
   it('ラベルを出し、htmlFor で select と結びつける', () => {
     render(

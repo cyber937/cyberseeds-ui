@@ -8,6 +8,26 @@ import { renderWithUIColorProvider, testColors, testScales } from '../../test-ut
 
 const { Default, Require, Invalid, Disabled } = composeStories(stories);
 
+describe('labelPlacement', () => {
+  it('既定では入力の上に置く', () => {
+    const { container } = render(<Input label="氏名" />);
+    const wrapper = container.firstElementChild!;
+    expect(wrapper.className).not.toContain('flex');
+  });
+
+  it('start にすると横に並べる', () => {
+    const { container } = render(<Input label="氏名" labelPlacement="start" />);
+    const wrapper = container.firstElementChild!;
+    expect(wrapper.className).toContain('flex');
+    expect(wrapper.className).toContain('items-center');
+  });
+
+  it('start でもラベルと入力が結びつく', () => {
+    render(<Input label="氏名" labelPlacement="start" />);
+    expect(screen.getByLabelText('氏名')).toBeTruthy();
+  });
+});
+
 describe('Input Component', () => {
   describe('Storybook Stories', () => {
     it('renders Default story correctly', () => {
