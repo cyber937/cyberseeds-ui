@@ -27,6 +27,59 @@ describe('labelPlacement', () => {
   });
 });
 
+/**
+ * 外枠は既定で inline-flex（中身の幅）。呼び出し側の className は内側の select に
+ * しか届かないため、`className="w-full"` でも親を w-full にしても広がらない。
+ * 縦に並ぶフォームで Input / TextArea と幅が揃わなくなるので fullWidth を用意した。
+ */
+describe('fullWidth', () => {
+  it('既定は中身の幅（inline-flex）', () => {
+    const { container } = render(
+      <Select><SelectOption label="2026" value="2026" /></Select>,
+    );
+    expect(container.firstElementChild!.className).toContain('inline-flex');
+  });
+
+  it('既定は横並びの中で縮まない', () => {
+    const { container } = render(
+      <Select><SelectOption label="2026" value="2026" /></Select>,
+    );
+    expect(container.firstElementChild!.className).toContain('shrink-0');
+  });
+
+  it('fullWidth で親いっぱいに広がる', () => {
+    const { container } = render(
+      <Select fullWidth><SelectOption label="2026" value="2026" /></Select>,
+    );
+    const wrapper = container.firstElementChild!;
+    expect(wrapper.className).toContain('w-full');
+    expect(wrapper.className).not.toContain('inline-flex');
+  });
+
+  it('fullWidth でも中身がはみ出さない（min-w-0）', () => {
+    const { container } = render(
+      <Select fullWidth><SelectOption label="2026" value="2026" /></Select>,
+    );
+    expect(container.firstElementChild!.className).toContain('min-w-0');
+  });
+
+  it('label と併せても広がる', () => {
+    const { container } = render(
+      <Select label="年度" fullWidth><SelectOption label="2026" value="2026" /></Select>,
+    );
+    // label があるときは <div><Label/><field/></div> の入れ子になる
+    const field = container.querySelector('select')!.parentElement!;
+    expect(field.className).toContain('w-full');
+  });
+
+  it('fullWidth でもラベルと入力の結びつきは保つ', () => {
+    render(
+      <Select label="年度" fullWidth><SelectOption label="2026" value="2026" /></Select>,
+    );
+    expect(screen.getByLabelText('年度').tagName).toBe('SELECT');
+  });
+});
+
 describe('label', () => {
   it('ラベルを出し、htmlFor で select と結びつける', () => {
     render(
