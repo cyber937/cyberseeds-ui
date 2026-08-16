@@ -250,8 +250,11 @@ function TableHead({
     <thead
       {...props}
       className={clsx(
-        "cs:bg-gray-50 cs:dark:bg-gray-900",
-        "cs:text-gray-500 cs:dark:text-gray-300",
+        // 見出しは本文より濃くする。以前は gray-50 の帯に gray-500 の文字（4.63:1）で、
+        // WCAG AA はぎりぎり通るものの「薄すぎて読みにくい」と実際に指摘があった。
+        // 帯と文字の両方を 1 段濃くして 9.36:1 にし、見出しと中身の境目も分かりやすくした。
+        "cs:bg-gray-100 cs:dark:bg-gray-900",
+        "cs:text-gray-700 cs:dark:text-gray-300",
         "cs:uppercase cs:tracking-wide",
         stickyHeader && ["cs:sticky cs:top-0", Z_INDEX.STICKY],
         className,

@@ -549,3 +549,53 @@ describe("Table Component", () => {
     });
   });
 });
+
+/**
+ * 見出しの濃さ。以前は gray-50 の帯に gray-500 の文字（4.63:1）で、WCAG AA は
+ * ぎりぎり通るものの「薄すぎて読みにくい」と実際に指摘があった。
+ * 帯・文字とも 1 段濃くして 9.36:1 にしている。薄い方へ戻したら気づけるようにする。
+ */
+describe("見出しの濃さ", () => {
+  it("帯は本文より濃い gray-100", () => {
+    const { container } = render(
+      <Table>
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell>氏名</Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+      </Table>,
+    );
+    const head = container.querySelector("thead")!;
+    expect(head.className).toContain("cs:bg-gray-100");
+    expect(head.className).not.toContain("cs:bg-gray-50");
+  });
+
+  it("文字は gray-700", () => {
+    const { container } = render(
+      <Table>
+        <Table.Head>
+          <Table.Row>
+            <Table.HeaderCell>氏名</Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+      </Table>,
+    );
+    const head = container.querySelector("thead")!;
+    expect(head.className).toContain("cs:text-gray-700");
+    expect(head.className).not.toContain("cs:text-gray-500");
+  });
+
+  it("呼び出し側の className で上書きできる", () => {
+    const { container } = render(
+      <Table>
+        <Table.Head className="cs:bg-white">
+          <Table.Row>
+            <Table.HeaderCell>氏名</Table.HeaderCell>
+          </Table.Row>
+        </Table.Head>
+      </Table>,
+    );
+    expect(container.querySelector("thead")!.className).toContain("cs:bg-white");
+  });
+});
