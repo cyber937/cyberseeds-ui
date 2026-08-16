@@ -200,3 +200,23 @@ export const WithLabel: Story = {
     </div>
   ),
 };
+
+/**
+ * 絞り込みの並びなど、ラベルを左に置きたいとき。
+ *
+ * `labelPlacement="start"` で横並びになる。`htmlFor` の結びつきはそのまま。
+ */
+export const LabelAtStart: Story = {
+  render: () => (
+    <div className="flex flex-wrap items-center gap-4">
+      <Select label="年度" labelPlacement="start" scale="sm">
+        <SelectOption label="2026" value="2026" />
+        <SelectOption label="2025" value="2025" />
+      </Select>
+      <Select label="種類" labelPlacement="start" scale="sm">
+        <SelectOption label="すべて" value="all" />
+        <SelectOption label="欠席" value="absence" />
+      </Select>
+    </div>
+  ),
+};

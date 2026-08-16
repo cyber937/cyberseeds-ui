@@ -1,7 +1,7 @@
 import { useId } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING_INSET, TRANSITION_NORMAL } from "../Constants/designTokens";
-import type { Color, Scale } from "../DesignSystemUtils";
+import type { Color, LabelPlacement, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
 import { Label } from "../Label/Label";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -9,6 +9,11 @@ import { useUIColor } from "../UIColorProvider/useUIColor";
 interface TextAreaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "color"> {
   label?: string;
+  /**
+   * ラベルの位置。既定は入力の上（"top"）。
+   * "start" にすると左に並び、縦位置を揃える。
+   */
+  labelPlacement?: LabelPlacement;
   scale?: Scale;
   color?: Color;
   require?: boolean;
@@ -24,6 +29,7 @@ const scaleMap: Record<Scale, string> = {
 
 export function TextArea({
   label,
+  labelPlacement = "top",
   scale = "md",
   color,
   require = false,
@@ -68,9 +74,24 @@ export function TextArea({
 
   if (!label) return textareaElement;
 
-  return (
+  const labelNode = (
+    <Label
+      htmlFor={id}
+      text={label}
+      scale={mergedScale}
+      require={require}
+      className={labelPlacement === "start" ? "cs:whitespace-nowrap" : "cs:ml-2"}
+    />
+  );
+
+  return labelPlacement === "start" ? (
+    <div className="cs:flex cs:items-center cs:gap-2">
+      {labelNode}
+      {textareaElement}
+    </div>
+  ) : (
     <div>
-      <Label htmlFor={id} text={label} scale={mergedScale} require={require} className="cs:ml-2" />
+      {labelNode}
       {textareaElement}
     </div>
   );

@@ -3,7 +3,7 @@ import type { ReactNode, Ref } from "react";
 import React, { useId } from "react";
 import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING_INSET } from "../Constants/designTokens";
-import type { Color, Scale } from "../DesignSystemUtils";
+import type { Color, LabelPlacement, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
 import { Label } from "../Label/Label";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -18,6 +18,11 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
    * control. Input and TextArea already take a label; Select did not.
    */
   label?: string;
+  /**
+   * ラベルの位置。既定は入力の上（"top"）。
+   * "start" にすると左に並び、縦位置を揃える。
+   */
+  labelPlacement?: LabelPlacement;
   /** Shows the required marker on the label. */
   require?: boolean;
   scale?: Scale;
@@ -43,7 +48,8 @@ const iconScaleMap: Record<Scale, string> = {
   lg: "cs:size-5 cs:right-3.5 cs:top-1/2 cs:-translate-y-1/2",
 };
 
-export function Select({ scale = "md", color, isInvalid = false, children, id: externalId, label, require, className, ref, ...props }: SelectProps) {
+export function Select({ scale = "md", color, isInvalid = false, children, id: externalId, label,
+  labelPlacement = "top", require, className, ref, ...props }: SelectProps) {
   const generatedId = useId();
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
   const colorStyle = colorToCSSVars(resolveColor(color ?? contextUIColor ?? "blue"));
@@ -105,15 +111,24 @@ export function Select({ scale = "md", color, isInvalid = false, children, id: e
     return field;
   }
 
-  return (
+  const labelNode = (
+    <Label
+      htmlFor={id}
+      text={label}
+      scale={mergedScale}
+      require={require || mergedRequired}
+      className={labelPlacement === "start" ? "cs:whitespace-nowrap" : "cs:ml-2"}
+    />
+  );
+
+  return labelPlacement === "start" ? (
+    <div className="cs:flex cs:items-center cs:gap-2">
+      {labelNode}
+      {field}
+    </div>
+  ) : (
     <div>
-      <Label
-        htmlFor={id}
-        text={label}
-        scale={mergedScale}
-        require={require || mergedRequired}
-        className="cs:ml-2"
-      />
+      {labelNode}
       {field}
     </div>
   );
