@@ -79,13 +79,14 @@
 }
 
 /* Badge variants */
+/* 文字色はここで決めない。背景の明るさによって白/濃色が変わるため、
+   Badge が solidTextClass() で付ける。ここに color: white を書くと
+   utility クラスに勝ってしまい、明るい背景でも白文字のままになる。 */
 .cs-badge-solid {
   background-color: var(--cs-ui-base);
-  color: white;
 }
 :is(.dark, .dark *) .cs-badge-solid {
   background-color: color-mix(in oklch, var(--cs-ui-base) 80%, white 20%);
-  color: white;
 }
 
 .cs-badge-outline {

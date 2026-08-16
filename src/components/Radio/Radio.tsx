@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { memo, useId, type Ref } from "react";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { needsDarkText } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { TRANSITION_SLOW } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
@@ -85,7 +85,7 @@ export const Radio = memo(function Radio({
         aria-describedby={describedBy}
         aria-invalid={formField?.isInvalid || undefined}
         style={colorStyle}
-        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-200 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 ${isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor) ? "cs:before:bg-gray-900" : "cs:before:bg-white"} cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${TRANSITION_SLOW} ${radioScaleMap[scale]} cs-checked`}
+        className={`cs:relative cs:appearance-none cs:rounded-full cs:border cs:border-gray-200 cs:dark:border-gray-600 cs:bg-white cs:dark:bg-gray-700 ${needsDarkText(finalUIColor) ? "cs:before:bg-gray-950" : "cs:before:bg-white"} cs:before:absolute cs:before:inset-1 cs:before:rounded-full cs:not-checked:before:hidden cs:focus-visible:outline-2 cs:focus-visible:outline-offset-2 cs:disabled:border-gray-300 cs:disabled:bg-gray-100 cs:dark:disabled:bg-gray-800 cs:disabled:before:bg-gray-400 cs:forced-colors:appearance-auto cs:forced-colors:before:hidden ${TRANSITION_SLOW} ${radioScaleMap[scale]} cs-checked`}
         onChange={handleChange}
         {...props}
       />

@@ -62,13 +62,13 @@ describe("Unified Color System (v1.0.0)", () => {
       it(`Button with "${color}" has dark text class`, () => {
         render(<Button color={color}>Click</Button>);
         const btn = screen.getByRole("button");
-        expect(btn.className).toContain("cs:text-gray-900");
+        expect(btn.className).toContain("cs:text-gray-950");
       });
 
       it(`Badge solid with "${color}" has dark text class`, () => {
         const { container } = render(<Badge color={color}>1</Badge>);
         const badge = container.firstElementChild;
-        expect(badge?.className).toContain("cs:text-gray-900");
+        expect(badge?.className).toContain("cs:text-gray-950");
       });
     });
 
@@ -76,8 +76,8 @@ describe("Unified Color System (v1.0.0)", () => {
       it(`Button with "${color}" does NOT have forced dark text`, () => {
         render(<Button color={color}>Click</Button>);
         const btn = screen.getByRole("button");
-        // Dark colors should have white text (the default) — NOT cs:text-gray-900
-        expect(btn.className).not.toContain("cs:text-gray-900");
+        // Dark colors should have white text (the default) — NOT cs:text-gray-950
+        expect(btn.className).not.toContain("cs:text-gray-950");
       });
     });
   });

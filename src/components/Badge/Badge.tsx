@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { type ReactNode } from "react";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { solidTextClass } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
@@ -53,10 +53,8 @@ export function Badge({
 
   const colorStyle = colorToCSSVars(finalColor);
 
-  // For solid variant, light background colors need dark text
-  const solidTextOverride = variant === "solid" && isPresetColor(finalColor) && LIGHT_BG_COLORS.has(finalColor)
-    ? "cs:text-gray-900 cs:dark:text-gray-900"
-    : "";
+  // solid は背景の明るさで文字色が変わる。CSS 側では決めない
+  const solidText = solidTextClass(finalColor);
 
   if (variant === "dot") {
     return (
@@ -82,7 +80,7 @@ export function Badge({
         "cs:inline-flex cs:items-center cs:justify-center cs:rounded-full cs:font-sans cs:font-medium cs:leading-none",
         badgeScaleMap[scale],
         variant === "solid" && "cs-badge-solid",
-        variant === "solid" && solidTextOverride,
+        variant === "solid" && solidText,
         variant === "outline" && "cs:border",
         variant === "outline" && "cs-badge-outline",
         className,

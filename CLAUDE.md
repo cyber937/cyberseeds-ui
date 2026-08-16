@@ -41,7 +41,7 @@ All colors — preset and custom — go through CSS variables (`--cs-ui-*`).
 |------|---------|
 | `src/components/Constants/colorUtils.ts` | `colorToCSSVars()`, `isPresetColor()`, `resolveColor()` |
 | `src/components/Constants/presetColorVars.ts` | 22 preset colors → OKLCH CSS variable values |
-| `src/components/Constants/colorContrast.ts` | `LIGHT_BG_COLORS` set (amber/yellow/lime dark text) |
+| `src/components/Constants/colorContrast.ts` | `needsDarkText()` / `solidTextClass()` — 背景の明るさから文字色を決める |
 | `src/components/Constants/colorShadeGenerator.ts` | Auto-generate shades from `base` color |
 | `src/components/Constants/semanticColor.ts` | success/warning/error/info → preset color mapping |
 | `src/components/Constants/designTokens.ts` | FOCUS_RING, TRANSITION, TOUCH_TARGET constants |
@@ -70,11 +70,42 @@ cs-stepper-active, cs-stepper-completed, cs-stepper-line-completed,
 cs-btn-tab-active
 ```
 
-### LIGHT_BG_COLORS
+### 文字色は背景の明るさで決める（v3.0.0）
 
-amber/yellow/lime need dark text for WCAG AA contrast.
-`LIGHT_BG_COLORS` Set is used in Button, Badge, Checkbox, Radio to switch to `cs:text-gray-900`.
-This cannot be done via CSS variables (no lightness detection in CSS).
+ソリッド背景に文字を載せる部品は `solidTextClass(color)` を使う。**自分で判断を書かない。**
+
+```tsx
+import { solidTextClass, needsDarkText } from "../Constants/colorContrast";
+const textColor = solidTextClass(finalUIColor);   // cs:text-white … か cs:text-gray-950
+```
+
+背景に白文字を載せて WCAG AA（4.5:1）に届かなければ濃い文字（`cs:text-gray-950`）にする。
+プリセットも自前の色（CustomColor）も同じ規則で判断する。
+
+⚠️ **CSS 側で `color:` を固定しないこと。** `.cs-badge-solid` が `color: white` を
+持っていたため、部品が付けた `cs:text-gray-950` に勝ってしまい、明るい背景でも白文字の
+ままだった（v3.0.0 で修正）。背景色だけを CSS に置き、文字色は部品が決める。
+
+⚠️ **CSS は 2 ファイルにある。** `src/index.css`（開発・Storybook 用）と
+`src/index-dist.css`（配布用 `dist/style.css` の元）。**片方だけ直すと配布物に反映されない。**
+
+#### なぜ一覧ではなく計算なのか
+
+以前は amber / yellow / lime の 3 色を手で並べていた。実際に測ると
+orange / green / emerald / teal / cyan / sky も白文字では 3.2〜4.0:1 しかなく、
+**6 色を取りこぼしていた**。`LIGHT_BG_COLORS` は今も export しているが、
+手書きの一覧ではなく実測から求めた集合になっている。
+
+#### hover / active は文字色から遠ざかる
+
+濃淡の自動生成は以前 hover を必ず明るくしていた（+0.08）。白文字を載せる濃い色では
+コントラストが下がる方向で、**22 色中 13 色がホバーで AA を割っていた**。
+今は「文字色から遠ざかる向き」に動かす（白文字なら暗く、濃い文字なら明るく）。
+
+#### 濃い文字は gray-950
+
+`sky` は白文字 4.02:1・gray-900 でも 4.41:1 とどちらでも届かない。
+gray-950（#030712）にすると 5.01:1 になり、22 色すべてが通る。
 
 ## Component Structure
 

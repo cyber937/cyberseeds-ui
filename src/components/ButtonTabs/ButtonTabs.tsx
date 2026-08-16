@@ -7,8 +7,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
+import { solidTextClass } from "../Constants/colorContrast";
 import { FOCUS_RING, TOUCH_TARGET_MIN, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -141,9 +141,7 @@ function ButtonTabsTrigger({ children, value, disabled = false, className }: But
   const isActive = activeValue === value;
   const colorStyle = colorToCSSVars(color);
 
-  const textColor = isPresetColor(color) && LIGHT_BG_COLORS.has(color)
-    ? "cs:text-gray-900"
-    : "cs:text-white cs:dark:text-gray-200";
+  const textColor = solidTextClass(color);
 
   const tabId = `${baseId}-tab-${value}`;
   const panelId = `${baseId}-panel-${value}`;
