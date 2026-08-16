@@ -22,7 +22,7 @@ export { generateShadesFromBase, resolveCustomColor } from "./Constants/colorSha
 export { createSemanticColorMap } from "./Constants/semanticColor";
 export type { SemanticColorMap, SemanticColorName } from "./Constants/semanticColor";
 export { PRESET_COLOR_VARS } from "./Constants/presetColorVars";
-export type { Color, CustomColor, PresetColor, ResolvedCustomColor, Scale, SemanticColor, Variant } from "./DesignSystemUtils";
+export type { Color, CustomColor, LabelPlacement, PresetColor, ResolvedCustomColor, Scale, SemanticColor, Variant } from "./DesignSystemUtils";
 export { EmptyState } from "./EmptyState/EmptyState";
 export { FileUpload } from "./FileUpload/FileUpload";
 export type { FileRejection } from "./FileUpload/FileUpload";
