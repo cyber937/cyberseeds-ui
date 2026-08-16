@@ -220,3 +220,27 @@ export const LabelAtStart: Story = {
     </div>
   ),
 };
+
+/**
+ * 入力欄を縦に並べるフォームでは `fullWidth` を付ける。
+ *
+ * 既定は中身の幅なので、Input や TextArea と並べると Select だけ短くなって
+ * 不揃いに見える。呼び出し側の `className="w-full"` では広がらない
+ * （className は内側の `<select>` にしか届かない）。
+ */
+export const FullWidth: Story = {
+  render: () => (
+    <div className="flex w-96 flex-col gap-4 rounded-md border border-gray-200 p-4">
+      <Select label="退学理由" require>
+        <SelectOption label="選択してください" value="" />
+        <SelectOption label="転居のため" value="move" />
+      </Select>
+      <div className="text-xs text-gray-500">↑ 既定（中身の幅）</div>
+      <Select label="退学理由" require fullWidth>
+        <SelectOption label="選択してください" value="" />
+        <SelectOption label="転居のため" value="move" />
+      </Select>
+      <div className="text-xs text-gray-500">↑ fullWidth</div>
+    </div>
+  ),
+};

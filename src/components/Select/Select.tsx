@@ -25,6 +25,18 @@ interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectElement>
   labelPlacement?: LabelPlacement;
   /** Shows the required marker on the label. */
   require?: boolean;
+  /**
+   * 幅を親いっぱいに広げる。既定は中身に合わせた幅。
+   *
+   * 外枠が `inline-flex`（中身の幅）なので、呼び出し側で `className="w-full"` を
+   * 付けても広がらない。className は内側の `<select>` にしか届かず、その `w-full` は
+   * 「中身の幅の 100%」にしかならないため。親を `w-full` にしても同じで、
+   * inline-flex は親の幅まで伸びない。
+   *
+   * 入力欄を縦に並べるフォームでは、他の入力（Input / TextArea）が全幅なのに
+   * Select だけ短くなって不揃いに見える。そこでこの prop で明示的に広げる。
+   */
+  fullWidth?: boolean;
   scale?: Scale;
   /** Focus-ring color (preset / custom / semantic, or inherited from context). */
   color?: Color;
@@ -49,7 +61,7 @@ const iconScaleMap: Record<Scale, string> = {
 };
 
 export function Select({ scale = "md", color, isInvalid = false, children, id: externalId, label,
-  labelPlacement = "top", require, className, ref, ...props }: SelectProps) {
+  labelPlacement = "top", require, fullWidth = false, className, ref, ...props }: SelectProps) {
   const generatedId = useId();
   const { color: contextUIColor } = useUIColor() ?? { color: undefined };
   const colorStyle = colorToCSSVars(resolveColor(color ?? contextUIColor ?? "blue"));
@@ -64,12 +76,19 @@ export function Select({ scale = "md", color, isInvalid = false, children, id: e
     ? [formField.errorId, formField.helpId].join(" ")
     : undefined;
 
-  // 横並び（flex）の中に直接置いたときに縮ませない。内側の select が min-w-0 を
-  // 持つため、shrink-0 が無いと flex の自動最小サイズが 0 まで許され、選択中の
-  // 文字が矢印に食われて読めなくなる。幅を詰めたい／伸ばしたい場合は、呼び出し側で
-  // ラッパーに幅を指定する（select は w-full + min-w-0 なのでその幅に収まる）。
+  // 既定は中身の幅（inline-flex）。横並び（flex）の中に直接置いたときに縮ませない。
+  // 内側の select が min-w-0 を持つため、shrink-0 が無いと flex の自動最小サイズが
+  // 0 まで許され、選択中の文字が矢印に食われて読めなくなる。
+  //
+  // 全幅にしたいときは fullWidth を使う。呼び出し側の className や親の w-full では
+  // 広がらない（className は内側の select にしか届かず、inline-flex は親まで伸びない）。
   const field = (
-    <div className="cs:relative cs:inline-flex cs:shrink-0">
+    <div
+      className={clsx(
+        "cs:relative",
+        fullWidth ? "cs:flex cs:w-full cs:min-w-0" : "cs:inline-flex cs:shrink-0",
+      )}
+    >
       <select
         ref={ref}
         id={id}
