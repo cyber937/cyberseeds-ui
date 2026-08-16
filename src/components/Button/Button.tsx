@@ -2,8 +2,8 @@
 
 import type { ReactElement, ReactNode } from "react";
 import React, { createContext, useContext, useMemo } from "react";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { solidTextClass } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import { FOCUS_RING, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, Scale, Variant } from "../DesignSystemUtils";
 import { Slot } from "../Slot/Slot";
@@ -94,10 +94,8 @@ export function Button({
 
   const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
 
-  // Text color: light backgrounds (amber/yellow/lime) need dark text for contrast
-  const textColor = isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor)
-    ? "cs:text-gray-900"
-    : "cs:text-white cs:dark:text-gray-200";
+  // 明るい背景には濃い文字。判断は solidTextClass に一本化している
+  const textColor = solidTextClass(finalUIColor);
 
   const variantClasses = useMemo<Record<Variant, string>>(() => ({
     primary: `${textColor} cs:disabled:text-gray-500 cs-btn-primary`,

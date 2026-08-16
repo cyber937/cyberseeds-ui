@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import { useId, type Ref } from "react";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
+import { needsDarkText } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useFormField } from "../FormField/FormFieldContext";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -102,7 +102,7 @@ export function Checkbox({
           <svg
             fill="none"
             viewBox="0 0 14 14"
-            className={`cs:pointer-events-none cs:col-start-1 cs:row-start-1 cs:self-center cs:justify-self-center cs:group-has-disabled:stroke-gray-950/25 ${isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor) ? "cs:stroke-gray-900" : "cs:stroke-white"} ${iconScaleMap[scale]}`}
+            className={`cs:pointer-events-none cs:col-start-1 cs:row-start-1 cs:self-center cs:justify-self-center cs:group-has-disabled:stroke-gray-950/25 ${needsDarkText(finalUIColor) ? "cs:stroke-gray-950" : "cs:stroke-white"} ${iconScaleMap[scale]}`}
           >
             <path
               d="M3 8L6 11L11 3.5"

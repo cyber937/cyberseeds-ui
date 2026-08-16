@@ -5,6 +5,8 @@ import {
   oklchToHex,
   generateShadesFromBase,
   resolveCustomColor,
+  contrastRatio,
+  whiteTextFails,
 } from "../Constants/colorShadeGenerator";
 
 // ===== Helper regex patterns =====
@@ -145,18 +147,36 @@ describe("generateShadesFromBase", () => {
     expect(shades.border).toMatch(OKLCH_REGEX);
   });
 
-  it("hover is lighter than base", () => {
+  // hover / active は「文字色から遠ざかる向き」に動かす。
+  // #4f46e5 は白文字を載せる濃い色なので、暗い側へ動く。
+  // 以前は常に明るくしており、ホバーするほど読みにくくなっていた。
+  it("hover は白文字の色では base より暗い", () => {
     const base = parseToOklch("#4f46e5");
     const shades = generateShadesFromBase("#4f46e5");
     const hover = parseToOklch(shades.hover);
-    expect(hover.l).toBeGreaterThan(base.l);
+    expect(hover.l).toBeLessThan(base.l);
   });
 
-  it("active is lighter than hover", () => {
+  it("active は hover よりさらに暗い", () => {
     const shades = generateShadesFromBase("#4f46e5");
     const hover = parseToOklch(shades.hover);
     const active = parseToOklch(shades.active);
-    expect(active.l).toBeGreaterThan(hover.l);
+    expect(active.l).toBeLessThan(hover.l);
+  });
+
+  it("hover は濃い文字の色（明るい背景）では base より明るい", () => {
+    const base = parseToOklch("#fbbf24");
+    const shades = generateShadesFromBase("#fbbf24");
+    expect(parseToOklch(shades.hover).l).toBeGreaterThan(base.l);
+  });
+
+  it("hover / active は base の AA を保つ", () => {
+    for (const base of ["#4f46e5", "#fbbf24", "#4b99d6", "#065ea2"]) {
+      const shades = generateShadesFromBase(base);
+      const text = whiteTextFails(base) ? "#030712" : "#ffffff";
+      expect(contrastRatio(text, shades.hover)).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(text, shades.active)).toBeGreaterThanOrEqual(4.5);
+    }
   });
 
   it("lightText is darker than base", () => {

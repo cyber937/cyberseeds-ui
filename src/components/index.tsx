@@ -16,7 +16,14 @@ export { Combobox } from "./Combobox/Combobox";
 export type { ComboboxOption } from "./Combobox/Combobox";
 export { DatePicker } from "./DatePicker/DatePicker";
 export { Drawer } from "./Drawer/Drawer";
-export { LIGHT_BG_COLORS } from "./Constants/colorContrast";
+export {
+  LIGHT_BG_COLORS,
+  needsDarkText,
+  solidTextClass,
+  contrastRatio,
+  whiteTextFails,
+  AA_NORMAL,
+} from "./Constants/colorContrast";
 export { colorToCSSVars, isCustomColor, isPresetColor, isSemanticColor, resolveColor } from "./Constants/colorUtils";
 export { generateShadesFromBase, resolveCustomColor } from "./Constants/colorShadeGenerator";
 export { createSemanticColorMap } from "./Constants/semanticColor";

@@ -1,4 +1,5 @@
 import type { PresetColor, ResolvedCustomColor } from "../DesignSystemUtils";
+import { oklchToString, parseToOklch, whiteTextFails } from "./colorShadeGenerator";
 
 /**
  * Maps each of the 22 preset colors to their equivalent OKLCH-based CSS variable values.
@@ -13,7 +14,7 @@ import type { PresetColor, ResolvedCustomColor } from "../DesignSystemUtils";
  *   lightText → 900 shade (where available, else derived)
  *   border   → 400 shade (same as active)
  */
-export const PRESET_COLOR_VARS: Record<PresetColor, ResolvedCustomColor> = {
+const TAILWIND_SHADES: Record<PresetColor, ResolvedCustomColor> = {
   red: {
     base: "oklch(57.7% 0.245 27.325)",
     hover: "oklch(63.7% 0.237 25.331)",
@@ -213,3 +214,37 @@ export const PRESET_COLOR_VARS: Record<PresetColor, ResolvedCustomColor> = {
     border: "oklch(70.9% 0.010 56.259)",
   },
 };
+
+/**
+ * hover / active を **文字色から遠ざかる向き** に置き直す。
+ *
+ * Tailwind の並びをそのまま使うと hover は 500（1 段明るい）になる。白文字を
+ * 載せる濃い色ではコントラストが落ちる方向で、実測すると 22 色中 13 色が
+ * ホバーで AA（4.5:1）を割っていた。マウスを載せた項目が一番読めない、という
+ * 逆の状態だった。
+ *
+ * 白文字の色は暗い側へ、濃い文字の色（amber など）は今までどおり明るい側へ動かす。
+ * 濃淡の幅は CustomColor の自動生成と同じ（±0.08 / ±0.16）。
+ */
+function contrastSafeShades(shades: ResolvedCustomColor): ResolvedCustomColor {
+  if (whiteTextFails(shades.base)) return shades; // 濃い文字。明るくしてよい
+
+  const base = parseToOklch(shades.base);
+  const shift = (dL: number) =>
+    oklchToString({ l: Math.max(0, Math.min(1, base.l + dL)), c: base.c, h: base.h });
+
+  return { ...shades, hover: shift(-0.08), active: shift(-0.16) };
+}
+
+/**
+ * Maps each of the 22 preset colors to their CSS variable values.
+ *
+ * base / light / lightText / border は Tailwind の値そのまま。
+ * hover / active だけ AA を保つように置き直している（`contrastSafeShades`）。
+ */
+export const PRESET_COLOR_VARS: Record<PresetColor, ResolvedCustomColor> =
+  Object.fromEntries(
+    (Object.entries(TAILWIND_SHADES) as [PresetColor, ResolvedCustomColor][]).map(
+      ([name, shades]) => [name, contrastSafeShades(shades)],
+    ),
+  ) as Record<PresetColor, ResolvedCustomColor>;

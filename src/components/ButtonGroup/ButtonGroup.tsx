@@ -6,8 +6,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
+import { solidTextClass } from "../Constants/colorContrast";
 import { FOCUS_RING, TOUCH_TARGET_MIN, TRANSITION_FAST } from "../Constants/designTokens";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
@@ -157,9 +157,7 @@ function ButtonGroupItem({ children, value, disabled = false, className }: Butto
   const isSelected = ctx.selectedValues.has(value);
   const colorStyle = colorToCSSVars(ctx.color);
 
-  const textColor = isPresetColor(ctx.color) && LIGHT_BG_COLORS.has(ctx.color)
-    ? "cs:text-gray-900"
-    : "cs:text-white cs:dark:text-gray-200";
+  const textColor = solidTextClass(ctx.color);
 
   const activeClasses = `cs-btn-primary ${textColor}`;
   const inactiveClasses = "cs:text-gray-700 cs:dark:text-gray-400 cs:ring-1 cs:ring-inset cs:ring-gray-300 cs:dark:ring-gray-600 cs:bg-white cs:dark:bg-gray-800 cs:hover:bg-gray-100 cs:dark:hover:bg-gray-700";

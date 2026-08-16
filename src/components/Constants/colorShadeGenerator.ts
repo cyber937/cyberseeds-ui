@@ -162,16 +162,72 @@ function adjustLightness(base: Oklch, dL: number, dC = 0): string {
   });
 }
 
+// ===== Contrast =====
+
+/** WCAG AA — 通常の文字。太字でも 18.66px 未満はこちら */
+export const AA_NORMAL = 4.5;
+
+/**
+ * ソリッド背景に載せる濃い文字（`cs:text-gray-950` の実値）。
+ *
+ * 以前は gray-900（#111827）だった。`sky` は白文字 4.02:1・gray-900 でも 4.41:1 と
+ * どちらでも AA に届かない。1 段濃くすると 5.01:1 になり、22 色すべてが通る。
+ */
+export const DARK_TEXT = "#030712";
+
+function relativeLuminanceOf(color: string): number {
+  const hex = oklchToHex(parseToOklch(color));
+  const channels = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
+  const linear = channels.map((c) =>
+    c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4,
+  );
+  return 0.2126 * linear[0] + 0.7152 * linear[1] + 0.0722 * linear[2];
+}
+
+/** 2 色のコントラスト比（1〜21）。順番は問わない。hex / rgb / oklch を受け取る。 */
+export function contrastRatio(a: string, b: string): number {
+  const [la, lb] = [a, b].map(relativeLuminanceOf);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+/** その背景に白文字を載せると AA に届かないか（＝濃い文字を使うべきか）。 */
+export function whiteTextFails(background: string): boolean {
+  try {
+    return contrastRatio("#ffffff", background) < AA_NORMAL;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * hover / active をどちらへ動かすか。**文字色から遠ざかる向き**に動かす。
+ *
+ * 以前は常に明るくしていた（hover +0.08、active +0.16）。白文字を載せる
+ * 濃い色では、明るくするほどコントラストが落ちる。実測で 22 のプリセット色の
+ * うち 13 色がホバーで AA を割っていた。マウスを載せた項目が一番読めない、
+ * という逆の状態になる。
+ */
+function shadeStep(base: Oklch, color: string): number {
+  const away = whiteTextFails(color) ? +1 : -1;
+  // 行き先が無いとき（黒に近い色を暗くする等）は反対へ。動かないと
+  // ホバーしたことが分からなくなる。
+  const room = away > 0 ? 1 - base.l : base.l;
+  return room >= 0.16 ? away : -away;
+}
+
 /**
  * Generate a full set of color shades from a single base color string.
  * Accepts hex (#4f46e5), rgb(79, 70, 229), or oklch(...) formats.
+ *
+ * `light` / `lightText` / `border` は文字を載せる面ではないので、向きは変えない。
  */
 export function generateShadesFromBase(base: string): ResolvedCustomColor {
   const parsed = parseToOklch(base);
+  const step = shadeStep(parsed, base);
   return {
     base,
-    hover: adjustLightness(parsed, +0.08),
-    active: adjustLightness(parsed, +0.16),
+    hover: adjustLightness(parsed, step * 0.08),
+    active: adjustLightness(parsed, step * 0.16),
     focus: base,
     light: adjustLightness(parsed, +0.35, -0.18),
     lightText: adjustLightness(parsed, -0.17),

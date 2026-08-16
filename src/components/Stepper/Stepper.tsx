@@ -1,6 +1,6 @@
 import clsx from "clsx";
-import { colorToCSSVars, isPresetColor, resolveColor } from "../Constants/colorUtils";
-import { LIGHT_BG_COLORS } from "../Constants/colorContrast";
+import { colorToCSSVars, resolveColor } from "../Constants/colorUtils";
+import { solidTextClass } from "../Constants/colorContrast";
 import type { Color, Scale } from "../DesignSystemUtils";
 import { useUIColor } from "../UIColorProvider/useUIColor";
 
@@ -60,9 +60,7 @@ export function Stepper({
   const finalUIColor = resolveColor(color ?? contextUIColor ?? "blue");
   const colorStyle = colorToCSSVars(finalUIColor);
 
-  const textColor = isPresetColor(finalUIColor) && LIGHT_BG_COLORS.has(finalUIColor)
-    ? "cs:text-gray-900"
-    : "cs:text-white";
+  const textColor = solidTextClass(finalUIColor);
 
   // Inverted styles for dark backgrounds
   const pendingCircleStyle = inverted
