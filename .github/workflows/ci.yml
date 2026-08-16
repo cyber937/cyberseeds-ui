@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       # publish.yml と同じ Node に揃えること。
       # ずれていると CI は通るのに公開時のビルドで落ちる、という見つけにくい壊れ方をする。
