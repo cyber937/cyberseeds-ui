@@ -383,4 +383,101 @@ describe("Tabs Component", () => {
       expect(screen.getByRole("tab", { name: "B" })).not.toHaveAttribute("aria-controls");
     });
   });
+
+  describe("variant", () => {
+    const 描く = (variant?: "underline" | "enclosed") =>
+      render(
+        <Tabs defaultValue="a" {...(variant ? { variant } : {})}>
+          <Tabs.List>
+            <Tabs.Trigger value="a">A</Tabs.Trigger>
+            <Tabs.Trigger value="b">B</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="a">Panel A</Tabs.Content>
+        </Tabs>,
+      );
+
+    it("defaults to the underline the existing callers already render", () => {
+      描く();
+      const active = screen.getByRole("tab", { name: "A" });
+      expect(active.className).toContain("cs:border-b-2");
+      expect(active.className).not.toContain("cs:bg-white");
+    });
+
+    it("draws the active enclosed tab as a folder tab", () => {
+      描く("enclosed");
+      const active = screen.getByRole("tab", { name: "A" });
+      // One weight on all three sides, and none along the bottom: the tab has
+      // to look like the top of the panel, not a box parked above it.
+      expect(active.className).toContain("cs:border");
+      expect(active.className).toContain("cs:border-b-0");
+      expect(active.className).toContain("cs:rounded-t-md");
+      // A heavier top edge would make the outline look uneven against the sides
+      expect(active.className).not.toContain("cs:border-t-2");
+    });
+
+    it("⚠️ leaves border-0 off the enclosed tab", () => {
+      // `border-0` and `border` are the same width utility, so which one lands
+      // is decided by the order they were generated into the stylesheet — not
+      // by the order they appear in the class list. With both present the
+      // enclosed tab rendered with **no outline at all**, which is how it
+      // shipped to review on 2026-08-20.
+      描く("enclosed");
+      const active = screen.getByRole("tab", { name: "A" });
+      expect(active.className).not.toContain("cs:border-0");
+      const inactive = screen.getByRole("tab", { name: "B" });
+      expect(inactive.className).not.toContain("cs:border-0");
+    });
+
+    it("keeps border-0 on the underline tab", () => {
+      // Otherwise a button's default border shows through.
+      描く();
+      expect(screen.getByRole("tab", { name: "A" }).className).toContain("cs:border-0");
+    });
+
+    it("keeps the enclosed outline the same grey as the panel", () => {
+      // `cs-tab-active` also paints the border with the theme colour, which
+      // leaves the tab outlined in one colour and the panel in another.
+      描く("enclosed");
+      const active = screen.getByRole("tab", { name: "A" });
+      expect(active.className).toContain("cs:border-gray-300");
+      expect(active.className).toContain("cs-tab-active-text");
+      expect(active.className).not.toContain("cs-tab-active ");
+    });
+
+    it("⚠️ draws no rule under an enclosed row", () => {
+      // A line running the full width is exactly what separates the tab from
+      // its body. The underline variant still needs one.
+      const { container } = 描く("enclosed");
+      const list = container.querySelector('[role="tablist"]')!;
+      expect(list.className).not.toContain("cs:border-b");
+    });
+
+    it("keeps the rule under an underline row", () => {
+      const { container } = 描く();
+      const list = container.querySelector('[role="tablist"]')!;
+      expect(list.className).toContain("cs:border-b");
+    });
+
+    it("gives the enclosed active tab an opaque background", () => {
+      // The row draws a rule along its whole width. Without a background the
+      // tab cannot paint over the pixel it stands on, and the seam stays
+      // visible — which is the whole thing this variant exists to remove.
+      描く("enclosed");
+      expect(screen.getByRole("tab", { name: "A" }).className).toContain("cs:bg-white");
+    });
+
+    it("reserves the same box on inactive enclosed tabs", () => {
+      // Otherwise the row jumps by a pixel every time a tab is selected.
+      描く("enclosed");
+      const inactive = screen.getByRole("tab", { name: "B" });
+      expect(inactive.className).toContain("cs:border-transparent");
+      expect(inactive.className).toContain("cs:rounded-t-md");
+      expect(inactive.className).not.toContain("cs:bg-white");
+    });
+
+    it("keeps the underline variant free of the enclosed box", () => {
+      描く();
+      expect(screen.getByRole("tab", { name: "B" }).className).not.toContain("cs:rounded-t-md");
+    });
+  });
 });

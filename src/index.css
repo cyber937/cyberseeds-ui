@@ -122,6 +122,16 @@
   color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
 }
 
+/* Tab active state — colour only.
+   `enclosed` tabs draw their own grey box, so they must not pick up the
+   theme colour on the border the way `.cs-tab-active` does. */
+.cs-tab-active-text {
+  color: var(--cs-ui-base);
+}
+:is(.dark, .dark *) .cs-tab-active-text {
+  color: color-mix(in oklch, var(--cs-ui-base) 60%, white 40%);
+}
+
 /* Table — the column currently being sorted.
    Falls back to gray-700 / gray-200 when no UIColorProvider is present. */
 .cs-sort-active {

@@ -16,12 +16,22 @@ import { useUIColor } from "../UIColorProvider/useUIColor";
 import { PillBox } from "../PillBox/PillBox";
 import { Slot } from "../Slot/Slot";
 import { TabsContext, useTabsContext } from "./TabsContext";
+import type { TabsVariant } from "./TabsContext";
 
 interface TabsProps {
   children: ReactNode;
   value?: string;
   defaultValue?: string;
   onChange?: (value: string) => void;
+  /**
+   * How the tab row reads against the content below it. Defaults to
+   * `underline`, which is what every existing caller already renders.
+   *
+   * Reach for `enclosed` when the reader has to see *which* content belongs to
+   * the selected tab — sibling records on one form, for instance, where an
+   * underline leaves the tab and its body looking like two unrelated blocks.
+   */
+  variant?: TabsVariant;
   scale?: Scale;
   color?: Color;
   className?: string;
@@ -90,6 +100,7 @@ export function Tabs({
   onChange,
   scale,
   color,
+  variant = "underline",
   className,
 }: TabsProps) {
   const baseId = useId();
@@ -135,11 +146,12 @@ export function Tabs({
       baseId,
       scale,
       color: finalColor,
+      variant,
       panels,
       registerPanel,
       unregisterPanel,
     }),
-    [activeValue, handleChange, baseId, scale, finalColor, panels, registerPanel, unregisterPanel],
+    [activeValue, handleChange, baseId, scale, finalColor, variant, panels, registerPanel, unregisterPanel],
   );
 
   return (
@@ -150,6 +162,7 @@ export function Tabs({
 }
 
 function TabsList({ children, className }: TabsListProps) {
+  const { variant } = useTabsContext();
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -232,7 +245,11 @@ function TabsList({ children, className }: TabsListProps) {
         onKeyDown={handleKeyDown}
         onScroll={updateScrollState}
         className={clsx(
-          "cs:flex cs:flex-1 cs:min-w-0 cs:overflow-x-auto cs:overflow-y-hidden cs-scrollbar-none cs:-mb-px cs:border-b cs:border-gray-200 cs:dark:border-gray-700",
+          "cs:flex cs:flex-1 cs:min-w-0 cs:overflow-x-auto cs:overflow-y-hidden cs-scrollbar-none cs:-mb-px",
+          // The underline variant needs a rule for the active tab to sit on.
+          // `enclosed` must not draw one: a line running the full width is
+          // exactly what separates the tab from its body.
+          variant === "underline" && "cs:border-b cs:border-gray-200 cs:dark:border-gray-700",
           className,
         )}
       >
@@ -279,9 +296,30 @@ function TabsTrigger({
     }
   }, [isActive]);
 
+  // The active tab either underlines itself or becomes a folder tab that the
+  // panel appears to hang from. `enclosed` needs an opaque background: the row
+  // draws a rule along its whole width, and the tab has to paint over the
+  // 1px it sits on, otherwise the seam stays visible and nothing looks joined.
+  const enclosed = ctx.variant === "enclosed";
   const activeClasses = isActive
-    ? "cs:border-b-2 cs:-mb-px cs-tab-active"
-    : "cs:text-gray-500 cs:dark:text-gray-400 cs:hover:text-gray-700 cs:dark:hover:text-gray-300";
+    ? enclosed
+      ? // One weight on all three sides, and none along the bottom: the tab has
+        // to look like the top of the panel, not like a box parked above it.
+        // The border stays grey so it matches the panel's own outline — only
+        // the label takes the theme colour.
+        //
+        // ⚠️ `gray-300`, not the `gray-200` the underline row uses. At 200 the
+        // outline is too faint to read as a join: the tab and the panel look
+        // like two pale shapes rather than one. **The consumer's panel must use
+        // the same value** or the seam reappears.
+        "cs:bg-white cs:dark:bg-gray-800 cs:border cs:border-b-0 cs:border-gray-300 cs:dark:border-gray-600 cs:rounded-t-md cs:-mb-px cs-tab-active-text"
+      : "cs:border-b-2 cs:-mb-px cs-tab-active"
+    : clsx(
+        "cs:text-gray-500 cs:dark:text-gray-400 cs:hover:text-gray-700 cs:dark:hover:text-gray-300",
+        // Reserve the same box the active tab occupies, so selecting a tab does
+        // not shift the row by a pixel.
+        enclosed && "cs:border cs:border-b-0 cs:border-transparent cs:rounded-t-md cs:-mb-px",
+      );
 
   const scale = ctx.scale ?? "md";
 
@@ -297,7 +335,13 @@ function TabsTrigger({
     style: isActive ? colorStyle : undefined,
     onClick: () => ctx.onChange(value),
     className: clsx(
-      `cs:border-0 cs:shadow-none cs:font-medium cs:whitespace-nowrap cs:no-underline ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
+      `cs:shadow-none cs:font-medium cs:whitespace-nowrap cs:no-underline ${TRANSITION_FAST} ${FOCUS_RING} ${TOUCH_TARGET_MIN} cs:disabled:opacity-50 cs:disabled:cursor-not-allowed`,
+      // ⚠️ `border-0` must not be in play for `enclosed`. It and `border` are the
+      // same width utility, so which one lands is decided by the order they were
+      // generated into the stylesheet — not by the order they appear here. The
+      // enclosed tab lost its outline entirely that way. `underline` still needs
+      // it, so that a button's default border never shows through.
+      !enclosed && "cs:border-0",
       // An icon or count turns the label into a row; without them the original
       // block layout is left untouched so existing tabs render identically.
       (icon || count !== undefined) && "cs:inline-flex cs:items-center cs:gap-1.5",
