@@ -3,12 +3,28 @@
 import { createContext, useContext } from "react";
 import type { CustomColor, PresetColor, Scale } from "../DesignSystemUtils";
 
+/**
+ * How the tab row reads against the content below it.
+ *
+ * - `underline` — a coloured rule under the active tab. The default, and what
+ *   every existing caller gets.
+ * - `enclosed` — the active tab is drawn as a folder tab: bordered on three
+ *   sides, sharing its background with the panel and cutting through the row's
+ *   bottom rule. Use this when the tab and its content must read as one object.
+ *
+ * ⚠️ `enclosed` assumes the panel underneath is the standard panel colour
+ * (white / `gray-800` in dark). If the surrounding surface is a different
+ * colour, the seam will not disappear.
+ */
+export type TabsVariant = "underline" | "enclosed";
+
 export interface TabsContextType {
   activeValue: string;
   onChange: (value: string) => void;
   baseId: string;
   scale?: Scale;
   color: PresetColor | CustomColor;
+  variant: TabsVariant;
   /**
    * Values whose `Tabs.Content` is currently in the DOM.
    *

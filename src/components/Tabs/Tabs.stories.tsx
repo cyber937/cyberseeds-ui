@@ -282,3 +282,57 @@ export const IconAndCountScales: Story = {
     </div>
   ),
 };
+
+/**
+ * `enclosed` — the active tab becomes a folder tab the panel hangs from.
+ *
+ * Reach for it when the reader has to see *which* body belongs to the selected
+ * tab. With the underline the tab and its content read as two unrelated
+ * blocks; that is fine for navigation, and wrong for sibling records on one
+ * form where picking the wrong tab means editing the wrong person.
+ *
+ * ⚠️ The panel must be the standard panel colour (white / `gray-800` in dark)
+ * and carry the same grey outline, because the active tab paints that colour
+ * over the panel's top edge to remove the seam. On a tinted surface, or with a
+ * different border colour, the join stays visible.
+ */
+export const Enclosed: Story = {
+  render: () => (
+    <div className="cs:flex cs:flex-col cs:gap-8">
+      <div>
+        <p className="cs:mb-2 cs:text-xs cs:text-gray-500">underline（既定）</p>
+        <Tabs defaultValue="a">
+          <Tabs.List>
+            <Tabs.Trigger value="a">山田 太郎</Tabs.Trigger>
+            <Tabs.Trigger value="b">山田 次郎</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="a">
+            <div className="cs:p-4">太郎の面接情報</div>
+          </Tabs.Content>
+          <Tabs.Content value="b">
+            <div className="cs:p-4">次郎の面接情報</div>
+          </Tabs.Content>
+        </Tabs>
+      </div>
+      <div>
+        <p className="cs:mb-2 cs:text-xs cs:text-gray-500">enclosed</p>
+        <Tabs defaultValue="a" variant="enclosed">
+          <Tabs.List>
+            <Tabs.Trigger value="a">山田 太郎</Tabs.Trigger>
+            <Tabs.Trigger value="b">山田 次郎</Tabs.Trigger>
+          </Tabs.List>
+          <Tabs.Content value="a">
+            <div className="cs:rounded-b-md cs:rounded-tr-md cs:border cs:border-gray-300 cs:bg-white cs:p-4 cs:dark:border-gray-600 cs:dark:bg-gray-800">
+              太郎の面接情報
+            </div>
+          </Tabs.Content>
+          <Tabs.Content value="b">
+            <div className="cs:rounded-b-md cs:rounded-tr-md cs:border cs:border-gray-300 cs:bg-white cs:p-4 cs:dark:border-gray-600 cs:dark:bg-gray-800">
+              次郎の面接情報
+            </div>
+          </Tabs.Content>
+        </Tabs>
+      </div>
+    </div>
+  ),
+};
