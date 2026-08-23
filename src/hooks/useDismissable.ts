@@ -22,6 +22,15 @@ export interface DismissableOptions {
   refs?: ReadonlyArray<RefObject<HTMLElement | null>>;
   /** Listen for Escape on the document. Default `true`. */
   escape?: boolean;
+  /**
+   * The element this layer occupies. Used to work out which layer Escape
+   * belongs to when several are open at once — see `innermostLayer`.
+   *
+   * Optional: a layer without one still takes part, it just falls back to
+   * registration order. Pass it whenever the component has a container node;
+   * every component in this library does.
+   */
+  container?: RefObject<HTMLElement | null>;
 }
 
 /**
@@ -40,11 +49,57 @@ export interface DismissableOptions {
  * The callback is held in a ref so a caller passing an inline arrow function
  * doesn't tear down and re-attach the listeners on every render.
  */
+/** One open layer that is listening for Escape. */
+type EscapeLayer = {
+  dismiss: () => void;
+  container?: RefObject<HTMLElement | null>;
+};
+
+/**
+ * Every layer currently listening for Escape, oldest first.
+ *
+ * Module scope is the point: these layers know nothing about each other. A
+ * confirm dialog opened inside a detail dialog, or a date picker inside a
+ * drawer, are written independently and still have to agree on who is on top.
+ */
+const openLayers: EscapeLayer[] = [];
+
+/**
+ * Which layer should Escape close? The one the user is looking at: the
+ * innermost.
+ *
+ * Nesting is read from the DOM rather than from registration order, because
+ * **React runs a child's effect before its parent's**. Two nested layers that
+ * mount in the same commit therefore register inner-first, and "whoever
+ * registered last" would hand Escape to the *outer* layer.
+ *
+ * A layer is passed over when another open layer sits inside it. Scanning from
+ * the newest backwards means that among layers which don't nest — two popovers
+ * side by side, or one rendered through a portal — the most recently opened
+ * still wins.
+ */
+function innermostLayer(): EscapeLayer | undefined {
+  for (let i = openLayers.length - 1; i >= 0; i--) {
+    const layer = openLayers[i];
+    const el = layer.container?.current;
+    // Nothing to compare against: fall back to registration order.
+    if (!el) return layer;
+    const containsAnother = openLayers.some((other) => {
+      if (other === layer) return false;
+      const otherEl = other.container?.current;
+      return !!otherEl && otherEl !== el && el.contains(otherEl);
+    });
+    if (!containsAnother) return layer;
+  }
+  return openLayers[openLayers.length - 1];
+}
+
 export function useDismissable({
   enabled,
   onDismiss,
   refs,
   escape = true,
+  container,
 }: DismissableOptions) {
   const onDismissRef = useRef(onDismiss);
   onDismissRef.current = onDismiss;
@@ -54,8 +109,21 @@ export function useDismissable({
   useEffect(() => {
     if (!enabled) return;
 
+    // Register while open so nested layers can tell who is on top. A layer
+    // that opts out of Escape never joins, so it can't take a turn it would
+    // only throw away — `Combobox` does exactly that.
+    const self: EscapeLayer | undefined = escape
+      ? { dismiss: () => onDismissRef.current("escape"), container }
+      : undefined;
+    if (self) openLayers.push(self);
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") onDismissRef.current("escape");
+      if (event.key !== "Escape") return;
+      // Only the innermost layer reacts. Every open layer hears the keypress,
+      // so without this one Escape closes the whole stack: backing out of a
+      // confirm dialog would take the dialog underneath it too.
+      if (innermostLayer() !== self) return;
+      self!.dismiss();
     };
 
     const handlePress = (event: MouseEvent | TouchEvent) => {
@@ -74,6 +142,10 @@ export function useDismissable({
     }
 
     return () => {
+      if (self) {
+        const i = openLayers.indexOf(self);
+        if (i !== -1) openLayers.splice(i, 1);
+      }
       if (escape) document.removeEventListener("keydown", handleKeyDown);
       if (watchOutside) {
         document.removeEventListener("mousedown", handlePress);
@@ -83,5 +155,5 @@ export function useDismissable({
     // `refs` is read through the closure above; identity churn on the array
     // itself would only re-attach identical listeners.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [enabled, escape, watchOutside]);
+  }, [enabled, escape, watchOutside, container]);
 }

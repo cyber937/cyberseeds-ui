@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 
 import { useDismissable, type DismissReason } from "../useDismissable";
 
@@ -117,5 +117,105 @@ describe("useDismissable", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     expect(first).not.toHaveBeenCalled();
     expect(second).toHaveBeenCalledWith("escape");
+  });
+});
+
+/**
+ * Which layer gets the Escape when several are open?
+ *
+ * Every layer used to hear it, so dismissing a confirm dialog with the
+ * keyboard took the dialog underneath it as well.
+ */
+describe("useDismissable: stacked layers", () => {
+  function Layer({
+    onDismiss,
+    escape,
+    children,
+  }: {
+    onDismiss: (reason: DismissReason) => void;
+    escape?: boolean;
+    children?: ReactNode;
+  }) {
+    const ref = useRef<HTMLDivElement>(null);
+    useDismissable({ enabled: true, escape, onDismiss, container: ref });
+    return <div ref={ref}>{children}</div>;
+  }
+
+  it("closes only the inner layer when it opened later", () => {
+    const outer = vi.fn();
+    const inner = vi.fn();
+    const { rerender } = render(<Layer onDismiss={outer} />);
+    rerender(
+      <Layer onDismiss={outer}>
+        <Layer onDismiss={inner} />
+      </Layer>
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(inner).toHaveBeenCalledTimes(1);
+    expect(outer).not.toHaveBeenCalled();
+  });
+
+  it("closes only the inner layer when both mount together", () => {
+    // React runs a child's effect *before* its parent's, so the inner layer
+    // registers first. Going by registration order alone would pick the outer.
+    const outer = vi.fn();
+    const inner = vi.fn();
+    render(
+      <Layer onDismiss={outer}>
+        <Layer onDismiss={inner} />
+      </Layer>
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(inner).toHaveBeenCalledTimes(1);
+    expect(outer).not.toHaveBeenCalled();
+  });
+
+  it("hands Escape back to the outer layer once the inner one is gone", () => {
+    const outer = vi.fn();
+    const inner = vi.fn();
+    const { rerender } = render(
+      <Layer onDismiss={outer}>
+        <Layer onDismiss={inner} />
+      </Layer>
+    );
+    rerender(<Layer onDismiss={outer} />);
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(outer).toHaveBeenCalledTimes(1);
+    expect(inner).not.toHaveBeenCalled();
+  });
+
+  it("gives Escape to the most recent of two layers that don't nest", () => {
+    const first = vi.fn();
+    const second = vi.fn();
+    const { rerender } = render(<Layer onDismiss={first} />);
+    rerender(
+      <>
+        <Layer onDismiss={first} />
+        <Layer onDismiss={second} />
+      </>
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(second).toHaveBeenCalledTimes(1);
+    expect(first).not.toHaveBeenCalled();
+  });
+
+  it("lets a layer that opted out of Escape be skipped over", () => {
+    // `Combobox` opts out. Sitting on top of a modal, it must not swallow the
+    // keypress the modal is waiting for.
+    const modal = vi.fn();
+    const combobox = vi.fn();
+    render(
+      <Layer onDismiss={modal}>
+        <Layer onDismiss={combobox} escape={false} />
+      </Layer>
+    );
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(modal).toHaveBeenCalledTimes(1);
+    expect(combobox).not.toHaveBeenCalled();
   });
 });

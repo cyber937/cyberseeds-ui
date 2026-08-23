@@ -82,7 +82,7 @@ export function Drawer({
 
   // The backdrop press is handled by onClick below, so only Escape is needed
   // here. Drawer is mounted only while open, hence `enabled: true`.
-  useDismissable({ enabled: true, onDismiss: () => onClose?.() });
+  useDismissable({ enabled: true, onDismiss: () => onClose?.(), container: drawerRef });
 
   useEffect(() => {
     let frameId: number | undefined;

@@ -81,7 +81,33 @@ import { Z_INDEX } from "cyberseeds-ui";
 数字を直接書かない。**書くと必ず順序が崩れる**（v1 では Tooltip 40 < Modal 50 で、
 モーダル内のツールチップが隠れていた）。
 
-### 2-3. `className` で上書きする前に prop を探す
+### 2-3. 覆いは重ねてよい。Escape は一番手前だけが受け取る
+
+`Modal` の中に `Modal`、`Drawer` の中に `DatePicker` のように、覆うものを
+**入れ子にしてよい**。Escape は**いちばん内側の 1 つだけ**が受け取る。
+
+```tsx
+<Modal onClose={詳細を閉じる}>          {/* Escape は届かない */}
+  <Modal.Body>
+    {確認中 && (
+      <Modal onClose={確認をやめる}>    {/* Escape はこちらへ */}
+```
+
+判定は `useDismissable` が持っている。**開いている覆いを DOM の入れ子で比べ、
+中に別の覆いを抱えていないものを選ぶ。** 登録した順ではない ——
+**React は子の効果を親より先に走らせる**ので、同時に開いた 2 つは内側が先に
+登録され、「最後に登録したもの」を採ると外側を選んでしまう。
+
+⚠️ **自前で `document` に Escape を張らないこと。** 重なりを見ないので、
+下にある覆いまで一緒に閉じる。必要なら `useDismissable` に `container` を渡す。
+
+2026-08-23 まで、`Modal` `Drawer` `Popover` `Tooltip` の 4 つが全員 `document` の
+Escape を受け取っていた。入れ子にすると**1 回のキーで全部閉じる**。
+当時アプリ側に入れ子の実例が無かったため表に出ていなかった。
+
+---
+
+### 2-4. `className` で上書きする前に prop を探す
 
 上書きしてよいのは**レイアウト**（`flex-1` `ml-auto` `shrink-0` `mb-4` など、
 親の中での位置取り）だけ。

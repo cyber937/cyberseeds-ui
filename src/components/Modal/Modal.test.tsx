@@ -394,3 +394,54 @@ describe('Modal Component', () => {
     });
   });
 });
+/**
+ * A confirm dialog opened on top of a detail dialog — how the withdrawal
+ * approval screen is built. One Escape must not clear both.
+ */
+describe("Modal: nested", () => {
+  function DetailWithConfirm({
+    onCloseDetail,
+    onCloseConfirm,
+  }: {
+    onCloseDetail: () => void;
+    onCloseConfirm: () => void;
+  }) {
+    const [confirming, setConfirming] = useState(false);
+    return (
+      <Modal onClose={onCloseDetail}>
+        <Modal.Body>
+          <button onClick={() => setConfirming(true)}>Approve</button>
+          {confirming && (
+            <Modal onClose={onCloseConfirm}>
+              <Modal.Body>
+                <button>Confirm approval</button>
+              </Modal.Body>
+            </Modal>
+          )}
+        </Modal.Body>
+      </Modal>
+    );
+  }
+
+  it("closes only the confirm dialog on Escape", async () => {
+    const detail = vi.fn();
+    const confirm = vi.fn();
+    render(<DetailWithConfirm onCloseDetail={detail} onCloseConfirm={confirm} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "Approve" }));
+    await screen.findByRole("button", { name: "Confirm approval" });
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(confirm).toHaveBeenCalledTimes(1);
+    expect(detail).not.toHaveBeenCalled();
+  });
+
+  it("keeps the inner dialog reachable by keyboard", async () => {
+    render(<DetailWithConfirm onCloseDetail={() => {}} onCloseConfirm={() => {}} />);
+    fireEvent.click(screen.getByRole("button", { name: "Approve" }));
+
+    const confirm = await screen.findByRole("button", { name: "Confirm approval" });
+    confirm.focus();
+    expect(document.activeElement).toBe(confirm);
+  });
+});

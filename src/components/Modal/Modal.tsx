@@ -73,7 +73,7 @@ export function Modal({ width = "md", children, onClose }: ModalProps) {
 
   // The backdrop press is handled by onClick below, so only Escape is needed
   // here. Modal is mounted only while open, hence `enabled: true`.
-  useDismissable({ enabled: true, onDismiss: () => onClose?.() });
+  useDismissable({ enabled: true, onDismiss: () => onClose?.(), container: dialogRef });
 
   useEffect(() => {
     // reduced motion: 即座に表示（アニメーションなし）
