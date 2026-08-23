@@ -131,6 +131,7 @@ export function Tooltip({
 
   useDismissable({
     enabled: isVisible,
+    container: tooltipRef,
     // Outside-press dismissal is for touch only. With a mouse the tooltip is
     // already dismissed by moving the pointer away, and reacting to an outside
     // press as well would close it during unrelated clicks.

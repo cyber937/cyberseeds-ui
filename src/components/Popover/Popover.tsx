@@ -102,6 +102,7 @@ export function Popover({
   useDismissable({
     enabled: open,
     refs: [triggerRef, contentRef],
+    container: contentRef,
     onDismiss: (reason) => {
       setOpen(false);
       // Only on Escape: the pointer never moved, so send focus back to the
