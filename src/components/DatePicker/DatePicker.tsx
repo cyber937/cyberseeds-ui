@@ -30,10 +30,19 @@ interface DatePickerProps {
   ref?: Ref<HTMLButtonElement>;
 }
 
+/*
+  Heights must match `Input` and `Select` at the same scale.
+
+  These controls sit side by side in a toolbar, so a mismatch shows up as a
+  visible step. Until 2026-08-24 `xs` was `h-7` (vs `h-5`) and `sm` was `h-8`
+  (vs `h-6`), so a date field next to a search box stood 8px taller.
+
+  `max-md:min-h-11` matches the touch target `Input`/`Select` use on mobile.
+*/
 const triggerScale: Record<Scale, string> = {
-  xs: "cs:text-xs cs:px-2 cs:h-7",
-  sm: "cs:text-xs cs:px-3 cs:h-8",
-  md: "cs:text-sm cs:px-3 cs:h-9",
+  xs: "cs:text-[0.625rem] cs:px-1.5 cs:h-5 cs:max-md:text-base cs:max-md:min-h-11",
+  sm: "cs:text-xs cs:px-2 cs:h-6 cs:max-md:text-base cs:max-md:min-h-11",
+  md: "cs:text-sm/6 cs:px-3 cs:h-9 cs:max-md:text-base cs:max-md:min-h-11",
   lg: "cs:text-base cs:px-4 cs:h-11",
 };
 

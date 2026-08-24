@@ -131,7 +131,21 @@ export function Popover({
 
   return (
     <PopoverContext.Provider value={contextValue}>
-      <div className="cs:relative cs:inline-block">{children}</div>
+      {/*
+        `inline-flex`, not `inline-block`.
+
+        An `inline-block` wrapper sits on the text baseline, so the line box adds
+        the font's descender space underneath the trigger. The wrapper then
+        measures a few px taller than the trigger it contains, and in a flex
+        toolbar (`items-center`) the trigger no longer lines up with a `Select`
+        or `Input` of the same height — reported 2026-08-24 for a `DatePicker`
+        next to a `Select`, both `scale="sm"` (`h-6`).
+
+        `Select` already wraps its field in `relative inline-flex` for the same
+        reason. This makes `Popover` (and therefore `DatePicker` and `Menu`)
+        match.
+      */}
+      <div className="cs:relative cs:inline-flex">{children}</div>
     </PopoverContext.Provider>
   );
 }
