@@ -6,7 +6,11 @@ import type { Scale } from "../DesignSystemUtils";
 
 interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
   scale?: Scale;
-  text: string;
+  /**
+   * ラベルの中身。文字列のほか ReactNode を渡せる。
+   * 文言の一部だけ強調したいときに <span> を混ぜられる。
+   */
+  text: React.ReactNode;
   require?: boolean;
   className?: string;
   htmlFor?: string;

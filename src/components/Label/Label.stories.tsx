@@ -54,3 +54,21 @@ export const AssociatedWithInput: Story = {
     </div>
   ),
 };
+
+/**
+ * `text` は文字列のほか ReactNode を受ける。
+ * 文言の一部だけ強調したいときに使う。
+ */
+export const RichText: Story = {
+  render: () => (
+    <Label
+      htmlFor="med-concern"
+      text={
+        <span style={{ whiteSpace: "normal" }}>
+          <span style={{ fontWeight: 700, color: "#dc2626" }}>アレルギー以外</span>
+          に、学校が知っておくべき健康上のことはありますか？
+        </span>
+      }
+    />
+  ),
+};
